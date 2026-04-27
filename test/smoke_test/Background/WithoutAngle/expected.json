@@ -1,0 +1,40 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1008,
+        "Height": 676,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "Use Alpha Channel",
+      "Values": {
+        "NoOverlayInFullscreenMode": true,
+        "RandomTile": true,
+        "Tiled": true,
+        "Transparency_UseAlphaChannel": true,
+        "Transparency_UseColour": false,
+        "BorderColour": "#FF0000FF",
+        "Colour": "#FF80C0FF",
+        "TransparentColour": "#FF8000FF"
+      },
+      "Images": {
+        "overlay_image": {
+          "Width": 1008,
+          "Height": 676,
+          "BitsPerPixel": 32
+        },
+        "tile_image": {
+          "Width": 1008,
+          "Height": 676,
+          "BitsPerPixel": 32
+        }
+      }
+    }
+  ]
+}

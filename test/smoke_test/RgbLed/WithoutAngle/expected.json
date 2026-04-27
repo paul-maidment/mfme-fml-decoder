@@ -1,0 +1,67 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1008,
+        "Height": 676,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "None",
+      "Values": {
+        "NoOverlayInFullscreenMode": false,
+        "RandomTile": false,
+        "Tiled": false,
+        "Transparency_UseAlphaChannel": false,
+        "Transparency_UseColour": false,
+        "BorderColour": "#000000FF",
+        "Colour": "#F0F0F0FF",
+        "TransparentColour": "#000000FF"
+      }
+    },
+    {
+      "Type": "RGBLed",
+      "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 313,
+        "Y": 171,
+        "Width": 17,
+        "Height": 17,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "Values": {
+        "Style": "Square",
+        "SelectedStyle": 1,
+        "BlueLampNumber": 35,
+        "GreenLampNumber": 34,
+        "RedLampNumber": 33,
+        "WhiteLampNumber": 36,
+        "MaxLED": false,
+        "NoOutline": true,
+        "NoShadow": true,
+        "AdjustedBlue": "#000080FF",
+        "AdjustedGreen": "#800080FF",
+        "AdjustedOff": "#0080FFFF",
+        "AdjustedRed": "#FF7777FF",
+        "AdjustedRedBlue": "#00FF00FF",
+        "AdjustedRedGreen": "#0000FFFF",
+        "AdjustedRedGreen2": "#FF8000FF",
+        "AdjustedRedGreenBlue": "#C0C0C0FF"
+      },
+      "Images": {
+        "overlay_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Assigning Lamps to Borders — Worked Examples (Revised)</title>
+  <style>
+    :root {
+      --ink: #1a1f24;
+      --muted: #5c6670;
+      --paper: #f7f4ef;
+      --card: #fffdf9;
+      --line: #d8d0c4;
+      --accent: #0f6b5c;
+      --accent-soft: #d8efe9;
+      --warn: #8a4b12;
+      --warn-soft: #f3e2cc;
+      --fail: #8b1e2d;
+      --fail-soft: #f3d6db;
+      --ok: #1f5f2f;
+      --ok-soft: #d9edd9;
+      --mono: "Cascadia Code", "Fira Code", "Consolas", monospace;
+      --sans: "Segoe UI", "Helvetica Neue", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 80% 50% at 10% -10%, #e7efe9 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 100% 0%, #efe6d8 0%, transparent 50%),
+        var(--paper);
+      font-family: var(--sans);
+      line-height: 1.55;
+    }
+
+    main {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+
+    header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    header p.eyebrow {
+      margin: 0 0 0.35rem;
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 650;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(1.6rem, 3vw, 2.1rem);
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .lede {
+      margin: 0;
+      max-width: 68ch;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    h2 {
+      margin: 2.25rem 0 0.75rem;
+      font-size: 1.25rem;
+    }
+
+    h3 {
+      margin: 1.4rem 0 0.5rem;
+      font-size: 1.05rem;
+    }
+
+    p { margin: 0.6rem 0; }
+
+    .rule-box {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      margin: 1rem 0 1.5rem;
+    }
+
+    .rule-box ol {
+      margin: 0.4rem 0 0;
+      padding-left: 1.2rem;
+    }
+
+    .rule-box li { margin: 0.35rem 0; }
+
+    .scenario {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1.1rem 1.15rem 1.25rem;
+      margin: 1.25rem 0;
+      box-shadow: 0 1px 0 rgba(26, 31, 36, 0.04);
+    }
+
+    .scenario header.scenario-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.75rem;
+      align-items: baseline;
+      margin: 0 0 0.85rem;
+      padding: 0;
+      border: 0;
+    }
+
+    .scenario h2 {
+      margin: 0;
+      flex: 1 1 auto;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 650;
+      letter-spacing: 0.02em;
+    }
+
+    .badge.ok { background: var(--ok-soft); color: var(--ok); }
+    .badge.warn { background: var(--warn-soft); color: var(--warn); }
+    .badge.fail { background: var(--fail-soft); color: var(--fail); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      margin: 0.75rem 0 1rem;
+    }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 0.4rem 0.55rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f0ebe3;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    tr.border-row { background: #f3f7f6; }
+    tr.lamp-row { background: #fff; }
+    tr.orphan-row { background: #f8f1f2; }
+    code, .mono {
+      font-family: var(--mono);
+      font-size: 0.88em;
+    }
+
+    .viz {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin: 0.75rem 0 1rem;
+    }
+
+    @media (max-width: 700px) {
+      .viz { grid-template-columns: 1fr; }
+    }
+
+    .viz-card {
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      padding: 0.75rem 0.85rem;
+      background: #fbfaf7;
+    }
+
+    .viz-card h3 {
+      margin: 0 0 0.45rem;
+      font-size: 0.95rem;
+    }
+
+    .viz-card ul {
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+
+    .viz-card li { margin: 0.25rem 0; }
+
+    .callout {
+      border-left: 3px solid var(--accent);
+      background: var(--accent-soft);
+      padding: 0.7rem 0.85rem;
+      border-radius: 0 8px 8px 0;
+      margin: 0.85rem 0;
+    }
+
+    .callout.warn {
+      border-left-color: var(--warn);
+      background: var(--warn-soft);
+    }
+
+    .callout.fail {
+      border-left-color: var(--fail);
+      background: var(--fail-soft);
+    }
+
+    pre {
+      overflow-x: auto;
+      background: #1a1f24;
+      color: #e8eee9;
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      line-height: 1.45;
+    }
+
+    .note {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    footer {
+      margin-top: 2.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">MFME layout analysis · revised</p>
+      <h1>Which lamps belong to which borders?</h1>
+      <p class="lede">
+        Worked report using the exact MFME component-list examples.
+        Revised conclusion: with <strong>X, Y, W, H</strong>, sibling <strong>local offsets</strong>,
+        and <strong>z-order</strong> when copies compete, every scenario below resolves.
+        Do <strong>not</strong> require <span class="mono">lamp.z &lt; border.z</span>.
+      </p>
+    </header>
+
+    <section>
+      <h2>Revised decision rule</h2>
+      <div class="rule-box">
+        <ol>
+          <li><strong>Containment.</strong> A lamp is a candidate for a border only if the lamp rectangle sits inside the border rectangle. If it sits in none, it is an orphan (belongs to no border).</li>
+          <li><strong>Unique owner.</strong> If only one border contains the lamp, assign it there.</li>
+          <li><strong>Local offset template.</strong> Same-sized sibling borders own the same set of local offsets
+            <span class="mono">(dx, dy) = (lamp.X − border.X, lamp.Y − border.Y)</span>.
+            In these examples the template is <code>(+1, +1)</code> and <code>(+21, +57)</code>.</li>
+          <li><strong>Z-order for competing copies.</strong> Process borders by rising z. For each template offset, assign the
+            <em>lowest-z unmatched</em> lamp that is contained in that border and matches the offset.
+            <strong>Do not</strong> require the lamp to be below the border in z — a lamp painted on top of its border is still allowed.</li>
+        </ol>
+      </div>
+      <p>
+        Plain language: stickers go on frames they’re inside; matching stickers sit in the same place
+        <em>inside</em> each copy of the frame; when copies are stacked, draw order picks which sticker
+        goes with which frame. Sticker above the frame is fine.
+      </p>
+      <p class="note">
+        <strong>“Offsets required”</strong> means containment / unique screen position alone is ambiguous
+        (e.g. two lamps on one pixel); you must use <code>(dx, dy)</code> relative to each border’s origin.
+      </p>
+    </section>
+
+    <!-- Scenario 1 -->
+    <article class="scenario" id="scenario-1">
+      <header class="scenario-head">
+        <h2>Scenario 1 — Offset borders, distinct positions</h2>
+        <span class="badge ok">Resolved</span>
+      </header>
+
+      <p>
+        Two same-sized borders sit apart. Each has a top-left lamp and a bottom-right lamp
+        at identical local offsets.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Num</th><th>Name</th><th>X</th><th>Y</th><th>Width</th><th>Height</th><th>Lamps</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>Background</td><td>0</td><td>0</td><td>1008</td><td>676</td><td></td></tr>
+          <tr class="border-row"><td>0</td><td>Border</td><td>234</td><td>141</td><td>39</td><td>75</td><td></td></tr>
+          <tr class="border-row"><td>0</td><td>Border</td><td>224</td><td>113</td><td>39</td><td>75</td><td></td></tr>
+          <tr class="lamp-row"><td>0</td><td>Lamp</td><td>225</td><td>114</td><td>17</td><td>17</td><td>0</td></tr>
+          <tr class="lamp-row"><td>1</td><td>Lamp</td><td>245</td><td>170</td><td>17</td><td>17</td><td>1</td></tr>
+          <tr class="lamp-row"><td>0</td><td>Lamp</td><td>235</td><td>142</td><td>17</td><td>17</td><td>0</td></tr>
+          <tr class="lamp-row"><td>1</td><td>Lamp</td><td>255</td><td>198</td><td>17</td><td>17</td><td>1</td></tr>
+        </tbody>
+      </table>
+
+      <div class="viz">
+        <div class="viz-card">
+          <h3>Border (224, 113) 39×75</h3>
+          <ul>
+            <li>Lamp <code>(225, 114)</code> → <code>(+1, +1)</code>, lamp 0</li>
+            <li>Lamp <code>(245, 170)</code> → <code>(+21, +57)</code>, lamp 1</li>
+          </ul>
+        </div>
+        <div class="viz-card">
+          <h3>Border (234, 141) 39×75</h3>
+          <ul>
+            <li>Lamp <code>(235, 142)</code> → <code>(+1, +1)</code>, lamp 0</li>
+            <li>Lamp <code>(255, 198)</code> → <code>(+21, +57)</code>, lamp 1</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout">
+        Borders overlap, so pure containment can be messy, but the shared local offsets
+        <code>(+1, +1)</code> / <code>(+21, +57)</code> make the pairs obvious.
+        Z-order is not needed here.
+      </div>
+    </article>
+
+    <!-- Scenario 2 -->
+    <article class="scenario" id="scenario-2">
+      <header class="scenario-head">
+        <h2>Scenario 2 — Diagonal chain, shared lamp coordinates</h2>
+        <span class="badge warn">Offsets required</span>
+        <span class="badge ok">Resolved</span>
+      </header>
+
+      <p>
+        Borders step along the same diagonal as the lamp pair. Two different lamp components
+        land on the exact same screen position <code>(245, 170)</code>.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Num</th><th>Name</th><th>X</th><th>Y</th><th>Width</th><th>Height</th><th>Lamps</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>Background</td><td>0</td><td>0</td><td>1008</td><td>676</td><td></td></tr>
+          <tr class="lamp-row"><td>0</td><td>Lamp</td><td>225</td><td>114</td><td>17</td><td>17</td><td>0</td></tr>
+          <tr class="lamp-row"><td>1</td><td>Lamp</td><td>245</td><td>170</td><td>17</td><td>17</td><td>1</td></tr>
+          <tr class="lamp-row"><td>0</td><td>Lamp</td><td>245</td><td>170</td><td>17</td><td>17</td><td>0</td></tr>
+          <tr class="lamp-row"><td>1</td><td>Lamp</td><td>265</td><td>226</td><td>17</td><td>17</td><td>1</td></tr>
+          <tr class="border-row"><td>0</td><td>Border</td><td>224</td><td>113</td><td>39</td><td>75</td><td></td></tr>
+          <tr class="border-row"><td>0</td><td>Border</td><td>244</td><td>169</td><td>39</td><td>75</td><td></td></tr>
+        </tbody>
+      </table>
+
+      <div class="viz">
+        <div class="viz-card">
+          <h3>Border (224, 113) 39×75</h3>
+          <ul>
+            <li>Lamp <code>(225, 114)</code> → <code>(+1, +1)</code>, lamp 0</li>
+            <li>Lamp <code>(245, 170)</code> → <code>(+21, +57)</code>, lamp 1</li>
+          </ul>
+        </div>
+        <div class="viz-card">
+          <h3>Border (244, 169) 39×75</h3>
+          <ul>
+            <li>Lamp <code>(245, 170)</code> → <code>(+1, +1)</code>, lamp 0</li>
+            <li>Lamp <code>(265, 226)</code> → <code>(+21, +57)</code>, lamp 1</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <strong>Why offsets are required:</strong> both lamps at <code>(245, 170)</code> are inside
+        <em>both</em> borders. Screen position cannot choose.
+        Relative to A <code>(224, 113)</code> that point is <code>(+21, +57)</code>;
+        relative to B <code>(244, 169)</code> it is <code>(+1, +1)</code>.
+        Same pixel, two roles — one per border’s template slot.
+      </div>
+    </article>
+
+    <!-- Scenario 3 -->
+    <article class="scenario" id="scenario-3">
+      <header class="scenario-head">
+        <h2>Scenario 3 — Fully stacked clones (coordinates only)</h2>
+        <span class="badge fail">Needs z-order</span>
+      </header>
+
+      <p>
+        Two borders and two lamp pairs occupy identical coordinates. Every local offset matches both borders.
+        Without z-order, instance pairing is ambiguous.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Num</th><th>Name</th><th>X</th><th>Y</th><th>Width</th><th>Height</th><th>Lamps</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>Background</td><td>0</td><td>0</td><td>1008</td><td>676</td><td></td></tr>
+          <tr class="lamp-row"><td>0</td><td>Lamp</td><td>225</td><td>114</td><td>17</td><td>17</td><td>0</td></tr>
+          <tr class="lamp-row"><td>1</td><td>Lamp</td><td>245</td><td>170</td><td>17</td><td>17</td><td>1</td></tr>
+          <tr class="lamp-row"><td>0</td><td>Lamp</td><td>225</td><td>114</td><td>17</td><td>17</td><td>0</td></tr>
+          <tr class="lamp-row"><td>1</td><td>Lamp</td><td>245</td><td>170</td><td>17</td><td>17</td><td>1</td></tr>
+          <tr class="border-row"><td>0</td><td>Border</td><td>224</td><td>113</td><td>39</td><td>75</td><td></td></tr>
+          <tr class="border-row"><td>0</td><td>Border</td><td>224</td><td>113</td><td>39</td><td>75</td><td></td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout fail">
+        You can say “these four lamps belong to this stacked border pair,”
+        but not which lamp <em>instance</em> belongs to which border <em>instance</em>.
+        Resolved in Scenario 4 once z-order is available.
+      </div>
+    </article>
+
+    <!-- Scenario 4 -->
+    <article class="scenario" id="scenario-4">
+      <header class="scenario-head">
+        <h2>Scenario 4 — Same stack, with z-order</h2>
+        <span class="badge ok">Resolved</span>
+      </header>
+
+      <p>
+        Same geometry as Scenario 3, plus z-order. <code>Intersects</code> is 5 for both borders — not a tie-break.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Num</th><th>Name</th><th>X</th><th>Y</th><th>W</th><th>H</th><th>Lamps</th><th>Intersects</th><th>OrdinalComponentIdentifier</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>Background</td><td>0</td><td>0</td><td>1008</td><td>676</td><td></td><td>7</td><td>0</td></tr>
+          <tr class="lamp-row"><td>0</td><td>Lamp</td><td>225</td><td>114</td><td>17</td><td>17</td><td>0</td><td>1</td><td>1</td></tr>
+          <tr class="lamp-row"><td>1</td><td>Lamp</td><td>245</td><td>170</td><td>17</td><td>17</td><td>1</td><td>1</td><td>2</td></tr>
+          <tr class="lamp-row"><td>0</td><td>Lamp</td><td>225</td><td>114</td><td>17</td><td>17</td><td>0</td><td>1</td><td>3</td></tr>
+          <tr class="lamp-row"><td>1</td><td>Lamp</td><td>245</td><td>170</td><td>17</td><td>17</td><td>1</td><td>1</td><td>4</td></tr>
+          <tr class="border-row"><td>0</td><td>Border</td><td>224</td><td>113</td><td>39</td><td>75</td><td></td><td>5</td><td>5</td></tr>
+          <tr class="border-row"><td>0</td><td>Border</td><td>224</td><td>113</td><td>39</td><td>75</td><td></td><td>5</td><td>6</td></tr>
+        </tbody>
+      </table>
+
+      <div class="viz">
+        <div class="viz-card">
+          <h3>Border z=5</h3>
+          <ul>
+            <li>Lamp z=1 at <code>(225, 114)</code> → <code>(+1, +1)</code></li>
+            <li>Lamp z=2 at <code>(245, 170)</code> → <code>(+21, +57)</code></li>
+          </ul>
+        </div>
+        <div class="viz-card">
+          <h3>Border z=6</h3>
+          <ul>
+            <li>Lamp z=3 at <code>(225, 114)</code> → <code>(+1, +1)</code></li>
+            <li>Lamp z=4 at <code>(245, 170)</code> → <code>(+21, +57)</code></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout">
+        Revised rule (no <code>z &lt; border</code>): process borders by rising z; each fills
+        <code>(+1, +1)</code> then <code>(+21, +57)</code> with the lowest-z unmatched matching lamp.
+        Border 5 takes z1–2; border 6 takes z3–4.
+      </div>
+    </article>
+
+    <!-- Scenario 5 -->
+    <article class="scenario" id="scenario-5">
+      <header class="scenario-head">
+        <h2>Scenario 5 — Lamp above borders + outside orphan</h2>
+        <span class="badge ok">Resolved (relaxed rule)</span>
+      </header>
+
+      <p>
+        Stacked borders again, but one template lamp sits <em>above</em> both borders in z-order,
+        and one lamp sits completely outside.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Num</th><th>Name</th><th>X</th><th>Y</th><th>W</th><th>H</th><th>Intersects</th><th>OrdinalComponentIdentifier</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>Background</td><td>0</td><td>0</td><td>1008</td><td>676</td><td>7</td><td>0</td></tr>
+          <tr class="lamp-row"><td></td><td>Lamp</td><td>225</td><td>114</td><td>17</td><td>17</td><td>1</td><td>1</td></tr>
+          <tr class="orphan-row"><td></td><td>Lamp</td><td>380</td><td>182</td><td>17</td><td>17</td><td>0</td><td>2</td></tr>
+          <tr class="lamp-row"><td></td><td>Lamp</td><td>245</td><td>170</td><td>17</td><td>17</td><td>1</td><td>3</td></tr>
+          <tr class="lamp-row"><td></td><td>Lamp</td><td>245</td><td>170</td><td>17</td><td>17</td><td>1</td><td>4</td></tr>
+          <tr class="border-row"><td>0</td><td>Border</td><td>224</td><td>113</td><td>39</td><td>75</td><td>5</td><td>5</td></tr>
+          <tr class="border-row"><td>0</td><td>Border</td><td>224</td><td>113</td><td>39</td><td>75</td><td>5</td><td>6</td></tr>
+          <tr class="lamp-row"><td></td><td>Lamp</td><td>225</td><td>114</td><td>17</td><td>17</td><td>1</td><td>7</td></tr>
+        </tbody>
+      </table>
+
+      <div class="viz">
+        <div class="viz-card">
+          <h3>Border z=5</h3>
+          <ul>
+            <li>Lamp z=1 <code>(225, 114)</code> → <code>(+1, +1)</code></li>
+            <li>Lamp z=3 <code>(245, 170)</code> → <code>(+21, +57)</code></li>
+          </ul>
+        </div>
+        <div class="viz-card">
+          <h3>Border z=6</h3>
+          <ul>
+            <li>Lamp z=7 <code>(225, 114)</code> → <code>(+1, +1)</code> (above borders)</li>
+            <li>Lamp z=4 <code>(245, 170)</code> → <code>(+21, +57)</code></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Strict rule failure:</strong> requiring <code>lamp.z &lt; border.z</code> leaves border 6
+        without a <code>(+1, +1)</code> lamp and strands z=7.<br />
+        <strong>Relaxed rule:</strong> z=7 is still a valid match for border 6’s <code>(+1, +1)</code> slot.
+        Lamp z=2 at <code>(380, 182)</code> has <code>Intersects=0</code> — orphan, belongs to no border.
+      </div>
+    </article>
+
+    <section>
+      <h2>Why drop <code>z &lt; border</code>?</h2>
+      <table>
+        <thead>
+          <tr><th>Scenario</th><th>With <code>z &lt; border</code></th><th>Without (revised)</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1 Offset</td>
+            <td>OK (z unused)</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <td>2 Shared pixel</td>
+            <td>OK</td>
+            <td>OK</td>
+          </tr>
+          <tr>
+            <td>4 Full stack</td>
+            <td>OK</td>
+            <td>OK (same pairing)</td>
+          </tr>
+          <tr>
+            <td>5 Lamp above borders</td>
+            <td>Fails — z7 stranded</td>
+            <td>OK — z7 → border 6</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        Same answers on 1, 2, and 4; Scenario 5 only works if lamps may sit above their border in z-order.
+      </p>
+    </section>
+
+    <section>
+      <h2>C# reference implementation</h2>
+      <p>
+        Same revised rule, expressed in C#. Wired into the decoder via
+        <span class="mono">BorderOwnershipAssigner</span> after all components are parsed;
+        each border emits <span class="mono">OwnedOrdinalComponentIdentifiers</span>.
+        A “child” may be any non-border component (lamp, button, etc.).
+        Template offsets are discovered from sibling ownership (fallback
+        <code>(+1, +1)</code> / <code>(+21, +57)</code> for the 39×75 examples).
+      </p>
+<pre>using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public readonly record struct Rect(int X, int Y, int Width, int Height)
+{
+    public bool Contains(Rect other) =&gt;
+        other.X &gt;= X
+        &amp;&amp; other.Y &gt;= Y
+        &amp;&amp; other.X + other.Width &lt;= X + Width
+        &amp;&amp; other.Y + other.Height &lt;= Y + Height;
+}
+
+public readonly record struct Offset(int Dx, int Dy);
+
+public sealed class LayoutComponent
+{
+    public string Id { get; init; }
+    public string Kind { get; init; }  // e.g. "Border", "Lamp", or any other type
+    public Rect Bounds { get; init; }
+    public int OrdinalComponentIdentifier { get; init; }
+}
+
+public sealed class BorderOwnershipResult
+{
+    public IReadOnlyDictionary&lt;LayoutComponent, List&lt;LayoutComponent&gt;&gt; Assignment { get; init; }
+    public IReadOnlyList&lt;LayoutComponent&gt; Orphans { get; init; }
+    public IReadOnlyList&lt;LayoutComponent&gt; Unresolved { get; init; }
+}
+
+/// &lt;summary&gt;
+/// Assigns candidate components to border containers by containment,
+/// sibling local-offset templates, and z-order when copies compete.
+/// Candidates may be lamps, other borders, or any layout component.
+/// &lt;/summary&gt;
+public static class BorderOwnershipAssigner
+{
+    // Known sibling template for the 39×75 border examples in this report.
+    private static readonly Offset[] DefaultTemplate =
+    {
+        new Offset(1, 1),
+        new Offset(21, 57),
+    };
+
+    public static BorderOwnershipResult Assign(
+        IReadOnlyList&lt;LayoutComponent&gt; borders,
+        IReadOnlyList&lt;LayoutComponent&gt; candidates,
+        IReadOnlyList&lt;Offset&gt; template = null)
+    {
+        if (borders is null) throw new ArgumentNullException(nameof(borders));
+        if (candidates is null) throw new ArgumentNullException(nameof(candidates));
+
+        Offset[] slots = (template ?? DefaultTemplate).ToArray();
+        var assignment = borders.ToDictionary(b =&gt; b, _ =&gt; new List&lt;LayoutComponent&gt;());
+        var unmatched = new HashSet&lt;LayoutComponent&gt;(candidates);
+        var orphans = new List&lt;LayoutComponent&gt;();
+
+        // 1. Orphans — contained by no border
+        foreach (LayoutComponent component in candidates)
+        {
+            if (!borders.Any(b =&gt; b.Bounds.Contains(component.Bounds)))
+            {
+                orphans.Add(component);
+                unmatched.Remove(component);
+            }
+        }
+
+        // 2. Unique containment
+        foreach (LayoutComponent component in unmatched.ToList())
+        {
+            List&lt;LayoutComponent&gt; owners = borders
+                .Where(b =&gt; b.Bounds.Contains(component.Bounds))
+                .ToList();
+
+            if (owners.Count == 1)
+            {
+                assignment[owners[0]].Add(component);
+                unmatched.Remove(component);
+            }
+        }
+
+        // 3. Competing copies — fill template slots by rising border z
+        //    Do NOT require component.OrdinalComponentIdentifier &lt; border.OrdinalComponentIdentifier
+        foreach (LayoutComponent border in borders.OrderBy(b =&gt; b.OrdinalComponentIdentifier))
+        {
+            foreach (Offset slot in slots)
+            {
+                LayoutComponent match = unmatched
+                    .Where(c =&gt; border.Bounds.Contains(c.Bounds)
+                                &amp;&amp; LocalOffset(border, c).Equals(slot))
+                    .OrderBy(c =&gt; c.OrdinalComponentIdentifier)
+                    .FirstOrDefault();
+
+                if (match is null)
+                    continue;
+
+                assignment[border].Add(match);
+                unmatched.Remove(match);
+            }
+        }
+
+        return new BorderOwnershipResult
+        {
+            Assignment = assignment,
+            Orphans = orphans,
+            Unresolved = unmatched.OrderBy(c =&gt; c.OrdinalComponentIdentifier).ToList(),
+        };
+    }
+
+    public static Offset LocalOffset(LayoutComponent border, LayoutComponent child) =&gt;
+        new Offset(child.Bounds.X - border.Bounds.X, child.Bounds.Y - border.Bounds.Y);
+}
+
+// --- Scenario 5 worked example ---
+//
+// Border z=5 → components z=1 (+1,+1), z=3 (+21,+57)
+// Border z=6 → components z=7 (+1,+1), z=4 (+21,+57)
+// Component z=2 at (380,182) → orphan
+
+public static class Scenario5Example
+{
+    public static BorderOwnershipResult Run()
+    {
+        var borders = new List&lt;LayoutComponent&gt;
+        {
+            Comp("B5", "Border", 224, 113, 39, 75, z: 5),
+            Comp("B6", "Border", 224, 113, 39, 75, z: 6),
+        };
+
+        // Any component kinds are valid candidates — lamps used here only as the worked example.
+        var candidates = new List&lt;LayoutComponent&gt;
+        {
+            Comp("C1", "Lamp", 225, 114, 17, 17, z: 1),
+            Comp("C2", "Lamp", 380, 182, 17, 17, z: 2), // outside
+            Comp("C3", "Lamp", 245, 170, 17, 17, z: 3),
+            Comp("C4", "Lamp", 245, 170, 17, 17, z: 4),
+            Comp("C7", "Lamp", 225, 114, 17, 17, z: 7), // above borders
+        };
+
+        return BorderOwnershipAssigner.Assign(borders, candidates);
+    }
+
+    private static LayoutComponent Comp(
+        string id, string kind, int x, int y, int w, int h, int z) =&gt;
+        new LayoutComponent
+        {
+            Id = id,
+            Kind = kind,
+            Bounds = new Rect(x, y, w, h),
+            OrdinalComponentIdentifier = z,
+        };
+}</pre>
+    </section>
+
+    <section>
+      <h2>Summary</h2>
+      <table>
+        <thead>
+          <tr><th>Scenario</th><th>Signals used</th><th>Outcome</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1 — Offset borders</td>
+            <td>Containment + offsets</td>
+            <td>Clean 2+2 split</td>
+          </tr>
+          <tr>
+            <td>2 — Diagonal / shared pixel</td>
+            <td>Offsets (required) + instances</td>
+            <td>2+2; one pixel hosts two lamps</td>
+          </tr>
+          <tr>
+            <td>3 — Full stack, no z</td>
+            <td>Coordinates only</td>
+            <td>Ambiguous until z is available</td>
+          </tr>
+          <tr>
+            <td>4 — Full stack + z</td>
+            <td>Offsets + z-order</td>
+            <td>Border z5→z1,z2; Border z6→z3,z4</td>
+          </tr>
+          <tr>
+            <td>5 — Lamp above + orphan</td>
+            <td>Offsets + z (no z&lt;border)</td>
+            <td>Border z5→z1,z3; Border z6→z7,z4; z2 orphan</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <strong>Bottom line:</strong> for every scenario provided so far, the revised rule resolves
+        which components belong to which border whenever z-order is present for stacked clones.
+        Geometry + offsets handle the rest. Outside lamps correctly stay unassigned.
+      </div>
+    </section>
+
+    <footer>
+      Examples from MFME component lists (39×75 borders; lamp template
+      <code>(+1, +1)</code> / <code>(+21, +57)</code>). Revised after dropping the
+      <code>lamp.z &lt; border.z</code> constraint.
+    </footer>
+  </main>
+</body>
+</html>

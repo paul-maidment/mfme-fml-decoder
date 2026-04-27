@@ -1,0 +1,54 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1008,
+        "Height": 676,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "None",
+      "Values": {
+        "NoOverlayInFullscreenMode": false,
+        "RandomTile": false,
+        "Tiled": false,
+        "Transparency_UseAlphaChannel": false,
+        "Transparency_UseColour": false,
+        "BorderColour": "#000000FF",
+        "Colour": "#F0F0F0FF",
+        "TransparentColour": "#000000FF"
+      }
+    },
+    {
+      "Type": "PlasmaDisplay",
+      "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 4294967150,
+        "Y": 171,
+        "Width": 1154,
+        "Height": 290,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "Values": {
+        "Size": 9,
+        "BackgroundColour": "#0080C0FF",
+        "OffColour": "#FF80C0FF",
+        "OnColour": "#8000FFFF"
+      },
+      "Images": {
+        "overlay_image": {
+          "Width": 1154,
+          "Height": 290,
+          "BitsPerPixel": 32
+        }
+      }
+    }
+  ]
+}

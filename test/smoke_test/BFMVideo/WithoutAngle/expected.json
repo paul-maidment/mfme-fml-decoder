@@ -1,0 +1,52 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1138,
+        "Height": 748,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "None",
+      "Values": {
+        "NoOverlayInFullscreenMode": false,
+        "RandomTile": false,
+        "Tiled": false,
+        "Transparency_UseAlphaChannel": false,
+        "Transparency_UseColour": false,
+        "BorderColour": "#000000FF",
+        "Colour": "#F0F0F0FF",
+        "TransparentColour": "#000000FF"
+      }
+    },
+    {
+      "Type": "BFMVideo",
+      "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 316,
+        "Y": 83,
+        "Width": 640,
+        "Height": 480,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "Values": {
+        "VideoMode": "640 x 480 H",
+        "VideoMode Index": 3
+      },
+      "Images": {
+        "overlay_image": {
+          "Width": 640,
+          "Height": 480,
+          "BitsPerPixel": 32
+        }
+      }
+    }
+  ]
+}

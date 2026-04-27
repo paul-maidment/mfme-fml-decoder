@@ -1,0 +1,81 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1008,
+        "Height": 676,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "None",
+      "Values": {
+        "NoOverlayInFullscreenMode": false,
+        "RandomTile": false,
+        "Tiled": false,
+        "Transparency_UseAlphaChannel": false,
+        "Transparency_UseColour": false,
+        "BorderColour": "#000000FF",
+        "Colour": "#F0F0F0FF",
+        "TransparentColour": "#000000FF"
+      }
+    },
+    {
+      "Type": "FlipReel",
+      "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 410,
+        "Y": 143,
+        "Width": 80,
+        "Height": 140,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "Values": {
+        "BorderWidth": 5,
+        "HalfSteps": 433,
+        "NumberOfDefinedLampNumbers": 3,
+        "Offset": 1,
+        "Stops": 72,
+        "SubLamp1Number": 23,
+        "SubLamp2Number": 24,
+        "SubLamp3Number": 25,
+        "Inverted": true,
+        "LampsEnabled": true,
+        "BorderColour": "#FF0080FF"
+      },
+      "Images": {
+        "lamp_mask_1": {
+          "Width": 80,
+          "Height": 140,
+          "BitsPerPixel": 32
+        },
+        "lamp_mask_2": {
+          "Width": 80,
+          "Height": 140,
+          "BitsPerPixel": 32
+        },
+        "lamp_mask_3": {
+          "Width": 80,
+          "Height": 140,
+          "BitsPerPixel": 32
+        },
+        "overlay_image": {
+          "Width": 80,
+          "Height": 140,
+          "BitsPerPixel": 32
+        },
+        "reel_image": {
+          "Width": 56,
+          "Height": 5760,
+          "BitsPerPixel": 32
+        }
+      }
+    }
+  ]
+}

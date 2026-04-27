@@ -1,0 +1,57 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1008,
+        "Height": 676,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "None",
+      "Values": {
+        "NoOverlayInFullscreenMode": false,
+        "RandomTile": false,
+        "Tiled": false,
+        "Transparency_UseAlphaChannel": false,
+        "Transparency_UseColour": false,
+        "BorderColour": "#000000FF",
+        "Colour": "#F0F0F0FF",
+        "TransparentColour": "#000000FF"
+      }
+    },
+    {
+      "Type": "BFMLED",
+      "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 278,
+        "Y": 97,
+        "Width": 229,
+        "Height": 78,
+        "Number": 0,
+        "Angle": 45,
+        "Orientation": "Vertical"
+      },
+      "Values": {
+        "DigitSpacing": 7,
+        "LedSize": 6,
+        "XSize": 9,
+        "YSize": 8,
+        "BackColour": "#0000FFFF",
+        "OffColour": "#FF8000FF",
+        "OnColour": "#FF80C0FF"
+      },
+      "Images": {
+        "overlay_image": {
+          "Width": 229,
+          "Height": 217,
+          "BitsPerPixel": 32
+        }
+      }
+    }
+  ]
+}

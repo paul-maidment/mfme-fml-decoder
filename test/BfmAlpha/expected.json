@@ -1,0 +1,41 @@
+{
+  "Components": [
+     {
+       "Type": "Background",
+       "Colour": "#F0F0F0FF",
+       "BorderColour": "#000000FF",
+       "TransparentColour": "#000000FF",
+       "TransparencyType": "None",
+       "Tiled": false,
+       "RandomTile": false,
+       "NoOverlayInFullscreenMode": false,
+       "OffsetX": 0,
+       "OffsetY": 0,
+       "X": 0,
+       "Y": 0,
+       "Width": 676,
+       "Height": 1008,
+       "Number": 0,
+       "Angle": 0,
+       "Images": {}
+     },
+     {
+       "Type": "XXXXXXX",
+       "LeftSkew": 5,
+       "RightSkew": -5,
+       "X": 430,
+       "Y": 173,
+       "Width": 296,
+       "Height": 504,
+       "Number": 0,
+       "Angle": 0,
+       "Images": {
+         "overlay_bitmap": {
+           "Width": 504,
+           "Height": 296,
+           "BitsPerPixel": 32
+         }
+       }
+     }
+   ]
+}

@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>MfmeFmlDecoder.SmokeTests</RootNamespace>
+    <AssemblyName>MfmeFmlDecoder.SmokeTests</AssemblyName>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>10</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="DiffPlex" Version="1.7.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="xunit" Version="2.6.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.4">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MfmeFmlDecoder.csproj" />
+  </ItemGroup>
+
+  <!-- Ensure the console app is built immediately before tests run (Fresh DLL for dotnet exec in smoke tests). -->
+  <Target Name="BuildMfmeFmlDecoderBeforeTests" BeforeTargets="VSTest">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)..\..\MfmeFmlDecoder.csproj" Targets="Build" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+  </Target>
+</Project>

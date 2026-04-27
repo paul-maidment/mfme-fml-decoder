@@ -1,0 +1,113 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1008,
+        "Height": 676,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "None",
+      "Values": {
+        "NoOverlayInFullscreenMode": false,
+        "RandomTile": false,
+        "Tiled": false,
+        "Transparency_UseAlphaChannel": false,
+        "Transparency_UseColour": false,
+        "BorderColour": "#000000FF",
+        "Colour": "#F0F0F0FF",
+        "TransparentColour": "#000000FF"
+      }
+    },
+    {
+      "Type": "Button",
+      "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 504,
+        "Y": 338,
+        "Width": 73,
+        "Height": 25,
+        "Number": 23,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "SubLampNumberTable": {
+        "NumberOfDefinedLampNumbers": 2,
+        "Lamp1": 32,
+        "Lamp2": 44
+      },
+      "Fonts": {
+        "PrimaryFont": {
+          "Tag": 39,
+          "Role": "PrimaryFont",
+          "FontName": "Tahoma",
+          "FontSize": 8,
+          "ScriptStyleRaw": 1,
+          "ScriptStyleName": "Western",
+          "TextColour": "#0000FFFF",
+          "FontStyle": 0
+        }
+      },
+      "Values": {
+        "Label (UTF-16)": "Collect",
+        "SelectedCoinNote": "Tok/2p SYS85",
+        "SelectedEffect": "S10 Token",
+        "SelectedShape": "Ellipse",
+        "Button Number": 23,
+        "InhibitLamp": 33,
+        "SelectedShapeId": 5,
+        "Shortcut 1": 67,
+        "Shortcut 2": 192,
+        "XOffset": 5,
+        "YOffset": 8,
+        "Graphic": true,
+        "Inverted": true,
+        "Led": true,
+        "Lockout": true,
+        "Shortcut 1 Enabled": true,
+        "Shortcut 2 Enabled": true,
+        "Split": true,
+        "Lamp1Colour": "#FFFF00FF",
+        "Lamp2Colour": "#FFFF00FF",
+        "OffColour": "#FFFF00FF"
+      },
+      "Images": {
+        "lamp_1_image": {
+          "Width": 73,
+          "Height": 25,
+          "BitsPerPixel": 32
+        },
+        "lamp_2_image": {
+          "Width": 73,
+          "Height": 25,
+          "BitsPerPixel": 32
+        },
+        "mask_1_image": {
+          "Width": 73,
+          "Height": 25,
+          "BitsPerPixel": 32
+        },
+        "mask_2_image": {
+          "Width": 73,
+          "Height": 25,
+          "BitsPerPixel": 32
+        },
+        "off_image": {
+          "Width": 73,
+          "Height": 25,
+          "BitsPerPixel": 32
+        },
+        "overlay_image": {
+          "Width": 73,
+          "Height": 25,
+          "BitsPerPixel": 32
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>MfmeFmlDecoder</RootNamespace>
+    <AssemblyName>MfmeFmlDecoder</AssemblyName>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <LangVersion>10</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>MfmeFmlDecoder.UnitTests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="src\Decoder\Core\**" />
+    <Compile Remove="test/**/*.cs" />
+    <Compile Remove="src/**/*Tests.cs" />
+    <Compile Remove="tools/**" />
+    <Compile Remove="test\smoke_test\MaygayVideo\WithAngle\**" />
+    <Compile Remove="test\smoke_test\PlasmaDisplay\WithAngle\**" />
+    <EmbeddedResource Remove="src\Decoder\Core\**" />
+    <EmbeddedResource Remove="tools/**" />
+    <EmbeddedResource Remove="test\smoke_test\MaygayVideo\WithAngle\**" />
+    <EmbeddedResource Remove="test\smoke_test\PlasmaDisplay\WithAngle\**" />
+    <None Remove="tools/**" />
+
+    <Folder Include="test\smoke_test\AceVideo\WithoutAngle\" />
+    <Folder Include="test\smoke_test\Alpha\WithoutAngle\" />
+    <Folder Include="test\smoke_test\AstraMatrix\WithoutAngle\" />
+    <Folder Include="test\smoke_test\BarcrestBwbVideo\WithAngle\" />
+    <Folder Include="test\smoke_test\BFMAlpha\WithoutAngle\" />
+    <Folder Include="test\smoke_test\BFMColourLed\WithoutAngle\" />
+    <Folder Include="test\smoke_test\BFMLed\WithoutAngle\" />
+    <Folder Include="test\smoke_test\BFMVideo\WithAngle\" />
+    <Folder Include="test\smoke_test\BFMVideo\WithoutAngle\" />
+    <Folder Include="test\smoke_test\Bitmap\WithoutAngle\" />
+    <Folder Include="test\smoke_test\Checkbox\WithoutAngle\" />
+    <Folder Include="test\smoke_test\DotAlpha\WithoutAngle\" />
+    <Folder Include="test\smoke_test\DotMatrix\WithAngle\" />
+    <Folder Include="test\smoke_test\EpochDotAlpha\WithoutAngle\" />
+    <Folder Include="test\smoke_test\EpochMatrix\WithoutAngle\" />
+    <Folder Include="test\smoke_test\Frame\WithAngle\" />
+    <Folder Include="test\smoke_test\IGTVfd\WithoutAngle\" />
+    <Folder Include="test\smoke_test\Label\WithAngle\" />
+    <Folder Include="test\smoke_test\Led\WithoutAngle\" />
+    <Folder Include="test\smoke_test\MatrixAlpha\WithoutAngle\" />
+    <Folder Include="test\smoke_test\MaygayMatrix\WithoutAngle\" />
+    <Folder Include="test\smoke_test\ProconnMatrix\WithoutAngle\" />
+    <Folder Include="test\smoke_test\RgbLed\WithoutAngle\" />
+    <None Remove="src\Decoder\Core\**" />
+    <None Remove="test\smoke_test\MaygayVideo\WithAngle\**" />
+    <None Remove="test\smoke_test\PlasmaDisplay\WithAngle\**" />
+  </ItemGroup>
+</Project>

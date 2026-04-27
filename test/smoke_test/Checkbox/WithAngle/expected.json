@@ -1,0 +1,64 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1138,
+        "Height": 748,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "None",
+      "Values": {
+        "NoOverlayInFullscreenMode": false,
+        "RandomTile": false,
+        "Tiled": false,
+        "Transparency_UseAlphaChannel": false,
+        "Transparency_UseColour": false,
+        "BorderColour": "#000000FF",
+        "Colour": "#F0F0F0FF",
+        "TransparentColour": "#000000FF"
+      }
+    },
+    {
+      "Type": "Checkbox",
+      "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 291,
+        "Y": 112,
+        "Width": 73,
+        "Height": 25,
+        "Number": 0,
+        "Angle": 45,
+        "Orientation": "Vertical"
+      },
+      "Fonts": {
+        "PrimaryFont": {
+          "Tag": 39,
+          "Role": "PrimaryFont",
+          "FontName": "Tahoma",
+          "FontSize": 8,
+          "ScriptStyleRaw": 1,
+          "ScriptStyleName": "Western",
+          "TextColour": "#FF80C0FF",
+          "FontStyle": 0
+        }
+      },
+      "Values": {
+        "Label": "0",
+        "Checked": false
+      },
+      "Images": {
+        "overlay_image": {
+          "Width": 73,
+          "Height": 69,
+          "BitsPerPixel": 32
+        }
+      }
+    }
+  ]
+}

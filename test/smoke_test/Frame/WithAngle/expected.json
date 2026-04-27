@@ -1,0 +1,54 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1137,
+        "Height": 813,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "None",
+      "Values": {
+        "NoOverlayInFullscreenMode": false,
+        "RandomTile": false,
+        "Tiled": false,
+        "Transparency_UseAlphaChannel": false,
+        "Transparency_UseColour": false,
+        "BorderColour": "#000000FF",
+        "Colour": "#F0F0F0FF",
+        "TransparentColour": "#000000FF"
+      }
+    },
+    {
+      "Type": "Frame",
+      "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 399,
+        "Y": 233,
+        "Width": 50,
+        "Height": 50,
+        "Number": 0,
+        "Angle": 45,
+        "Orientation": "Vertical"
+      },
+      "Values": {
+        "Bevel": "Lowered",
+        "Shape": "Bottom Line",
+        "BevelSelectedIndex": 0,
+        "ShapeSelectedIndex": 3
+      },
+      "Images": {
+        "overlay_image": {
+          "Width": 70,
+          "Height": 70,
+          "BitsPerPixel": 32
+        }
+      }
+    }
+  ]
+}

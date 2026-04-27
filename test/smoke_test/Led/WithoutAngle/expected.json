@@ -1,0 +1,59 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1137,
+        "Height": 813,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "None",
+      "Values": {
+        "NoOverlayInFullscreenMode": false,
+        "RandomTile": false,
+        "Tiled": false,
+        "Transparency_UseAlphaChannel": false,
+        "Transparency_UseColour": false,
+        "BorderColour": "#000000FF",
+        "Colour": "#F0F0F0FF",
+        "TransparentColour": "#000000FF"
+      }
+    },
+    {
+      "Type": "Led",
+      "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 324,
+        "Y": 145,
+        "Width": 17,
+        "Height": 17,
+        "Number": -1,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "Values": {
+        "Segment": "",
+        "Style": "Round",
+        "SelectedStyleIndex": 0,
+        "SelectedSegmentIndex": -1,
+        "Led": true,
+        "NoOutline": true,
+        "NoShadow": false,
+        "OffColour": "#00FF00FF",
+        "OnColour": "#0000FFFF"
+      },
+      "Images": {
+        "overlay_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1430,
+        "Height": 1824,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "None",
+      "Values": {
+        "NoOverlayInFullscreenMode": false,
+        "RandomTile": false,
+        "Tiled": false,
+        "Transparency_UseAlphaChannel": false,
+        "Transparency_UseColour": false,
+        "BorderColour": "#000000FF",
+        "Colour": "#F0F0F0FF",
+        "TransparentColour": "#000000FF"
+      }
+    },
+    {
+      "Type": "MaygayMatrix",
+      "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 515,
+        "Y": 882,
+        "Width": 491,
+        "Height": 148,
+        "Number": 0,
+        "Angle": 45,
+        "Orientation": "Vertical"
+      },
+      "Values": {
+        "Size": 7,
+        "BackgroundColour": "#0000FFFF",
+        "OffColour": "#00FF00FF",
+        "OnColour": "#FF80C0FF"
+      },
+      "Images": {
+        "overlay_image": {
+          "Width": 491,
+          "Height": 451,
+          "BitsPerPixel": 32
+        }
+      }
+    }
+  ]
+}

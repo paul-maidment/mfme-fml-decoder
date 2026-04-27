@@ -1,0 +1,113 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1008,
+        "Height": 676,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "None",
+      "Values": {
+        "NoOverlayInFullscreenMode": false,
+        "RandomTile": false,
+        "Tiled": false,
+        "Transparency_UseAlphaChannel": false,
+        "Transparency_UseColour": false,
+        "BorderColour": "#000000FF",
+        "Colour": "#F0F0F0FF",
+        "TransparentColour": "#000000FF"
+      }
+    },
+    {
+      "Type": "BandReel",
+      "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 385,
+        "Y": 230,
+        "Width": 80,
+        "Height": 200,
+        "Number": 0,
+        "Angle": 45,
+        "Orientation": "Vertical"
+      },
+      "Values": {
+        "OffColour": "White",
+        "BorderWidth": 2,
+        "HalfSteps": 321,
+        "NonNullSublampCount": 42,
+        "Offset": 11,
+        "OptoTab": 9,
+        "Spacing": 12,
+        "Stops": 23,
+        "View": 6,
+        "Custom": true,
+        "Inverted": true,
+        "Lamps": true,
+        "Opaque": true,
+        "Reverse": true,
+        "OffLevel": 64,
+        "SelectedOffColour": 3,
+        "BorderColour": "#FF0000FF"
+      },
+      "Images": {
+        "band_image": {
+          "Width": 80,
+          "Height": 896,
+          "BitsPerPixel": 32
+        },
+        "lamp_mask_1_20_image": {
+          "Width": 80,
+          "Height": 200,
+          "BitsPerPixel": 32
+        },
+        "lamp_mask_21_40_image": {
+          "Width": 80,
+          "Height": 200,
+          "BitsPerPixel": 32
+        },
+        "lamp_mask_41_60_image": {
+          "Width": 80,
+          "Height": 200,
+          "BitsPerPixel": 32
+        },
+        "overlay_image": {
+          "Width": 197,
+          "Height": 200,
+          "BitsPerPixel": 32
+        }
+      },
+      "Masks": {
+        "mask1": {
+          "1a": 21, "1b": 28,
+          "2a": 22, "2b": 29,
+          "3a": 23, "3b": 30,
+          "4a": 24, "4b": 31,
+          "5a": 25, "5b": 32,
+          "6a": 26, "6b": 33
+        },
+        "mask2": {
+          "1a": 35, "1b": 42,
+          "2a": 36, "2b": 43,
+          "3a": 37, "3b": 44,
+          "4a": 38, "4b": 45,
+          "5a": 39, "5b": 46,
+          "6a": 40, "6b": 47
+        },
+        "mask3": {
+          "1a": 49, "1b": 56,
+          "2a": 50, "2b": 57,
+          "3a": 51, "3b": 58,
+          "4a": 52, "4b": 59,
+          "5a": 53, "5b": 60,
+          "6a": 54, "6b": 61
+        }
+      }
+    }
+  ]
+}

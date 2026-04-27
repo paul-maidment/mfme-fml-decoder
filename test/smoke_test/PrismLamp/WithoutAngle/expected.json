@@ -1,0 +1,84 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1008,
+        "Height": 676,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "None",
+      "Values": {
+        "NoOverlayInFullscreenMode": false,
+        "RandomTile": false,
+        "Tiled": false,
+        "Transparency_UseAlphaChannel": false,
+        "Transparency_UseColour": false,
+        "BorderColour": "#000000FF",
+        "Colour": "#F0F0F0FF",
+        "TransparentColour": "#000000FF"
+      }
+    },
+    {
+      "Type": "PrismLamp",
+      "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 435,
+        "Y": 220,
+        "Width": 35,
+        "Height": 45,
+        "Number": 23,
+        "Angle": 0,
+        "Orientation": "Horizontal"
+      },
+      "IsHorizontal": true,
+      "Values": {
+        "HorizontalSpacing": 5,
+        "NumberOfDefinedLampNumbers": 2,
+        "SubLamp1Number": 23,
+        "SubLamp2Number": 24,
+        "Tilt": 42,
+        "VerticalSpacing": 4,
+        "CenterLine": false,
+        "Style": true
+      },
+      "Images": {
+        "lamp_1_image": {
+          "Width": 35,
+          "Height": 45,
+          "BitsPerPixel": 32
+        },
+        "lamp_1_mask_image": {
+          "Width": 35,
+          "Height": 45,
+          "BitsPerPixel": 32
+        },
+        "lamp_2_image": {
+          "Width": 35,
+          "Height": 45,
+          "BitsPerPixel": 32
+        },
+        "lamp_2_mask_image": {
+          "Width": 35,
+          "Height": 45,
+          "BitsPerPixel": 32
+        },
+        "off_image": {
+          "Width": 35,
+          "Height": 45,
+          "BitsPerPixel": 32
+        },
+        "overlay_image": {
+          "Width": 35,
+          "Height": 45,
+          "BitsPerPixel": 32
+        }
+      }
+    }
+  ]
+}

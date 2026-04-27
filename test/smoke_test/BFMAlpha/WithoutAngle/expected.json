@@ -1,0 +1,60 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1008,
+        "Height": 676,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "None",
+      "Values": {
+        "NoOverlayInFullscreenMode": false,
+        "RandomTile": false,
+        "Tiled": false,
+        "Transparency_UseAlphaChannel": false,
+        "Transparency_UseColour": false,
+        "BorderColour": "#000000FF",
+        "Colour": "#F0F0F0FF",
+        "TransparentColour": "#000000FF"
+      }
+    },
+    {
+      "Type": "BFMAlpha",
+      "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 310,
+        "Y": 136,
+        "Width": 272,
+        "Height": 30,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "Values": {
+        "Columns": 18,
+        "DigitWidth": 17,
+        "OffLevel": 73,
+        "Reversed": true,
+        "Colour": "#FF80C0FF"
+      },
+      "Images": {
+        "character_image": {
+          "Width": 272,
+          "Height": 30,
+          "BitsPerPixel": 32
+        },
+        "overlay_image": {
+          "Width": 272,
+          "Height": 30,
+          "BitsPerPixel": 32
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1008,
+        "Height": 676,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "None",
+      "Values": {
+        "NoOverlayInFullscreenMode": false,
+        "RandomTile": false,
+        "Tiled": false,
+        "Transparency_UseAlphaChannel": false,
+        "Transparency_UseColour": false,
+        "BorderColour": "#000000FF",
+        "Colour": "#F0F0F0FF",
+        "TransparentColour": "#000000FF"
+      }
+    },
+    {
+      "Type": "Reel",
+      "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 275,
+        "Y": 129,
+        "Width": 140,
+        "Height": 80,
+        "Number": 3,
+        "Angle": 45,
+        "Orientation": "Horizontal"
+      },
+      "SubLampNumberTable": {
+        "NumberOfDefinedLampNumbers": 15,
+        "Lamp1": 21,
+        "Lamp2": 22,
+        "Lamp3": 23,
+        "Lamp4": 24,
+        "Lamp5": 25,
+        "Lamp6": 26,
+        "Lamp7": 27,
+        "Lamp8": 28,
+        "Lamp9": 29,
+        "Lamp10": 30,
+        "Lamp11": 31,
+        "Lamp12": 32,
+        "Lamp13": 33,
+        "Lamp14": 34,
+        "Lamp15": 35
+      },
+      "Values": {
+        "OffColour": "White",
+        "BorderThickness": 6,
+        "Bounce": 10,
+        "Filter": 4,
+        "HalfSteps": 97,
+        "MirroredLevel": 67,
+        "NumberOfWinlines": 5,
+        "OptoTab": 5,
+        "ReelHeight": 191,
+        "ReelNbrOffset": 9,
+        "Resolution": 2,
+        "Stops": 17,
+        "WinlinesOffset": 3,
+        "WinlinesThickness": 1,
+        "BandOffset": -1,
+        "WidthDiff": 12,
+        "CustomEnabled": true,
+        "DblSymbols": false,
+        "IGTReel": true,
+        "InvertedOpto": true,
+        "LampsEnabled": true,
+        "LedsEnabled": true,
+        "Mirrored": true,
+        "OpaqueBand": true,
+        "Reversed": true,
+        "ToggleView": true,
+        "OffLevel": 65,
+        "BackgroundFillColour": "#804000FF",
+        "BorderColour": "#FF0080FF",
+        "WinlinesColour": "#FFFFFFFF"
+      },
+      "Images": {
+        "band_image": {
+          "Width": 80,
+          "Height": 952,
+          "BitsPerPixel": 32
+        },
+        "gradient_image": {
+          "Width": 140,
+          "Height": 80,
+          "BitsPerPixel": 32
+        },
+        "lamp_masks_11to15": {
+          "Width": 80,
+          "Height": 140,
+          "BitsPerPixel": 32
+        },
+        "lamp_masks_1to5": {
+          "Width": 80,
+          "Height": 140,
+          "BitsPerPixel": 32
+        },
+        "lamp_masks_6to10": {
+          "Width": 80,
+          "Height": 140,
+          "BitsPerPixel": 32
+        },
+        "overlay_image": {
+          "Width": 155,
+          "Height": 155,
+          "BitsPerPixel": 32
+        }
+      }
+    }
+  ]
+}

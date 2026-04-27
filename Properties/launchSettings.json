@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "MfmeFmlDecoder": {
+      "commandName": "Project",
+      "commandLineArgs": "../../../test/smoke_test/Background/WithoutAngle/layout.fml"
+    },
+    "Profile 1": {
+      "commandName": "Executable"
+    }
+  }
+}

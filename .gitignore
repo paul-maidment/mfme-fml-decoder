@@ -1,0 +1,18 @@
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results (without excluding .exe files)
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vs/
+
+# NuGet
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/

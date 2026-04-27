@@ -1,0 +1,543 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1008,
+        "Height": 676,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "None",
+      "Values": {
+        "NoOverlayInFullscreenMode": false,
+        "RandomTile": false,
+        "Tiled": false,
+        "Transparency_UseAlphaChannel": false,
+        "Transparency_UseColour": false,
+        "BorderColour": "#000000FF",
+        "Colour": "#F0F0F0FF",
+        "TransparentColour": "#000000FF"
+      }
+    },
+    {
+      "Type": "SevenSegBlock",
+      "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 211,
+        "Y": 122,
+        "Width": 290,
+        "Height": 290,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "Values": {
+        "SelectedType": "Style 3",
+        "Centre": 51,
+        "Chop": 76,
+        "ColumnSpacing": 1,
+        "Columns": 8,
+        "DigitAngle": 1,
+        "DigitHeight": 33,
+        "DigitWidth": 25,
+        "HorizontalSizePercent": 65,
+        "Offset": 1,
+        "RowSpacing": 1,
+        "Rows": 6,
+        "Slant": 7,
+        "Spacing": 2,
+        "Thickness": 4,
+        "VerticalSizePercent": 79,
+        "DPRight": true,
+        "Segment14": true,
+        "BackColour": "#696969FF",
+        "OffColour": "#4F4F00FF",
+        "OnColour": "#FFFF00FF"
+      },
+      "Digits": [
+        {
+          "DigitNumber": 1,
+          "Visible": true,
+          "Programmable": true,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false,
+          "SegmentLamps": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ]
+        },
+        {
+          "DigitNumber": 2,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": true,
+          "LampNumber": 21
+        },
+        {
+          "DigitNumber": 3,
+          "Visible": true,
+          "Programmable": true,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": true,
+          "ZeroOn": false,
+          "SegmentLamps": [
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39
+          ]
+        },
+        {
+          "DigitNumber": 4,
+          "Visible": true,
+          "Programmable": true,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false,
+          "SegmentLamps": [
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71
+          ]
+        },
+        {
+          "DigitNumber": 5,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": true,
+          "DPOff": false,
+          "AutoDP": true,
+          "ZeroOn": true,
+          "LampNumber": 22
+        },
+        {
+          "DigitNumber": 6,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": true,
+          "DPOff": true,
+          "AutoDP": true,
+          "ZeroOn": true,
+          "LampNumber": 23
+        },
+        {
+          "DigitNumber": 7,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false,
+          "LampNumber": 24
+        },
+        {
+          "DigitNumber": 8,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": true,
+          "AutoDP": true,
+          "ZeroOn": true,
+          "LampNumber": 25
+        },
+        {
+          "DigitNumber": 9,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 10,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 11,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 12,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 13,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 14,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 15,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 16,
+          "Visible": true,
+          "Programmable": true,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false,
+          "SegmentLamps": [
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85
+          ]
+        },
+        {
+          "DigitNumber": 17,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 18,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 19,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 20,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 21,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 22,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 23,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 24,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 25,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 26,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 27,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 28,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 29,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 30,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 31,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 32,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 33,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 34,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 35,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 36,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 37,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 38,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 39,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 40,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 41,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 42,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 43,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 44,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 45,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 46,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 47,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        },
+        {
+          "DigitNumber": 48,
+          "Visible": true,
+          "Programmable": false,
+          "DPOn": false,
+          "DPOff": false,
+          "AutoDP": false,
+          "ZeroOn": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1008,
+        "Height": 676,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "None",
+      "Values": {
+        "NoOverlayInFullscreenMode": false,
+        "RandomTile": false,
+        "Tiled": false,
+        "Transparency_UseAlphaChannel": false,
+        "Transparency_UseColour": false,
+        "BorderColour": "#000000FF",
+        "Colour": "#F0F0F0FF",
+        "TransparentColour": "#000000FF"
+      }
+    },
+    {
+      "Type": "SevenSeg",
+      "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 317,
+        "Y": 187,
+        "Width": 24,
+        "Height": 32,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "Values": {
+        "SelectedType": "Style 2",
+        "Centre": 50,
+        "Chop": 75,
+        "DigitAngle": 0,
+        "Horizontal Spacing": 10,
+        "NumberOfDefinedLampNumbers": 16,
+        "Offset": 0,
+        "Slant": 7,
+        "Spacing": 1,
+        "Thickness": 3,
+        "Vertical Spacing": 6,
+        "Alpha": true,
+        "AutoDP": true,
+        "DPOff": true,
+        "DPOn": true,
+        "DPRight": true,
+        "Programmable": true,
+        "Segment16": true,
+        "ZeroOn": true,
+        "BackgroundColour": "#000000FF",
+        "SegmentOffColour": "#303030FF",
+        "SegmentOnColour": "#FF0000FF"
+      },
+      "Images": {
+        "overlay_image": {
+          "Width": 24,
+          "Height": 32,
+          "BitsPerPixel": 32
+        }
+      },
+      "SegmentLamps": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ]
+    }
+  ]
+}

@@ -1,0 +1,337 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1008,
+        "Height": 676,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "None",
+      "Values": {
+        "NoOverlayInFullscreenMode": false,
+        "RandomTile": false,
+        "Tiled": false,
+        "Transparency_UseAlphaChannel": false,
+        "Transparency_UseColour": false,
+        "BorderColour": "#000000FF",
+        "Colour": "#F0F0F0FF",
+        "TransparentColour": "#000000FF"
+      }
+    },
+    {
+      "Type": "Lamp",
+      "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 414,
+        "Y": 200,
+        "Width": 17,
+        "Height": 17,
+        "Number": 58,
+        "Angle": 45,
+        "Orientation": "Vertical"
+      },
+      "SubLampNumberTable": {
+        "NumberOfDefinedLampNumbers": 12,
+        "Lamp1": 50,
+        "Lamp2": 51,
+        "Lamp3": 52,
+        "Lamp4": 53,
+        "Lamp5": 54,
+        "Lamp6": 55,
+        "Lamp7": 56,
+        "Lamp8": 57,
+        "Lamp9": 58,
+        "Lamp10": 59,
+        "Lamp11": 60,
+        "Lamp12": 61
+      },
+      "Fonts": {
+        "PrimaryFont": {
+          "Tag": 39,
+          "Role": "PrimaryFont",
+          "FontName": "Tahoma",
+          "FontSize": 8,
+          "ScriptStyleRaw": 1,
+          "ScriptStyleName": "Western",
+          "TextColour": "#FF0000FF",
+          "FontStyle": 0
+        },
+        "On1Font": {
+          "Tag": 25,
+          "Role": "On1Font",
+          "FontName": "Tahoma",
+          "FontSize": 8,
+          "ScriptStyleRaw": 1,
+          "ScriptStyleName": "Western",
+          "TextColour": "#00FF00FF",
+          "FontStyle": 0
+        },
+        "On2Font": {
+          "Tag": 26,
+          "Role": "On2Font",
+          "FontName": "Tahoma",
+          "FontSize": 8,
+          "ScriptStyleRaw": 1,
+          "ScriptStyleName": "Western",
+          "TextColour": "#FF0080FF",
+          "FontStyle": 0
+        },
+        "On3Font": {
+          "Tag": 29,
+          "Role": "On3Font",
+          "FontName": "Tahoma",
+          "FontSize": 8,
+          "ScriptStyleRaw": 1,
+          "ScriptStyleName": "Western",
+          "TextColour": "#800080FF",
+          "FontStyle": 0
+        },
+        "On4Font": {
+          "Tag": 30,
+          "Role": "On4Font",
+          "FontName": "Tahoma",
+          "FontSize": 8,
+          "ScriptStyleRaw": 1,
+          "ScriptStyleName": "Western",
+          "TextColour": "#FF8000FF",
+          "FontStyle": 0
+        },
+        "On5Font": {
+          "Tag": 78,
+          "Role": "On5Font",
+          "FontName": "Tahoma",
+          "FontSize": 8,
+          "ScriptStyleRaw": 1,
+          "ScriptStyleName": "Western",
+          "TextColour": "#0080FFFF",
+          "FontStyle": 0
+        },
+        "On6Font": {
+          "Tag": 79,
+          "Role": "On6Font",
+          "FontName": "Tahoma",
+          "FontSize": 8,
+          "ScriptStyleRaw": 1,
+          "ScriptStyleName": "Western",
+          "TextColour": "#FF80FFFF",
+          "FontStyle": 0
+        },
+        "On7Font": {
+          "Tag": 80,
+          "Role": "On7Font",
+          "FontName": "Tahoma",
+          "FontSize": 8,
+          "ScriptStyleRaw": 1,
+          "ScriptStyleName": "Western",
+          "TextColour": "#FF8040FF",
+          "FontStyle": 0
+        },
+        "On8Font": {
+          "Tag": 81,
+          "Role": "On8Font",
+          "FontName": "Tahoma",
+          "FontSize": 8,
+          "ScriptStyleRaw": 1,
+          "ScriptStyleName": "Western",
+          "TextColour": "#00FFFFFF",
+          "FontStyle": 0
+        }
+      },
+      "Values": {
+        "OffText": "Off Text",
+        "On1Text": "On 1 Text",
+        "On2Text": "On 2 Text",
+        "On3Text": "On 3 Text",
+        "On4Text": "On4 Text",
+        "On5Text": "On5 Text",
+        "On6Text": "On6 Text",
+        "On7Text": "On7 Text",
+        "On8Text": "On8 Text",
+        "SelectedCoinNote": "bit6 64",
+        "SelectedEffect": "S10",
+        "ButtonNumber": 45,
+        "InhibitLampNumber": 62,
+        "PieSize": 120,
+        "PieStart": 0,
+        "Roundness": 0,
+        "SelectedShapeIndex": 4,
+        "ShapeAngle": 0,
+        "ShapeParamter": 0,
+        "Shortcut 1": 65,
+        "Shortcut 2": 66,
+        "X Offset": 4,
+        "Y Offset": 5,
+        "Blend": true,
+        "ClickAll": true,
+        "Coin / Note Selected": true,
+        "Graphic": true,
+        "Inverted": true,
+        "LED": true,
+        "Lockout": true,
+        "No outline (inverted)": false,
+        "Preserve Aspect Ratio": true,
+        "RGBLED": false,
+        "Shortcut 1 Enabled": true,
+        "Shortcut 2 Enabled": true,
+        "Transparent": true,
+        "OffImageColour": "#00FFFFFF",
+        "OutlineColour": "#0000FFFF",
+        "Sublamp10Colour": "#000040FF",
+        "Sublamp11Colour": "#400040FF",
+        "Sublamp12Colour": "#800000FF",
+        "Sublamp1Colour": "#FF0000FF",
+        "Sublamp2Colour": "#00FF00FF",
+        "Sublamp3Colour": "#0000FFFF",
+        "Sublamp4Colour": "#FF0080FF",
+        "Sublamp5Colour": "#FF8000FF",
+        "Sublamp6Colour": "#0080FFFF",
+        "Sublamp7Colour": "#0000A0FF",
+        "Sublamp8Colour": "#8000FFFF",
+        "Sublamp9Colour": "#004000FF"
+      },
+      "Images": {
+        "brightmask_main": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "brightmask_mask": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "overlay_bitmap": {
+          "Width": 24,
+          "Height": 24,
+          "BitsPerPixel": 32
+        },
+        "sublamp_10_main_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_10_mask_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_11_main_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_11_mask_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_12_main_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_12_mask_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_1_main_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_1_mask_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_2_main_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_2_mask_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_3_main_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_3_mask_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_4_main_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_4_mask_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_5_main_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_5_mask_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_6_main_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_6_mask_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_7_main_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_7_mask_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_8_main_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_8_mask_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_9_main_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        },
+        "sublamp_9_mask_image": {
+          "Width": 17,
+          "Height": 17,
+          "BitsPerPixel": 32
+        }
+      }
+    }
+  ]
+}
