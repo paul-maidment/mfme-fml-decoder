@@ -1,0 +1,28 @@
+System ASTRASYSA1
+DIP 1 00001000
+DIP 2 00010000
+Stake 4
+Jackpot 5
+Percentage 8
+SetPercent 86
+TotalIn 0
+TotalOut 0
+Effects 255
+SEC1 "REFILL " 0
+SEC2 "CASH IN" 0
+SEC3 "CASHOUT" 0
+SEC4 "NOTESIN" 0
+SEC5 "TOCN IN" 0
+SEC6 "TOCNOUT" 0
+SEC7 "TPLAYS " 0
+SEC8 "NOTEOUT" 0
+Played 5
+Hidden
+DX 1
+Game LayoutGame
+Version MeterOK
+DisplayPosition 664 408 357 503 725008070
+LinkType 2
+Layout layout.fml
+ROM bbsv7-08.u1
+ROM bbsv7-08.u2

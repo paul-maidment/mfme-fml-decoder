@@ -1,0 +1,78 @@
+{
+  "System": "MPU5",
+  "Settings": {
+    "Cabinet Style": "Default",
+    "Caption": "Barcrest: The Addams Family 30p/?15                                       Johnnyafc 29 November 2006",
+    "Coin Mech": "Parallel",
+    "Hopper Type": "Compact",
+    "J2": "IRQ3",
+    "Lamp Test": "Pass",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Sec 1",
+          "multiplier": "2"
+        }
+      ],
+      "out": [
+        {
+          "source": "Sec 2",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "MUX5E": "No",
+    "Name In Manager": "",
+    "Network Id": "None",
+    "NV4 Note": "No",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "PIC": "2",
+    "PIC Code": "BC25",
+    "RAM Size": "64K",
+    "Reel Jumpers 1": {
+      "value": "Old1",
+      "checkboxes": {
+        "J1": false,
+        "J2": false,
+        "J3": false,
+        "J4": false,
+        "J5": false,
+        "J6": false,
+        "J7": false,
+        "J8": false
+      }
+    },
+    "Reel Jumpers 2": {
+      "value": "Old",
+      "checkboxes": {
+        "J1": false,
+        "J2": false,
+        "J3": false,
+        "J4": false,
+        "J5": false,
+        "J6": false,
+        "J7": false,
+        "J8": false
+      }
+    },
+    "SEC": "Yes",
+    "Showtime/Mux2": "Enabled",
+    "Triac Effects": {
+      "rows": []
+    },
+    "Version": "",
+    "switches": {
+      "Cash": 0,
+      "Lock": null,
+      "Refill": null,
+      "Service": 0,
+      "Test 2": null,
+      "Top Up": null
+    }
+  }
+}

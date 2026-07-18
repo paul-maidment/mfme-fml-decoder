@@ -1,0 +1,15 @@
+System PHOENIX
+DIP 1 10000000
+DIP 2 00000000
+SetPercent 84
+TotalIn 260
+TotalOut 130
+Effects 255
+Played 5
+DX 1
+Game //  Electrocoin  //  Famous Games  //  Crown Jester
+Version -
+DisplayPosition 2076 101 1217 1307 725008070
+Layout layout.fml
+ROM crown_jester.bin
+ROM crown_jester.bin

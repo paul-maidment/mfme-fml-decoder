@@ -1,0 +1,15 @@
+System MPU3
+DIP 1 00001100
+DIP 2 00001000
+SetPercent 78
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 3
+Game Ace Chase 10p / £3 jackpot
+Version MPU3
+DisplayPosition 1264 385 911 698 725008070
+Layout layout.fml
+ROM ac10p.p1
+ROM ac10p.p2
+ROM ac10p.p3

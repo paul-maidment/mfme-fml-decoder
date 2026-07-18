@@ -1,0 +1,50 @@
+{
+  "System": "SCORPION2",
+  "Settings": {
+    "Caption": "Big Breakfast WDX - Pook                                                           www.dxcellent.com",
+    "Dongle Fitted": "No",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 2",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 4",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 3",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 5",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "Triac Effects": {
+      "rows": []
+    },
+    "Version": "",
+    "switches": {
+      "Cash": 24,
+      "DM Busy": 64,
+      "Pay Sense 1": null,
+      "Pay Sense 2": null,
+      "Pay Sense 3": null,
+      "Pay Sense 4": null,
+      "Refill": 26,
+      "Service": 25
+    }
+  }
+}

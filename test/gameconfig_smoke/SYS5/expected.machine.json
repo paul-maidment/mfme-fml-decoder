@@ -1,0 +1,48 @@
+{
+  "System": "SYS5",
+  "Settings": {
+    "Caption": "Around The World In Eighty Days Club by Bugs Bunny and Troutman. Many thanks to Ploggy",
+    "Coin Interface": "MS129",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 1",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 3",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 2",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 4",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "Sound Type": "Std",
+    "Triac Effects": {
+      "rows": []
+    },
+    "Version": "Sys5",
+    "switches": {
+      "Cash": 0,
+      "Demo": null,
+      "Refill": null,
+      "Service": 0,
+      "Test": null
+    }
+  }
+}

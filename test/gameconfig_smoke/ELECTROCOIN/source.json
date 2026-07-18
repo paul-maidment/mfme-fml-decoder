@@ -1,0 +1,9 @@
+{
+  "system": "ELECTROCOIN",
+  "gam": "layout.gam",
+  "fml": "layout.fml",
+  "copiedFrom": {
+    "gam": "ELECTROCOIN/Arcade Retro (Big 7 Hybrid)/Arcade_Retro_(Big_7_Hybrid)_[Pdx1_4jp].gam",
+    "fml": "ELECTROCOIN/Arcade Retro (Big 7 Hybrid)/Arcade_Retro_(Big_7_Hybrid)_[Pdx1_4jp].fml"
+  }
+}

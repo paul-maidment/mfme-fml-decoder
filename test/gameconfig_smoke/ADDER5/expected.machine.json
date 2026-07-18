@@ -1,0 +1,56 @@
+{
+  "System": "ADDER5",
+  "Settings": {
+    "Adder5 Screen 1": "600 x 800 V",
+    "Adder5 Screen 2": "600 x 800 V",
+    "Audio": "Stereo",
+    "Cabinet Style": "Default",
+    "Caption": "Viva_Las_Vegas_(Bellfruit)_[C01_70jp]",
+    "Coin Mech": "SR5i",
+    "Coin Mech Currency": "GB 1",
+    "Coin Mech DES": true,
+    "Hopper 1": "SCH 3",
+    "Hopper 1 DES": true,
+    "Hopper 2": "SCH 2",
+    "Hopper 2 DES": true,
+    "LEDs": "Normal",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 3",
+          "multiplier": "1"
+        },
+        {
+          "source": "Sec 2",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 4",
+          "multiplier": "1"
+        },
+        {
+          "source": "Sec 3",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "",
+    "Network Id": "None",
+    "Note Acceptor": "JCM EBA",
+    "Note Acceptor Currency": "GB 1",
+    "Note Acceptor DES": true,
+    "PIC Type": "Gamestec",
+    "Triac Effects": {
+      "rows": []
+    },
+    "Version": "",
+    "PAC Drive Assignments": {
+      "records": []
+    }
+  }
+}

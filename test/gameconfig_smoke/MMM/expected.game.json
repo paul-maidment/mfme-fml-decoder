@@ -1,0 +1,57 @@
+{
+  "System": "MMM",
+  "Settings": {
+    "EffectsButtons": {
+      "kind": "checkbox",
+      "value": true,
+      "raw": 255,
+      "mask": 8
+    },
+    "EffectsCoins": {
+      "kind": "checkbox",
+      "value": true,
+      "raw": 255,
+      "mask": 16
+    },
+    "EffectsMeters": {
+      "kind": "checkbox",
+      "value": true,
+      "raw": 255,
+      "mask": 2
+    },
+    "EffectsReels": {
+      "kind": "checkbox",
+      "value": true,
+      "raw": 255,
+      "mask": 1
+    },
+    "EffectsTriacs": {
+      "kind": "checkbox",
+      "value": true,
+      "raw": 255,
+      "mask": 4
+    },
+    "Lo Tech": {
+      "kind": "checkbox",
+      "value": false,
+      "raw": null,
+      "defaultUsed": true
+    },
+    "Rating": {
+      "kind": "text",
+      "value": "",
+      "defaultUsed": true
+    },
+    "Tags": {
+      "kind": "text",
+      "value": "",
+      "defaultUsed": true
+    },
+    "WIP": {
+      "kind": "checkbox",
+      "value": false,
+      "raw": null,
+      "defaultUsed": true
+    }
+  }
+}

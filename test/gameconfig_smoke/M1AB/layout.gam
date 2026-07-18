@@ -1,0 +1,18 @@
+System M1AB
+DIP 1 00000000
+DIP 2 00000000
+Protocol 1
+Percentage 9
+SetPercent 88
+TotalIn 0
+TotalOut 0
+Effects 255
+MasterVolume 200
+Played 4
+DX 1
+Game LayoutGame
+DisplayPosition 1213 84 1013 1307 725008070
+Layout layout.fml
+Sound albertsqsndu2.bin
+Sound albertsqsndu3.bin
+ROM sa4-443.bin

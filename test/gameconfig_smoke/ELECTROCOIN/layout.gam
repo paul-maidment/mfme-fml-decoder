@@ -1,0 +1,13 @@
+System ELECTROCOIN
+DIP 1 00111010
+SetPercent 92
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 4
+Game LayoutGame
+Version 1.0
+DisplayPosition 833 275 1920 1108 725008070
+Layout layout.fml
+SLAVEROM big7sound.bin
+ROM big7 v1.2 4t.bin

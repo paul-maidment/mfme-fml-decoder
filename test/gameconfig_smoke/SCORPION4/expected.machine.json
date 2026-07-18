@@ -1,0 +1,50 @@
+{
+  "System": "SCORPION4",
+  "Settings": {
+    "Audio": "Stereo",
+    "Cabinet Style": "Default",
+    "Caption": "ClubBanketyBank",
+    "Coin Mech": "Parallel",
+    "Hopper 1": false,
+    "Hopper 2": false,
+    "LEDs": "Normal",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Sec 2",
+          "multiplier": "10"
+        }
+      ],
+      "out": [
+        {
+          "source": "Sec 3",
+          "multiplier": "-4"
+        }
+      ]
+    },
+    "Name In Manager": "",
+    "Network Id": "None",
+    "NV4 Note": "No",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "RNG": "None",
+    "Rotary Switch": "No",
+    "SEC": "Yes",
+    "Serial Port": "DataPak",
+    "Triac Effects": {
+      "rows": []
+    },
+    "Version": "",
+    "switches": {
+      "Cash": 16,
+      "DM Busy": 64,
+      "Refill": null,
+      "Service": 8,
+      "Top Up": null
+    }
+  }
+}

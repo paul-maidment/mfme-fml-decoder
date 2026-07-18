@@ -1,0 +1,14 @@
+System SCORPION2
+DIP 1 00000000
+DIP 2 00000000
+SetPercent 88
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 5
+DX 1
+Game Big Breakfast WDX - Pook                                                           www.dxcellent.com
+DisplayPosition 1084 260 1735 947 725008070
+Layout layout.fml
+Sound bigbreakfastsnd.bin
+ROM big-breakfast_std_ar_var_a.bin

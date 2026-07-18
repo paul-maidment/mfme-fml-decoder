@@ -1,0 +1,22 @@
+System MPU5
+DIP 1 00000000
+DIP 2 00000000
+Stake 4
+Jackpot 4
+Percentage 5
+SetPercent 80
+TotalIn 0
+TotalOut 0
+Effects 255
+SEC1 "REFILL " 0
+SEC2 "CASH IN" 0
+SEC3 "CASHOUT" 0
+SEC4 "TOCN IN" 0
+SEC5 "TOCNOUT" 0
+SEC6 "NOTESIN" 0
+SEC7 "PRIEOUT" 0
+Played 2
+Game Barcrest: The Addams Family 30p/£15                                       Johnnyafc 29 November 2006
+DisplayPosition 1212 394 1015 679 725008070
+Layout layout.fml
+ROM Addams_Family_(Barcrest)_[C01_15jp].hex

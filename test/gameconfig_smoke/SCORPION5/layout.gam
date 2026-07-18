@@ -1,0 +1,26 @@
+System SCORPION5
+DIP 1 00000000
+DIP 2 00000000
+Protocol 1
+Stake 3
+Jackpot 5
+Percentage 6
+SetPercent 82
+TotalIn 30
+TotalOut 0
+Effects 255
+SEC1 "REFILL " 0
+SEC2 "CASH IN" 30
+SEC3 "CASHOUT" 0
+SEC4 "TOCN IN" 0
+SEC5 "TOCNOUT" 0
+SEC6 "CHANGE " 0
+SEC8 "VTP    " 2
+SEC13 "NOTESIN" 0
+Played 5
+Game BAR 7'S 25P/£25 hitthesix and spa thanks to wizard
+DisplayPosition 596 389 749 641 725008070
+Layout layout.fml
+Sound 95008502.bin
+ROM 95412716.lo
+ROM 95412717.hi

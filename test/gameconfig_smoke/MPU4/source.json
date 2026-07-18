@@ -1,0 +1,9 @@
+{
+  "system": "MPU4",
+  "gam": "layout.gam",
+  "fml": "layout.fml",
+  "copiedFrom": {
+    "gam": "MPU4/21 Club (Barcrest) [Dutch]/21_Club_(Barcrest)_[Dutch]_[Dx01].gam",
+    "fml": "MPU4/21 Club (Barcrest) [Dutch]/21_Club_(Barcrest)_[Dutch]_[Dx01].fml"
+  }
+}

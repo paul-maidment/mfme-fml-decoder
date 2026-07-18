@@ -1,0 +1,75 @@
+{
+  "System": "MPS2",
+  "Settings": {
+    "Caption": "2p Cash Nudger Wdx By Tommy c 3/10/19",
+    "Game": "Other",
+    "Hopper 1": true,
+    "Hopper 2": true,
+    "Meter Effects": {
+      "rows": [
+        {
+          "meter": 2,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 3,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 5,
+          "on": "Meter",
+          "off": ""
+        }
+      ]
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 2",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 3",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 5",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 7",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "Mdm 2p Cash Nudger",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "Rotary Switch": 0,
+    "Triac Effects": {
+      "rows": [
+        {
+          "triac": 2,
+          "on": "10p Slide",
+          "off": ""
+        },
+        {
+          "triac": 3,
+          "on": "50p Slide",
+          "off": ""
+        },
+        {
+          "triac": 5,
+          "on": "50p Slide",
+          "off": ""
+        }
+      ]
+    },
+    "Version": "....."
+  }
+}

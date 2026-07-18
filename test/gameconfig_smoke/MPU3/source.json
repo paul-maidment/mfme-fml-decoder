@@ -1,0 +1,9 @@
+{
+  "system": "MPU3",
+  "gam": "layout.gam",
+  "fml": "layout.fml",
+  "copiedFrom": {
+    "gam": "MPU3/Ace Chase (BWB)/Ace_Chase_(BWB)_[C01_3jp].gam",
+    "fml": "MPU3/Ace Chase (BWB)/Ace_Chase_(BWB)_[C01_3jp].fml"
+  }
+}

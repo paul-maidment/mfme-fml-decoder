@@ -88,7 +88,7 @@ namespace MfmeFmlDecoder.Decoder
         }
 
         [Fact]
-        public void Layout_ToJson_IncludesSplashDescriptionAndNotes()
+        public void Layout_ToJson_IsComponentsOnly_HeaderFieldsStayOffJson()
         {
             var header = new LayoutFileHeader
             {
@@ -103,10 +103,13 @@ namespace MfmeFmlDecoder.Decoder
             var layout = new Layout(Array.Empty<BaseComponentStub>(), header);
             string json = layout.ToJson(indented: false);
 
-            Assert.Contains("\"HasSplash\":true", json);
-            Assert.Contains("\"Description\":\"Cabinet artwork\"", json);
-            Assert.Contains("\"TextNotes\":\"Needs lamp remap\"", json);
-            Assert.Contains("\"splash_bitmap\"", json);
+            Assert.Equal("Cabinet artwork", layout.Description);
+            Assert.Equal("Needs lamp remap", layout.TextNotes);
+            Assert.True(layout.HasSplash);
+            Assert.DoesNotContain("Description", json);
+            Assert.DoesNotContain("TextNotes", json);
+            Assert.DoesNotContain("HasSplash", json);
+            Assert.DoesNotContain("splash_bitmap", json);
             Assert.Contains("\"Components\":[]", json);
         }
 

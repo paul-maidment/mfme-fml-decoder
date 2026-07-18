@@ -1,0 +1,15 @@
+System MMM
+DIP 1 00000000
+DIP 2 00000000
+SetPercent 0
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 2
+Game Bust Out
+Version -
+DisplayPosition 1394 390 651 687 725008070
+Layout layout.fml
+ROM bustout_1.bin
+ROM bustout_2.bin
+ROM bustout_3.bin

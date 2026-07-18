@@ -9,6 +9,7 @@
 [Rr]elease/
 [Bb]in/
 [Oo]bj/
+dist/
 
 # Visual Studio
 .vs/

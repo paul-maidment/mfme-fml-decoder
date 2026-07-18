@@ -1,0 +1,9 @@
+{
+  "system": "MPU2",
+  "gam": "layout.gam",
+  "fml": "layout.fml",
+  "copiedFrom": {
+    "gam": "MPU2/Hi Lights (Barcrest)/Hi_Lights_(Barcrest)_[Dx01_2jp].gam",
+    "fml": "MPU2/Hi Lights (Barcrest)/Hi_Lights_(Barcrest)_[Dx01_2jp].fml"
+  }
+}

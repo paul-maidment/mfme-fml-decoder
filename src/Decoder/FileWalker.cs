@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using MfmeFmlDecoder.Model;
@@ -108,7 +109,8 @@ namespace MfmeFmlDecoder.Decoder
             switch (tag)
             {
                 case LayoutFileHeader.LayoutDescriptionTag:
-                    Header.Description = DecodeNullTerminatedAscii(values);
+                    // 101-byte buffer may hold multiple null-terminated lines (line1\0line2\0…).
+                    Header.Description = DecodeNullSeparatedAscii(values);
                     break;
                 case LayoutFileHeader.TextNotesTag:
                     Header.TextNotes = DecodeNullTerminatedAscii(values);
@@ -147,6 +149,34 @@ namespace MfmeFmlDecoder.Decoder
             }
 
             return Encoding.ASCII.GetString(values, 0, end);
+        }
+
+        /// <summary>
+        /// Decode one or more C-strings packed into a fixed buffer (e.g. layout
+        /// description tag 0x0C: line1\0line2\0padding). Joins non-empty parts with newlines.
+        /// </summary>
+        private static string DecodeNullSeparatedAscii(byte[] values)
+        {
+            if (values is null || values.Length == 0)
+                return string.Empty;
+
+            var parts = new List<string>();
+            int i = 0;
+            while (i < values.Length)
+            {
+                int end = Array.IndexOf(values, (byte)0, i);
+                if (end < 0) end = values.Length;
+                if (end > i)
+                    parts.Add(Encoding.ASCII.GetString(values, i, end - i));
+                if (end >= values.Length) break;
+                i = end + 1;
+                // Trailing padding is all zeros — stop once we hit an empty segment
+                // after at least one part (avoid inventing blank lines from padding).
+                if (i < values.Length && values[i] == 0 && parts.Count > 0)
+                    break;
+            }
+
+            return string.Join("\n", parts);
         }
 
         private static void ValidateMfmeVersion(long recordStartOffset, byte[] values)

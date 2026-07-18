@@ -1,0 +1,9 @@
+{
+  "system": "SCORPION4",
+  "gam": "layout.gam",
+  "fml": "layout.fml",
+  "copiedFrom": {
+    "gam": "SCORPION4/Bankety Bank (QPS) [c]/Bankety_Bank_(QPS)_[C01_250jp]_[c].gam",
+    "fml": "SCORPION4/Bankety Bank (QPS) [c]/Bankety_Bank_(QPS)_[C01_250jp]_[c].fml"
+  }
+}

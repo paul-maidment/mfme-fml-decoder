@@ -1,0 +1,9 @@
+{
+  "system": "M1VIDEO",
+  "gam": "layout.gam",
+  "fml": "layout.fml",
+  "copiedFrom": {
+    "gam": "M1VIDEO/Screen Play (Maygay)/Screen_Play_(Maygay)_[Dx01_6jp].gam",
+    "fml": "M1VIDEO/Screen Play (Maygay)/Screen_Play_(Maygay)_[Dx01_6jp].fml"
+  }
+}

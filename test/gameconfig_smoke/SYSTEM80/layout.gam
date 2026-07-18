@@ -1,0 +1,13 @@
+System SYSTEM80
+DIP 1 00000000
+DIP 3 00000000
+SetPercent 0
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 3
+Game 7s Up (JPM) By Alex74 Big Thanks To Steve Lancett For Providing Roms & AlanRoad Runner for dumping
+DisplayPosition 330 393 821 552 725008070
+Layout layout.fml
+ROM 7s_up_1-1.bin
+ROM 7s_up_1-2.bin

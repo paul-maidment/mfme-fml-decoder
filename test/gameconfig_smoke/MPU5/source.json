@@ -1,0 +1,9 @@
+{
+  "system": "MPU5",
+  "gam": "layout.gam",
+  "fml": "layout.fml",
+  "copiedFrom": {
+    "gam": "MPU5/Addams Family (Barcrest)/Addams_Family_(Barcrest)_[C01_15jp].gam",
+    "fml": "MPU5/Addams Family (Barcrest)/Addams_Family_(Barcrest)_[C01_15jp].fml"
+  }
+}

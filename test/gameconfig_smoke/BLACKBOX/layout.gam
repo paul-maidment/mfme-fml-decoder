@@ -1,0 +1,13 @@
+System BLACKBOX
+DIP 1 00000000
+DIP 2 00000000
+SetPercent 0
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 4
+Game LayoutGame
+DisplayPosition 1087 295 758 736 725008070
+Layout layout.fml
+ROM fiestav4p2.bin
+ROM fiestav4p1.bin

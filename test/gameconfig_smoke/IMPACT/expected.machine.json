@@ -1,0 +1,43 @@
+{
+  "System": "IMPACT",
+  "Settings": {
+    "Cabinet Style": "Default",
+    "Caption": "Ace of clubs 30p ?250 78% By RoadRunner",
+    "Coin Mech": "Parallel",
+    "Hopper 1": true,
+    "Hopper 2": true,
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 2",
+          "multiplier": "10"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 3",
+          "multiplier": "-4"
+        }
+      ]
+    },
+    "Name In Manager": "",
+    "SEC": "No",
+    "Triac Effects": {
+      "rows": []
+    },
+    "Version": "",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "switches": {
+      "Cash": null,
+      "Refill": null,
+      "Service": null,
+      "Test 2": null,
+      "Top Up": null
+    }
+  }
+}

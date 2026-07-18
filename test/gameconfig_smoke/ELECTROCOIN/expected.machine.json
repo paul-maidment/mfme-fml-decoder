@@ -1,0 +1,50 @@
+{
+  "System": "ELECTROCOIN",
+  "Settings": {
+    "7Seg": "Type 1",
+    "Caption": "Based on Big 7 - Here's Arcade Retro - by Multi Retro Man",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 2",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 4",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 3",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 5",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "",
+    "Triac Effects": {
+      "rows": []
+    },
+    "Version": "1.0",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "switches": {
+      "Cash": 13,
+      "Hopper Motor 1": null,
+      "Hopper Motor 2": null,
+      "Hopper Opto 1": null,
+      "Hopper Opto 2": null,
+      "Refill": 15,
+      "Service": 20,
+      "Test": 14
+    }
+  }
+}

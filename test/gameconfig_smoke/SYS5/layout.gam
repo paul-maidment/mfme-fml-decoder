@@ -1,0 +1,15 @@
+System SYS5
+DIP 1 00000000
+DIP 2 00000000
+SetPercent 86
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 2
+Game Around The World In Eighty Days Club by Bugs Bunny and Troutman. Many thanks to Ploggy
+Version Sys5
+DisplayPosition 1321 387 797 694 725008070
+Layout layout.fml
+Sound atwcsnd.bin
+ROM atw_club_v6_p1.bin
+ROM atw_club_v6_p2.bin

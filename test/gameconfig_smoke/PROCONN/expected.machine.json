@@ -1,0 +1,77 @@
+{
+  "System": "PROCONN",
+  "Settings": {
+    "Caption": "L OF A DAY Classic By Tommy c Modded  16/1018 With Thanks To Louie B ",
+    "Display Type": "VFD",
+    "Hopper 1": true,
+    "Hopper 2": true,
+    "Meter Effects": {
+      "rows": [
+        {
+          "meter": 5,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 7,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 8,
+          "on": "Meter",
+          "off": ""
+        }
+      ]
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 6",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 8",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 5",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 7",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "",
+    "Triac Effects": {
+      "rows": [
+        {
+          "triac": 5,
+          "on": "Misc Slide",
+          "off": ""
+        },
+        {
+          "triac": 7,
+          "on": "4294967295",
+          "off": ""
+        }
+      ]
+    },
+    "Type": "PC92",
+    "Version": "",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "switches": {
+      "Cash": null,
+      "Opto": null,
+      "Refill": null,
+      "Service": null,
+      "Test": null
+    }
+  }
+}

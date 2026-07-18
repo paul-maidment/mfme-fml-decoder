@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>disable</Nullable>
     <IsPackable>false</IsPackable>
     <RootNamespace>MfmeFmlDecoder</RootNamespace>
@@ -12,7 +12,9 @@
     <Compile Include="..\..\src\**\*Tests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="DiffPlex" Version="1.7.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="xunit" Version="2.6.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.4">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -25,5 +27,10 @@
 
   <ItemGroup>
     <Content Include="TestData\CoinNoteOptions.csv" CopyToOutputDirectory="PreserveNewest" />
+    <!-- Self-contained smoke fixtures (gam/fml/expected) — visible in Solution Explorer -->
+    <Content Include="..\gameconfig_smoke\**\*"
+             Link="gameconfig_smoke\%(RecursiveDir)%(Filename)%(Extension)"
+             CopyToOutputDirectory="PreserveNewest"
+             Exclude="..\gameconfig_smoke\Maps\**" />
   </ItemGroup>
 </Project>

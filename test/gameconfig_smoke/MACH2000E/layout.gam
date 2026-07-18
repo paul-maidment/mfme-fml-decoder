@@ -1,0 +1,13 @@
+System MACH2000E
+DIP 1 10010100
+DIP 2 00000000
+SetPercent 0
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 4
+Game Castle - Revolution 
+DisplayPosition 1334 257 772 953 725008070
+Layout layout.fml
+SLAVEROM castlerevolutionp1.bin
+ROM castlerevolutionp2.bin

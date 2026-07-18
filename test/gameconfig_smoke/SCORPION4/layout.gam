@@ -1,0 +1,18 @@
+System SCORPION4
+DIP 1 00000000
+DIP 2 00000000
+SetPercent 0
+TotalIn 0
+TotalOut 0
+Effects 255
+SEC2 "CASH IN" 0
+SEC3 "CASHOUT" 0
+SEC4 "JACKPOT" 0
+SEC5 "NOTE IN" 0
+Played 2
+Game ClubBanketyBank
+DisplayPosition 1292 333 855 801 725008070
+Layout layout.fml
+Sound 95008383.bin
+ROM 95410110.p1
+ROM 95410111.p2

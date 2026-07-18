@@ -1,0 +1,14 @@
+System MACH2000A
+DIP 1 10010000
+DIP 2 00000000
+SetPercent 0
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 3
+Game LayoutGame
+Version 1.1
+DisplayPosition 1042 84 1227 1234 725008070
+Layout layout.fml
+ROM big50u1.bin
+ROM big50u2.bin

@@ -1,0 +1,53 @@
+{
+  "System": "MPU3",
+  "Settings": {
+    "Caption": "Ace Chase 10p / ?3 jackpot",
+    "Chr Addr": "0C000",
+    "Display Port": "Meters",
+    "Meter Payout/Sense": {
+      "Button": {
+        "Meter": 19,
+        "Triac": null
+      },
+      "Mask": {
+        "Meter": "3F",
+        "Triac": "FF"
+      }
+    },
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 1",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 2",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 6",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "",
+    "Reel Smoothing": "No",
+    "Triac Effects": {
+      "rows": []
+    },
+    "Version": "MPU3",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "switches": {
+      "Refill": null,
+      "Service": null,
+      "Test": null
+    }
+  }
+}

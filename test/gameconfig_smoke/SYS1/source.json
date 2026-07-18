@@ -1,0 +1,9 @@
+{
+  "system": "SYS1",
+  "gam": "layout.gam",
+  "fml": "layout.fml",
+  "copiedFrom": {
+    "gam": "SYS1/Club Xtra (Ace) [c]/Club_Xtra_(Ace)_[C01_200jp]_[c].gam",
+    "fml": "SYS1/Club Xtra (Ace) [c]/Club_Xtra_(Ace)_[C01_200jp]_[c].fml"
+  }
+}

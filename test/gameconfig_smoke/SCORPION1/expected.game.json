@@ -1,0 +1,114 @@
+{
+  "System": "SCORPION1",
+  "Settings": {
+    "%": {
+      "kind": "dropdown",
+      "value": "",
+      "raw": 0,
+      "defaultUsed": true
+    },
+    "DataPak": {
+      "kind": "dropdown",
+      "value": "No",
+      "raw": 0,
+      "defaultUsed": true
+    },
+    "DIP": {
+      "kind": "dip-banks",
+      "banks": {
+        "DIP1": {
+          "pattern": "01000000",
+          "order": "lsb-first",
+          "switches": {
+            "1": false,
+            "2": true,
+            "3": false,
+            "4": false,
+            "5": false,
+            "6": false,
+            "7": false,
+            "8": false
+          }
+        },
+        "DIP2": {
+          "pattern": "00100000",
+          "order": "lsb-first",
+          "switches": {
+            "1": false,
+            "2": false,
+            "3": true,
+            "4": false,
+            "5": false,
+            "6": false,
+            "7": false,
+            "8": false
+          }
+        }
+      }
+    },
+    "EffectsButtons": {
+      "kind": "checkbox",
+      "value": true,
+      "raw": 255,
+      "mask": 8
+    },
+    "EffectsCoins": {
+      "kind": "checkbox",
+      "value": true,
+      "raw": 255,
+      "mask": 16
+    },
+    "EffectsMeters": {
+      "kind": "checkbox",
+      "value": true,
+      "raw": 255,
+      "mask": 2
+    },
+    "EffectsReels": {
+      "kind": "checkbox",
+      "value": true,
+      "raw": 255,
+      "mask": 1
+    },
+    "EffectsTriacs": {
+      "kind": "checkbox",
+      "value": true,
+      "raw": 255,
+      "mask": 4
+    },
+    "Lo Tech": {
+      "kind": "checkbox",
+      "value": false,
+      "raw": null,
+      "defaultUsed": true
+    },
+    "Prize": {
+      "kind": "dropdown",
+      "value": "",
+      "raw": 0,
+      "defaultUsed": true
+    },
+    "Rating": {
+      "kind": "text",
+      "value": "",
+      "defaultUsed": true
+    },
+    "Stake": {
+      "kind": "dropdown",
+      "value": "",
+      "raw": 0,
+      "defaultUsed": true
+    },
+    "Tags": {
+      "kind": "text",
+      "value": "",
+      "defaultUsed": true
+    },
+    "WIP": {
+      "kind": "checkbox",
+      "value": false,
+      "raw": null,
+      "defaultUsed": true
+    }
+  }
+}

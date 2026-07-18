@@ -1,0 +1,9 @@
+{
+  "system": "MACH2000E",
+  "gam": "layout.gam",
+  "fml": "layout.fml",
+  "copiedFrom": {
+    "gam": "MACH2000E/Revolution (Castle)/Revolution_(Castle)_[C01_4jp].gam",
+    "fml": "MACH2000E/Revolution (Castle)/Revolution_(Castle)_[C01_4jp].fml"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "System": "SCORPION5",
+  "Settings": {
+    "Adder5 Screen 1": "600 x 800 V",
+    "Adder5 Screen 2": "600 x 800 V",
+    "Alpha Type": "BFM",
+    "Audio": "Stereo",
+    "Cabinet Style": "Default",
+    "Caption": "BAR 7'S 25P/?25 hitthesix and spa thanks to wizard",
+    "Coin Mech": "SR5i",
+    "Coin Mech Currency": "GB 2",
+    "Coin Mech DES": true,
+    "Hopper 1": "SCH 2",
+    "Hopper 1 DES": true,
+    "Hopper 2": "SCH 2",
+    "Hopper 2 DES": true,
+    "LEDs": "Normal",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Sec 2",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Sec 3",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "",
+    "Network Id": "None",
+    "Note Acceptor": "JCM EBA",
+    "Note Acceptor Currency": "GB 2",
+    "Note Acceptor DES": true,
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "PIC Type": "Gamestec",
+    "Triac Effects": {
+      "rows": []
+    },
+    "Version": ""
+  }
+}

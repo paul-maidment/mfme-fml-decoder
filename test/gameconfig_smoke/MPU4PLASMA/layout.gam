@@ -1,0 +1,15 @@
+System MPU4PLASMA
+DIP 1 00000000
+DIP 2 00000000
+Percentage 7
+SetPercent 84
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 3
+Game Apache £6 84%
+DisplayPosition 480 306 728 663 725008070
+Layout layout.fml
+SLAVEROM a6ppl.p0
+SLAVEROM a6ppl.p1
+ROM a6ps.p1

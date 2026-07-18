@@ -1,0 +1,14 @@
+System MPS2
+DIP 1 00100010
+DIP 2 00000000
+SetPercent 0
+TotalIn 20
+TotalOut 32
+Effects 255
+Played 4
+DX 1
+Game Mdm 2p Cash Nudger
+Version .....
+DisplayPosition 1161 84 1117 1306 725008070
+Layout layout.fml
+ROM cash_nudger_2_1.bin

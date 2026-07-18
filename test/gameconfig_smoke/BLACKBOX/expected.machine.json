@@ -1,0 +1,93 @@
+{
+  "System": "BLACKBOX",
+  "Settings": {
+    "Caption": "Associated Leisure - Fiesta by Clo06",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 1",
+          "multiplier": "2"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 5",
+          "multiplier": "-4"
+        },
+        {
+          "source": "Meter 6",
+          "multiplier": "2"
+        }
+      ]
+    },
+    "Motor Drive": "B10",
+    "Motor Relay": "M8",
+    "Name In Manager": "Associated Leisure - Fiesta",
+    "NVRAM": "No",
+    "Reel Type": "Solenoid",
+    "Sound Type": "NE566",
+    "Test / Run": "C5",
+    "Triac Effects": {
+      "rows": [
+        {
+          "triac": 5,
+          "on": "Lockout On",
+          "off": "Lockout Off"
+        },
+        {
+          "triac": 6,
+          "on": "Lockout On",
+          "off": "Lockout Off"
+        },
+        {
+          "triac": 7,
+          "on": "10p Slide",
+          "off": ""
+        },
+        {
+          "triac": 8,
+          "on": "Token Slide",
+          "off": ""
+        },
+        {
+          "triac": 9,
+          "on": "Sol/Wiper On",
+          "off": "Sol/Wiper Off"
+        },
+        {
+          "triac": 10,
+          "on": "Sol/Wiper On",
+          "off": "Sol/Wiper Off"
+        },
+        {
+          "triac": 11,
+          "on": "Sol/Wiper On",
+          "off": "Sol/Wiper Off"
+        },
+        {
+          "triac": 13,
+          "on": "Motor On",
+          "off": ""
+        },
+        {
+          "triac": 15,
+          "on": "Lockout On",
+          "off": "Lockout Off"
+        }
+      ]
+    },
+    "Version": "",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "switches": {
+      "Refill": null,
+      "Service": null,
+      "Test": null,
+      "Test 2": null
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "System": "MMM",
+  "Settings": {
+    "Caption": "Bust Out",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Triac 6",
+          "multiplier": "2"
+        },
+        {
+          "source": "Triac 9",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Triac 5",
+          "multiplier": "1"
+        },
+        {
+          "source": "Triac 7",
+          "multiplier": "1"
+        },
+        {
+          "source": "Triac 13",
+          "multiplier": "2"
+        }
+      ]
+    },
+    "Name In Manager": "",
+    "Triac Effects": {
+      "rows": [
+        {
+          "triac": 4,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "triac": 5,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "triac": 6,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "triac": 7,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "triac": 8,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "triac": 9,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "triac": 10,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "triac": 11,
+          "on": "10p Slide",
+          "off": ""
+        },
+        {
+          "triac": 12,
+          "on": "10p Slide",
+          "off": ""
+        },
+        {
+          "triac": 13,
+          "on": "10p Slide",
+          "off": ""
+        }
+      ]
+    },
+    "Version": "-",
+    "PAC Drive Assignments": {
+      "records": []
+    }
+  }
+}

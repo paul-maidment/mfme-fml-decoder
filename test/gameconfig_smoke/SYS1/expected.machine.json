@@ -1,0 +1,39 @@
+{
+  "System": "SYS1",
+  "Settings": {
+    "Caption": "Club Xtra",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 1",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 2",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "Reel Type": "6 Reel A",
+    "Step Mode": "Full Step",
+    "Triac Effects": {
+      "rows": []
+    },
+    "Version": "-",
+    "switches": {
+      "Cash": null,
+      "Refill": 40,
+      "Service": 5,
+      "Test": null
+    }
+  }
+}

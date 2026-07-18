@@ -1,0 +1,27 @@
+System ADDER5
+DIP 1 00001001
+DIP 2 00000000
+Protocol 1
+Stake 6
+Jackpot 7
+Percentage 9
+SetPercent 88
+TotalIn 0
+TotalOut 0
+Effects 255
+SEC1 "REFILL " 0
+SEC2 "CASH IN" 0
+SEC3 "CASHOUT" 0
+SEC4 "TOCN IN" 0
+SEC5 "TOCNOUT" 0
+SEC6 "CHANGE " 0
+SEC7 "NOTESOT" 0
+SEC8 "VTP    " 0
+SEC13 "NOTESIN" 0
+Played 6
+Game LayoutGame
+DisplayPosition 1111 84 1218 1307 725008070
+Layout layout.fml
+Sound 95009055.bin
+Sound 95009056.bin
+ROM 39212605.bin

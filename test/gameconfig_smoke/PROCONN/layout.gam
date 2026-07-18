@@ -1,0 +1,14 @@
+System PROCONN
+DIP 1 00000000
+DIP 2 00000000
+SetPercent 0
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 2
+Game L OF A DAY Classic By Tommy c Modded  16/1018 With Thanks To Louie B 
+DisplayPosition 1217 353 1006 761 725008070
+Layout layout.fml
+Sound l_of_a_day_sound1.bin
+Sound l_of_a_day_sound2.bin
+ROM lday72c.bin

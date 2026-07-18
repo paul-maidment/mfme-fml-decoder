@@ -39,38 +39,6 @@ namespace MfmeFmlDecoder.src.Model
 
             writer.WriteStartObject();
 
-            if (HasSplash)
-            {
-                writer.WriteBoolean("HasSplash", true);
-            }
-
-            if (!string.IsNullOrEmpty(Description))
-            {
-                writer.WriteString("Description", Description);
-            }
-
-            if (!string.IsNullOrEmpty(TextNotes))
-            {
-                writer.WriteString("TextNotes", TextNotes);
-            }
-
-            if (Images.Count > 0)
-            {
-                writer.WritePropertyName("Images");
-                writer.WriteStartObject();
-                foreach (var kvp in Images.OrderBy(entry => entry.Key, StringComparer.Ordinal))
-                {
-                    writer.WritePropertyName(kvp.Key);
-                    writer.WriteStartObject();
-                    writer.WriteNumber(nameof(BitmapEntry.Width), kvp.Value.Width);
-                    writer.WriteNumber(nameof(BitmapEntry.Height), kvp.Value.Height);
-                    writer.WriteNumber(nameof(BitmapEntry.BitsPerPixel), kvp.Value.BitsPerPixel);
-                    writer.WriteEndObject();
-                }
-
-                writer.WriteEndObject();
-            }
-
             writer.WriteStartArray("Components");
             for (int i = 0; i < Components.Count; i++)
             {

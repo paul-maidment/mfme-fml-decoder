@@ -1,0 +1,16 @@
+System MPU2
+DIP 1 00000000
+DIP 2 00000000
+SetPercent 82
+TotalIn 12
+TotalOut 18
+Effects 255
+Played 9
+DX 1
+Game Hi-Lights
+Version v1
+DisplayPosition 215 126 1034 995 725008070
+Layout layout.fml
+ROM hi-lights.p3
+ROM hi-lights.p2
+ROM hi-lights.p1

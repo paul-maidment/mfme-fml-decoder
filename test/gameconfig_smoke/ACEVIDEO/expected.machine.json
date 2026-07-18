@@ -1,0 +1,43 @@
+{
+  "System": "ACEVIDEO",
+  "Settings": {
+    "Caption": "Sidewinder by altharic",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 2",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 3",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 4",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 6",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 9",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "Sidewinder by altharic",
+    "Triac Effects": {
+      "rows": []
+    },
+    "Version": "0.1",
+    "PAC Drive Assignments": {
+      "records": []
+    }
+  }
+}

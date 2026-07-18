@@ -1,0 +1,44 @@
+{
+  "System": "EPOCH",
+  "Settings": {
+    "Cabinet Style": "Default",
+    "Caption": "Blackjack Club",
+    "Hopper": "Coin Controls",
+    "Lamp Test": "Pass",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 1",
+          "multiplier": "10"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 2",
+          "multiplier": "-4"
+        }
+      ]
+    },
+    "Name In Manager": "",
+    "NV4 Note": "No",
+    "Reel Board": "6",
+    "Stake / Prize": null,
+    "Triac Effects": {
+      "rows": []
+    },
+    "Version": "-",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "switches": {
+      "Cash": null,
+      "Refill": null,
+      "Service": null,
+      "Test": null,
+      "Top Up": null
+    }
+  }
+}

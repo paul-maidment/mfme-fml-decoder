@@ -1,0 +1,9 @@
+{
+  "system": "SRU",
+  "gam": "layout.gam",
+  "fml": "layout.fml",
+  "copiedFrom": {
+    "gam": "SRU/Club Casino (JPM) [c]/Club_Casino_(JPM)_[C01_50jp]_[c].gam",
+    "fml": "SRU/Club Casino (JPM) [c]/Club_Casino_(JPM)_[C01_50jp]_[c].fml"
+  }
+}

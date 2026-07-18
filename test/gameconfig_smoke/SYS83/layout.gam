@@ -1,0 +1,16 @@
+System SYS83
+DIP 1 01011010
+DIP 2 00000001
+SetPercent 0
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 3
+Game Cat And Mouse
+Version -
+DisplayPosition 1328 439 784 590 725008070
+Layout layout.fml
+ROM catmouse1.bin
+ROM catmouse2.bin
+ROM catmouse3.bin
+ROM catmouse4.bin

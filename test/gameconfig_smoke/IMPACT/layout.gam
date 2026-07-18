@@ -1,0 +1,16 @@
+System IMPACT
+DIP 1 00000000
+Stake 4
+Jackpot 5
+Percentage 6
+SetPercent 82
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 3
+Game LayoutGame
+DisplayPosition 1212 400 1016 667 725008070
+Layout layout.fml
+Sound aceofclubssnd.bin
+ROM aocd1.bin
+ROM aocd2.bin

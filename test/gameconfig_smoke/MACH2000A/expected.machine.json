@@ -1,0 +1,50 @@
+{
+  "System": "MACH2000A",
+  "Settings": {
+    "Caption": "Castle Big Fifty by TTX v1.1",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 1",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 2",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 3",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 4",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "Castle Big Fifty",
+    "Triac Effects": {
+      "rows": [
+        {
+          "triac": 1,
+          "on": "2p Slide",
+          "off": ""
+        }
+      ]
+    },
+    "Version": "1.1",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "switches": {
+      "Cash": null,
+      "Refill": null,
+      "Service": null
+    }
+  }
+}

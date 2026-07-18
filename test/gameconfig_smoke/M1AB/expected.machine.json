@@ -1,0 +1,93 @@
+{
+  "System": "M1AB",
+  "Settings": {
+    "Caption": "",
+    "Coin Mech": "Binary",
+    "Dongle Fitted": "No",
+    "Hopper 1": false,
+    "Hopper 2": false,
+    "Meter Effects": {
+      "rows": [
+        {
+          "meter": 1,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 2,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 3,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 4,
+          "on": "Meter",
+          "off": ""
+        }
+      ]
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 1",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 3",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 2",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 4",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "Albert Square ?6 DX",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "Sample Clock Rate": 128000,
+    "Triac Effects": {
+      "rows": [
+        {
+          "triac": 1,
+          "on": "20p Slide",
+          "off": ""
+        },
+        {
+          "triac": 2,
+          "on": "Token Slide",
+          "off": ""
+        },
+        {
+          "triac": 3,
+          "on": "£1 Slide",
+          "off": ""
+        },
+        {
+          "triac": 4,
+          "on": "Token Slide",
+          "off": ""
+        }
+      ]
+    },
+    "Version": "",
+    "switches": {
+      "Cash": 39,
+      "Opto": null,
+      "Refill": 25,
+      "Service": 38,
+      "Test": null
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "system": "MACH2000A",
+  "gam": "layout.gam",
+  "fml": "layout.fml",
+  "copiedFrom": {
+    "gam": "MACH2000A/Big Fifty (Castle)/Big_Fifty_(Castle)_[C01_4jp].gam",
+    "fml": "MACH2000A/Big Fifty (Castle)/Big_Fifty_(Castle)_[C01_4jp].fml"
+  }
+}

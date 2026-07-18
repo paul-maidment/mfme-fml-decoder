@@ -1,0 +1,16 @@
+System SCORPION1
+DIP 1 01000000
+DIP 2 00100000
+SetPercent 0
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 3
+Game Global - All in a days work
+DisplayPosition 1334 257 772 953 725008070
+Layout layout.fml
+Sound allinsnd0.bin
+Sound allinsnd1.bin
+Sound allinsnd2.bin
+ROM allinv1-6a.bin
+ROM allinv1-6b.bin

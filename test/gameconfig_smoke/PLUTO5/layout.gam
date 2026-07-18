@@ -1,0 +1,14 @@
+System PLUTO5
+DIP 1 00000000
+DIP 2 00000000
+SetPercent 0
+TotalIn 0
+TotalOut 0
+Effects 255
+MasterVolume 64
+Played 9
+Position 156 100 1320 542
+LinkType 1
+Layout layout.fml
+ROM vnm205.u1
+ROM vnm205.u2

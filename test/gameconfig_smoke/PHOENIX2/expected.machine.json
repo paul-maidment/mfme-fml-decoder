@@ -1,0 +1,59 @@
+{
+  "System": "PHOENIX2",
+  "Settings": {
+    "Caption": "Electrocoins Red,White & Blue 7 Wdx By Tommy c  11/04/20,Many Thanks To Wizard & Amot",
+    "Meter Effects": {
+      "rows": [
+        {
+          "meter": 1,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 2,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 5,
+          "on": "Meter",
+          "off": ""
+        }
+      ]
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 1",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 2",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "Electrocoin Red White Blue",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "Triac Effects": {
+      "rows": [
+        {
+          "triac": 4,
+          "on": "£1 Slide",
+          "off": ""
+        }
+      ]
+    },
+    "Version": "V1",
+    "switches": {
+      "Cash": null,
+      "Refill": 7,
+      "Service": 5,
+      "Test": 6
+    }
+  }
+}

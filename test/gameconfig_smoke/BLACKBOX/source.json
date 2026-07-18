@@ -1,0 +1,9 @@
+{
+  "system": "BLACKBOX",
+  "gam": "layout.gam",
+  "fml": "layout.fml",
+  "copiedFrom": {
+    "gam": "BLACKBOX/Fiesta (Associated Leisure)/Fiesta_(Associated_Leisure)_[C01_2jp].gam",
+    "fml": "BLACKBOX/Fiesta (Associated Leisure)/Fiesta_(Associated_Leisure)_[C01_2jp].fml"
+  }
+}

@@ -1,0 +1,20 @@
+System ACEVIDEO
+DIP 1 00100000
+DIP 2 00000000
+SetPercent 0
+TotalIn 10
+TotalOut 0
+Effects 255
+Played 9
+Game LayoutGame
+Version 0.1
+DisplayPosition 1260 428 920 611 725008070
+Layout layout.fml
+VIDROM 2_h05.bin
+VIDROM 2_h06.bin
+VIDROM 2_h07.bin
+VIDROM 2_h08.bin
+ROM 2_h09.bin
+ROM 2_h10.bin
+ROM 2_h11.bin
+ROM 2_h12.bin

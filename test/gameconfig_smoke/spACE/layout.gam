@@ -1,0 +1,17 @@
+System spACE
+DIP 1 01100100
+DIP 2 00000000
+SetPercent 84
+TotalIn 0
+TotalOut 0
+Effects 247
+Played 3
+DX 1
+Game Big Break Club DX
+Version Pook
+DisplayPosition 952 158 1536 1152 725008070
+Layout layout.fml
+Sound bbds1.bin
+Sound bbds2.bin
+ROM bb10d13a.bin
+ROM bb10d13b.bin

@@ -1,0 +1,46 @@
+{
+  "System": "MPU4",
+  "Settings": {
+    "7 Seg Display": "Barcrest",
+    "Alpha Cable": "Normal",
+    "Aux1 Invert": false,
+    "Aux2 Invert": false,
+    "Cabinet Style": "Default",
+    "Caption": "",
+    "Character": "Barcrest",
+    "Door Invert": false,
+    "Encryption": "Normal",
+    "Extender Aux1": "None",
+    "Lamp Test": "Pass",
+    "LVD": "No",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [],
+      "out": []
+    },
+    "Mod Type": "2",
+    "Name In Manager": "",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "Payout": "Tube",
+    "Reels": "7",
+    "ROM Paging": "1/4/8 pages",
+    "Sound": "Sample",
+    "Triac Effects": {
+      "rows": []
+    },
+    "Type": "Reel",
+    "Version": "",
+    "Volume Control": "Auto",
+    "switches": {
+      "Cash": 38,
+      "Refill": null,
+      "Service": 39,
+      "Test": null,
+      "Top Up": null
+    }
+  }
+}

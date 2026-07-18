@@ -1,0 +1,9 @@
+{
+  "system": "MPS2",
+  "gam": "layout.gam",
+  "fml": "layout.fml",
+  "copiedFrom": {
+    "gam": "MPS2/2p Cash Nudger (MDM)/2p_Cash_Nudger_(MDM)_[Dx01_2-40jp].gam",
+    "fml": "MPS2/2p Cash Nudger (MDM)/2p_Cash_Nudger_(MDM)_[Dx01_2-40jp].fml"
+  }
+}

@@ -1,0 +1,94 @@
+name: Build AOT
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    name: Windows (win-x64, win-arm64)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Publish Native AOT
+        shell: pwsh
+        run: ./scripts/build-aot.ps1 -Target win-x64,win-arm64 -Clean
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: mfmefmldecoder-aot-windows
+          path: |
+            dist/aot/win-x64/MfmeFmlDecoder.exe
+            dist/aot/win-arm64/MfmeFmlDecoder.exe
+          if-no-files-found: error
+
+  build-linux:
+    name: Linux (${{ matrix.rid }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - rid: linux-x64
+            runner: ubuntu-latest
+          - rid: linux-arm64
+            runner: ubuntu-24.04-arm
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install Native AOT toolchain
+        run: sudo apt-get update && sudo apt-get install -y clang zlib1g-dev
+
+      - name: Publish Native AOT
+        run: bash ./scripts/build-aot.sh --clean ${{ matrix.rid }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: mfmefmldecoder-aot-${{ matrix.rid }}
+          path: dist/aot/${{ matrix.rid }}/MfmeFmlDecoder
+          if-no-files-found: error
+
+  build-macos:
+    name: macOS (osx-x64, osx-arm64)
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Publish Native AOT
+        run: bash ./scripts/build-aot.sh --clean osx-x64 osx-arm64
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: mfmefmldecoder-aot-macos
+          path: |
+            dist/aot/osx-x64/MfmeFmlDecoder
+            dist/aot/osx-arm64/MfmeFmlDecoder
+          if-no-files-found: error

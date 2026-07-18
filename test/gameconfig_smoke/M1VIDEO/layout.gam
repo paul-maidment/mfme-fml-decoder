@@ -1,0 +1,25 @@
+System M1VIDEO
+DIP 1 00000000
+DIP 2 00000000
+Stake 2
+Jackpot 11
+Percentage 8
+SetPercent 86
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 3
+Game Screen Play DX
+Version Pook_v6
+DisplayPosition 952 158 1536 1152 725008070
+Layout layout.fml
+Sound splaysound.bin
+SLAVEROM reels.bin
+ROM 20p6pnd_u15.bin
+ROM 20p6pnd_u16.bin
+ROM 20p6pnd_u17.bin
+ROM 20p6pnd_u18.bin
+ROM 20p6pnd_u2.bin
+ROM 20p6pnd_u1.bin
+ROM 20p6pnd_u4.bin
+ROM 20p6pnd_u3.bin

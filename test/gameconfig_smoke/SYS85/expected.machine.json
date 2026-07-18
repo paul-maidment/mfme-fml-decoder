@@ -1,0 +1,84 @@
+{
+  "System": "SYS85",
+  "Settings": {
+    "Caption": "           Bar Sevens DX By Ploggy - ?4/10p/92% - 07/10/18 - Huge Thanks To All The Contributors. :)",
+    "IRQ": "Normal",
+    "Meter Effects": {
+      "rows": [
+        {
+          "meter": 2,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 3,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 4,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 5,
+          "on": "Meter",
+          "off": ""
+        }
+      ]
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 2",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 4",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 3",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 5",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "Bar Sevens DX",
+    "Triac Effects": {
+      "rows": [
+        {
+          "triac": 2,
+          "on": "10p Slide",
+          "off": ""
+        },
+        {
+          "triac": 3,
+          "on": "Token Slide",
+          "off": ""
+        },
+        {
+          "triac": 4,
+          "on": "£1 Slide",
+          "off": ""
+        }
+      ]
+    },
+    "Version": "1.0",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "switches": {
+      "Cash": 30,
+      "Demo": null,
+      "Refill": 28,
+      "Service": 29,
+      "Test": 5
+    }
+  }
+}

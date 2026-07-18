@@ -1,0 +1,35 @@
+{
+  "System": "IGTS+",
+  "Settings": {
+    "Caption": "Wild Cherry",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 6",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 3",
+          "multiplier": "-4"
+        },
+        {
+          "source": "Meter 5",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "",
+    "Triac Effects": {
+      "rows": []
+    },
+    "Version": "",
+    "PAC Drive Assignments": {
+      "records": []
+    }
+  }
+}

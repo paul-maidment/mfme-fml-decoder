@@ -1,0 +1,11 @@
+System IGTS+
+DIP 1 00000000
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 5
+Game Wild Cherry
+DisplayPosition 1610 253 659 1079 725008070
+Layout layout.fml
+SLAVEROM ss3758_5c_1l_97.41pct.bin
+ROM sp1271.bin

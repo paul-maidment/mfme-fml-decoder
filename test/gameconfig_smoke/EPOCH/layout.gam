@@ -1,0 +1,15 @@
+System EPOCH
+DIP 1 00000000
+DIP 2 00000110
+SetPercent 84
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 2
+Game Blackjack Club
+Version -
+DisplayPosition 3229 363 821 741 725008070
+Layout layout.fml
+Sound bkjksnd.p0
+ROM bkjk0-1n.p0
+ROM bkjk0-1n.p1

@@ -1,0 +1,3117 @@
+{
+  "System": "SRU",
+  "Settings": {
+    "Caption": "Club Casino",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 1",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 2",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 3",
+          "multiplier": "10"
+        }
+      ]
+    },
+    "Name In Manager": "",
+    "Output Mappings": {
+      "entries": [
+        {
+          "index": 0,
+          "value": "Reel",
+          "param": 0,
+          "raw": 14
+        },
+        {
+          "index": 1,
+          "value": "Reel",
+          "param": 0,
+          "raw": 14
+        },
+        {
+          "index": 2,
+          "value": "Reel",
+          "param": 0,
+          "raw": 14
+        },
+        {
+          "index": 3,
+          "value": "Reel",
+          "param": 0,
+          "raw": 14
+        },
+        {
+          "index": 4,
+          "value": "Reel",
+          "param": 0,
+          "raw": 14
+        },
+        {
+          "index": 5,
+          "value": "Reel",
+          "param": 0,
+          "raw": 14
+        },
+        {
+          "index": 6,
+          "value": "Reel",
+          "param": 0,
+          "raw": 14
+        },
+        {
+          "index": 7,
+          "value": "Reel",
+          "param": 0,
+          "raw": 14
+        },
+        {
+          "index": 8,
+          "value": "Reel",
+          "param": 0,
+          "raw": 14
+        },
+        {
+          "index": 9,
+          "value": "Reel",
+          "param": 0,
+          "raw": 14
+        },
+        {
+          "index": 10,
+          "value": "Reel",
+          "param": 0,
+          "raw": 14
+        },
+        {
+          "index": 11,
+          "value": "Reel",
+          "param": 0,
+          "raw": 14
+        },
+        {
+          "index": 12,
+          "value": "Reel",
+          "param": 0,
+          "raw": 14
+        },
+        {
+          "index": 13,
+          "value": "Reel",
+          "param": 0,
+          "raw": 14
+        },
+        {
+          "index": 14,
+          "value": "Reel",
+          "param": 0,
+          "raw": 14
+        },
+        {
+          "index": 15,
+          "value": "Reel",
+          "param": 0,
+          "raw": 14
+        },
+        {
+          "index": 16,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 17,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 18,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 19,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 20,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 21,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 22,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 23,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 24,
+          "value": "Meter",
+          "param": 2,
+          "raw": 514
+        },
+        {
+          "index": 25,
+          "value": "Meter",
+          "param": 3,
+          "raw": 770
+        },
+        {
+          "index": 26,
+          "value": "Meter",
+          "param": 4,
+          "raw": 1026
+        },
+        {
+          "index": 27,
+          "value": "Meter",
+          "param": 5,
+          "raw": 1282
+        },
+        {
+          "index": 28,
+          "value": "Meter",
+          "param": 1,
+          "raw": 258
+        },
+        {
+          "index": 29,
+          "value": "Lamp",
+          "param": 2,
+          "raw": 512
+        },
+        {
+          "index": 30,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 31,
+          "value": "Lamp",
+          "param": 1,
+          "raw": 256
+        },
+        {
+          "index": 32,
+          "value": "LED BCD",
+          "param": 8,
+          "raw": 2053
+        },
+        {
+          "index": 33,
+          "value": "LED BCD",
+          "param": 9,
+          "raw": 2309
+        },
+        {
+          "index": 34,
+          "value": "LED BCD",
+          "param": 10,
+          "raw": 2565
+        },
+        {
+          "index": 35,
+          "value": "LED BCD",
+          "param": 11,
+          "raw": 2821
+        },
+        {
+          "index": 36,
+          "value": "LED (BCD) Digit",
+          "param": 1,
+          "raw": 263
+        },
+        {
+          "index": 37,
+          "value": "LED (BCD) Digit",
+          "param": 0,
+          "raw": 7
+        },
+        {
+          "index": 38,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 39,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 40,
+          "value": "Extender Clock",
+          "param": 0,
+          "raw": 10
+        },
+        {
+          "index": 41,
+          "value": "Extender Data",
+          "param": 0,
+          "raw": 11
+        },
+        {
+          "index": 42,
+          "value": "Extender Address",
+          "param": 0,
+          "raw": 12
+        },
+        {
+          "index": 43,
+          "value": "Extender Address",
+          "param": 1,
+          "raw": 268
+        },
+        {
+          "index": 44,
+          "value": "Extender Address",
+          "param": 2,
+          "raw": 524
+        },
+        {
+          "index": 45,
+          "value": "Extender Address",
+          "param": 3,
+          "raw": 780
+        },
+        {
+          "index": 46,
+          "value": "Extender Address",
+          "param": 4,
+          "raw": 1036
+        },
+        {
+          "index": 47,
+          "value": "Extender Address",
+          "param": 5,
+          "raw": 1292
+        },
+        {
+          "index": 48,
+          "value": "Extender Reset",
+          "param": 0,
+          "raw": 13
+        },
+        {
+          "index": 49,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 50,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 51,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 52,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 53,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 54,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 55,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 56,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 57,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 58,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 59,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 60,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 61,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 62,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 63,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 64,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 65,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 66,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 67,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 68,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 69,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 70,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 71,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 72,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 73,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 74,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 75,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 76,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 77,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 78,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 79,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 80,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 81,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 82,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 83,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 84,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 85,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 86,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 87,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 88,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 89,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 90,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 91,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 92,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 93,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 94,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 95,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 96,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 97,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 98,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 99,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 100,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 101,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 102,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 103,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 104,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 105,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 106,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 107,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 108,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 109,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 110,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 111,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 112,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 113,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 114,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 115,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 116,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 117,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 118,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 119,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 120,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 121,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 122,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 123,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 124,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 125,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 126,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 127,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 128,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 129,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 130,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 131,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 132,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 133,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 134,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 135,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 136,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 137,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 138,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 139,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 140,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 141,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 142,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 143,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 144,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 145,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 146,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 147,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 148,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 149,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 150,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 151,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 152,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 153,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 154,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 155,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 156,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 157,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 158,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 159,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 160,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 161,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 162,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 163,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 164,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 165,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 166,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 167,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 168,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 169,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 170,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 171,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 172,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 173,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 174,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 175,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 176,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 177,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 178,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 179,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 180,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 181,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 182,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 183,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 184,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 185,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 186,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 187,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 188,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 189,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 190,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 191,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 192,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 193,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 194,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 195,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 196,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 197,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 198,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 199,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 200,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 201,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 202,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 203,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 204,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 205,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 206,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 207,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 208,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 209,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 210,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 211,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 212,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 213,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 214,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 215,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 216,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 217,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 218,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 219,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 220,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 221,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 222,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 223,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 224,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 225,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 226,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 227,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 228,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 229,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 230,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 231,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 232,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 233,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 234,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 235,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 236,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 237,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 238,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 239,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 240,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 241,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 242,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 243,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 244,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 245,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 246,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 247,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 248,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 249,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 250,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 251,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 252,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 253,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 254,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 255,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 256,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 257,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 258,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 259,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 260,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 261,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 262,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 263,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 264,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 265,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 266,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 267,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 268,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 269,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 270,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 271,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 272,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 273,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 274,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 275,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 276,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 277,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 278,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 279,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 280,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 281,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 282,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 283,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 284,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 285,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 286,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 287,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 288,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 289,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 290,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 291,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 292,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 293,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 294,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 295,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 296,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 297,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 298,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 299,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 300,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 301,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 302,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 303,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 304,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 305,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 306,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 307,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 308,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 309,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 310,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 311,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 312,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 313,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 314,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 315,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 316,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 317,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 318,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 319,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 320,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 321,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 322,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 323,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 324,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 325,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 326,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 327,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 328,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 329,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 330,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 331,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 332,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 333,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 334,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 335,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 336,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 337,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 338,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 339,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 340,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 341,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 342,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 343,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 344,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 345,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 346,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 347,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 348,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 349,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 350,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 351,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 352,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 353,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 354,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 355,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 356,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 357,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 358,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 359,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 360,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 361,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 362,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 363,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 364,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 365,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 366,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 367,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 368,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 369,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 370,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 371,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 372,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 373,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 374,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 375,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 376,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 377,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 378,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 379,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 380,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 381,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 382,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 383,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 384,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 385,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 386,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 387,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 388,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 389,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 390,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 391,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 392,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 393,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 394,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 395,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 396,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 397,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 398,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 399,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 400,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 401,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 402,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 403,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 404,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 405,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 406,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 407,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 408,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 409,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 410,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 411,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 412,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 413,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 414,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 415,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 416,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 417,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 418,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 419,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 420,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 421,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 422,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 423,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 424,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 425,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 426,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 427,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 428,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 429,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 430,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 431,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 432,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 433,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 434,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 435,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 436,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 437,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 438,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 439,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 440,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 441,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 442,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 443,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 444,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 445,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 446,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 447,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 448,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 449,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 450,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 451,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 452,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 453,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 454,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 455,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 456,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 457,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 458,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 459,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 460,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 461,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 462,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 463,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 464,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 465,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 466,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 467,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 468,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 469,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 470,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 471,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 472,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 473,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 474,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 475,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 476,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 477,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 478,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 479,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 480,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 481,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 482,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 483,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 484,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 485,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 486,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 487,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 488,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 489,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 490,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 491,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 492,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 493,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 494,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 495,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 496,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 497,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 498,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 499,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 500,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 501,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 502,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 503,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 504,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 505,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 506,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 507,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 508,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 509,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 510,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        },
+        {
+          "index": 511,
+          "value": "Lamp",
+          "param": 0,
+          "raw": 0
+        }
+      ]
+    },
+    "Sound Pitch": 50,
+    "Triac Effects": {
+      "rows": []
+    },
+    "Version": "-",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "switches": {
+      "Cash": null,
+      "Refill": 38,
+      "Service": null
+    }
+  }
+}

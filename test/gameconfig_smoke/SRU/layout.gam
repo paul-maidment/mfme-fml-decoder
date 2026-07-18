@@ -1,0 +1,17 @@
+System SRU
+DIP 1 00000000
+DIP 2 00000000
+SetPercent 0
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 2
+Game Club Casino
+Version -
+DisplayPosition 1370 277 700 914 725008070
+Layout layout.fml
+ROM luckycasino1.bin
+ROM luckycasino2.bin
+ROM luckycasino3.bin
+ROM luckycasino4.bin
+ROM luckycasino5.bin

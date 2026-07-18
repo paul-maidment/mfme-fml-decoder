@@ -1,0 +1,19 @@
+System MPU4VIDEO
+DIP 1 00000000
+DIP 2 00000000
+Protocol 1
+Percentage 6
+SetPercent 82
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 4
+DX 1
+Game £6-X Bwb Video CLASSIC by Vectra666 07/12/2016 thanks to richy1976 for rom help
+DisplayPosition 492 312 1100 800 725008070
+Layout layout.fml
+VIDROM 6x______.3_1
+VIDROM 6x______.3_2
+VIDROM 6x______.3_3
+VIDROM 6x______.3_4
+ROM 6x_20a__.3_0

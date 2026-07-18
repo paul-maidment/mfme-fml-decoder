@@ -1,0 +1,90 @@
+{
+  "System": "SYS1",
+  "Settings": {
+    "DIP": {
+      "kind": "dip-banks",
+      "banks": {
+        "DIP1": {
+          "pattern": "10000011",
+          "order": "unknown",
+          "switches": {
+            "1": true,
+            "2": false,
+            "3": false,
+            "4": false,
+            "5": false,
+            "6": false,
+            "7": true,
+            "8": true
+          }
+        },
+        "DIP2": {
+          "pattern": "00011000",
+          "order": "unknown",
+          "switches": {
+            "1": false,
+            "2": false,
+            "3": false,
+            "4": true,
+            "5": true,
+            "6": false,
+            "7": false,
+            "8": false
+          }
+        }
+      }
+    },
+    "EffectsButtons": {
+      "kind": "checkbox",
+      "value": true,
+      "raw": 255,
+      "mask": 8
+    },
+    "EffectsCoins": {
+      "kind": "checkbox",
+      "value": true,
+      "raw": 255,
+      "mask": 16
+    },
+    "EffectsMeters": {
+      "kind": "checkbox",
+      "value": true,
+      "raw": 255,
+      "mask": 2
+    },
+    "EffectsReels": {
+      "kind": "checkbox",
+      "value": true,
+      "raw": 255,
+      "mask": 1
+    },
+    "EffectsTriacs": {
+      "kind": "checkbox",
+      "value": true,
+      "raw": 255,
+      "mask": 4
+    },
+    "Lo Tech": {
+      "kind": "checkbox",
+      "value": false,
+      "raw": null,
+      "defaultUsed": true
+    },
+    "Rating": {
+      "kind": "text",
+      "value": "",
+      "defaultUsed": true
+    },
+    "Tags": {
+      "kind": "text",
+      "value": "",
+      "defaultUsed": true
+    },
+    "WIP": {
+      "kind": "checkbox",
+      "value": false,
+      "raw": null,
+      "defaultUsed": true
+    }
+  }
+}

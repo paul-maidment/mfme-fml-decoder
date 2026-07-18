@@ -1,0 +1,45 @@
+{
+  "System": "SYS83",
+  "Settings": {
+    "Caption": "Cat And Mouse",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 3",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 5",
+          "multiplier": "2"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 7",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 8",
+          "multiplier": "2"
+        }
+      ]
+    },
+    "Name In Manager": "",
+    "Triac Effects": {
+      "rows": []
+    },
+    "Version": "-",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "switches": {
+      "Demo": null,
+      "Refill": null,
+      "Service": null,
+      "Test": null
+    }
+  }
+}

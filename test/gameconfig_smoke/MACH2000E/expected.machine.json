@@ -1,0 +1,65 @@
+{
+  "System": "MACH2000E",
+  "Settings": {
+    "Caption": "Castle - Revolution by Clo06",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 1",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 2",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 3",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 4",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "Castle - Revolution ",
+    "Triac Effects": {
+      "rows": [
+        {
+          "triac": 1,
+          "on": "Token Slide",
+          "off": ""
+        },
+        {
+          "triac": 2,
+          "on": "£1 Slide",
+          "off": ""
+        },
+        {
+          "triac": 3,
+          "on": "50p Slide",
+          "off": ""
+        },
+        {
+          "triac": 4,
+          "on": "10p Slide",
+          "off": ""
+        }
+      ]
+    },
+    "Version": "",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "switches": {
+      "Cash": 34,
+      "Refill": null,
+      "Service": 33
+    }
+  }
+}

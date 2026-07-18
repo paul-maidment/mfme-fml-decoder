@@ -1,0 +1,55 @@
+{
+  "System": "ASTRASYSA1",
+  "Settings": {
+    "Caption": "Bullion Bars Slave 1 DX by DAD. Thanks to Wizard for MFME 6.",
+    "DM Type": "1",
+    "FPGA Type": "2",
+    "Hopper Opto": "Inverted",
+    "ID Detect": "Reel4",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Sec 7",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Sec 2",
+          "multiplier": "1"
+        },
+        {
+          "source": "Sec 3",
+          "multiplier": "1"
+        },
+        {
+          "source": "Sec 7",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Multiplex Type": "2",
+    "Name In Manager": "Bullion Bars Slave 1",
+    "Network Id": "Slave 2",
+    "NV4 Note": "Yes",
+    "Reel 56 Optos": "Type 1",
+    "SEC": "Yes",
+    "Triac Effects": {
+      "rows": []
+    },
+    "Version": "MeterOK",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "switches": {
+      "Cash": 14,
+      "Refill": 23,
+      "Service": 13,
+      "Test": 43,
+      "Top Up": 27
+    }
+  }
+}

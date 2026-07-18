@@ -1,0 +1,110 @@
+{
+  "System": "MPU4PLASMA",
+  "Settings": {
+    "7 Seg Display": "Barcrest",
+    "Alpha Cable": "Normal",
+    "Aux1 Invert": false,
+    "Aux2 Invert": false,
+    "Caption": "Apache ?6 84%",
+    "Character": "Barcrest",
+    "Door Invert": false,
+    "Encryption": "Normal",
+    "Extender Aux1": "None",
+    "Lamp Test": "Pass",
+    "LVD": "No",
+    "Meter Effects": {
+      "rows": [
+        {
+          "meter": 1,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 2,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 3,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 4,
+          "on": "Meter",
+          "off": ""
+        }
+      ]
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 1",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 3",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 2",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 4",
+          "multiplier": "2"
+        }
+      ]
+    },
+    "Mod Type": "2",
+    "Name In Manager": "",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "Payout": "Tube",
+    "Reels": "3/4",
+    "ROM Paging": "1/4/8 pages",
+    "Sound": "Yamaha",
+    "Triac Effects": {
+      "rows": [
+        {
+          "triac": 1,
+          "on": "20p Slide",
+          "off": ""
+        },
+        {
+          "triac": 2,
+          "on": "£1 Slide",
+          "off": ""
+        },
+        {
+          "triac": 3,
+          "on": "Token Slide",
+          "off": ""
+        },
+        {
+          "triac": 4,
+          "on": "Token Slide",
+          "off": ""
+        },
+        {
+          "triac": 8,
+          "on": "Meter",
+          "off": ""
+        }
+      ]
+    },
+    "Type": "Reel",
+    "Version": "",
+    "Volume Control": "Auto",
+    "switches": {
+      "Cash": null,
+      "Refill": 22,
+      "Service": 23,
+      "Test": 21,
+      "Top Up": null
+    }
+  }
+}

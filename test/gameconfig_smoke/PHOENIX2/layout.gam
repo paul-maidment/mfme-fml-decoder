@@ -1,0 +1,19 @@
+System PHOENIX2
+DIP 1 11101100
+DIP 2 00000000
+REEL 1 22 74
+REEL 2 70 26
+REEL 3 86 10
+Percentage 7
+SetPercent 84
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 2
+DX 1
+Game LayoutGame
+Version V1
+DisplayPosition 573 125 1033 1142 725008070
+Layout layout.fml
+Sound rwbsnd.bin
+ROM STAIRV9.BIN

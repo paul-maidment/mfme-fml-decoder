@@ -1,0 +1,44 @@
+{
+  "System": "PLUTO5",
+  "Settings": {
+    "Caption": "",
+    "DM Type": "1",
+    "FPGA Type": "1",
+    "Hopper Opto": "Normal",
+    "ID Detect": "None",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 1",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 2",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Multiplex Type": "1",
+    "Name In Manager": "",
+    "Network Id": "Master",
+    "NV4 Note": "No",
+    "Reel 56 Optos": "None",
+    "SEC": "No",
+    "Triac Effects": {
+      "rows": []
+    },
+    "Version": "",
+    "switches": {
+      "Cash": null,
+      "Refill": null,
+      "Service": -6,
+      "Test": 7,
+      "Top Up": null
+    }
+  }
+}

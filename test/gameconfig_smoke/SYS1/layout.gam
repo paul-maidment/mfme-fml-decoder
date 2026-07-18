@@ -1,0 +1,16 @@
+System SYS1
+DIP 1 10000011
+DIP 2 00011000
+SetPercent 0
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 2
+Game Club Xtra
+Version -
+DisplayPosition 1397 405 646 676 725008070
+Layout layout.fml
+ROM xt545p2c
+ROM xt545p2e
+ROM xt545p2f
+ROM xt545p2g

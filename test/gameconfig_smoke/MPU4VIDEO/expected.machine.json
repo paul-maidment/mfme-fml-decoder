@@ -1,0 +1,56 @@
+{
+  "System": "MPU4VIDEO",
+  "Settings": {
+    "7 Seg Display": "Barcrest",
+    "Caption": "?6-X Bwb Video CLASSIC by Vectra666 07/12/2016 thanks to richy1976 for rom help",
+    "Character": "BWB",
+    "Extender Aux1": "None",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 1",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 3",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 2",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 4",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "",
+    "No Cursor": false,
+    "Palette Type": "ef9369",
+    "PC Key Location": "Main Board",
+    "ROM Paging": "1/4/8 pages",
+    "Screen Brightness": 199,
+    "Triac Effects": {
+      "rows": []
+    },
+    "Type": "Video",
+    "Version": "",
+    "XRam": "No",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "switches": {
+      "Mouse Left Button": 23,
+      "Mouse Right Button": 33,
+      "Refill": 22,
+      "Service": 23,
+      "Test": 21
+    }
+  }
+}

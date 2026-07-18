@@ -1,0 +1,14 @@
+System SYS85
+DIP 1 00011000
+DIP 2 01000000
+SetPercent 92
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 3
+DX 1
+Game Bar Sevens DX
+Version 1.0
+DisplayPosition 1221 185 997 1098 725008070
+Layout layout.fml
+ROM bar7diff.bin

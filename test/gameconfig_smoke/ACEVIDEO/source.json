@@ -1,0 +1,9 @@
+{
+  "system": "ACEVIDEO",
+  "gam": "layout.gam",
+  "fml": "layout.fml",
+  "copiedFrom": {
+    "gam": "ACEVIDEO/Sidewinder (Ace)/Sidewinder_(Ace)_[C01_2jp].gam",
+    "fml": "ACEVIDEO/Sidewinder (Ace)/Sidewinder_(Ace)_[C01_2jp].fml"
+  }
+}

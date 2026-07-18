@@ -1,0 +1,199 @@
+{
+  "System": "MPU2",
+  "Settings": {
+    "Caption": "Hi-Lights MPU2 (1981)",
+    "Meter Effects": {
+      "rows": [
+        {
+          "meter": 6,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 12,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 14,
+          "on": "Meter",
+          "off": ""
+        }
+      ]
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Triac 6",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Triac 12",
+          "multiplier": "1"
+        },
+        {
+          "source": "Triac 14",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "Hi-Lights",
+    "Reel Smoothing": "No",
+    "Reel Type": "Stepper",
+    "Relay": "Triac 3",
+    "Triac Effects": {
+      "rows": [
+        {
+          "triac": 4,
+          "on": "10p Slide",
+          "off": ""
+        },
+        {
+          "triac": 10,
+          "on": "Token Slide",
+          "off": ""
+        }
+      ]
+    },
+    "Version": "v1",
+    "PAC Drive Assignments": {
+      "records": [
+        {
+          "index": 0,
+          "output": 1,
+          "outputType": "Lamp",
+          "value1": 52,
+          "value2": null,
+          "label": "Start Right A"
+        },
+        {
+          "index": 1,
+          "output": 1,
+          "outputType": "Lamp",
+          "value1": 28,
+          "value2": null,
+          "label": "Start Right B"
+        },
+        {
+          "index": 2,
+          "output": 1,
+          "outputType": "Lamp",
+          "value1": 11,
+          "value2": null,
+          "label": "gamble"
+        },
+        {
+          "index": 3,
+          "output": 3,
+          "outputType": "Lamp",
+          "value1": 55,
+          "value2": null,
+          "label": "Reel 3 Nudge Down"
+        },
+        {
+          "index": 4,
+          "output": 4,
+          "outputType": "Lamp",
+          "value1": 54,
+          "value2": null,
+          "label": "Reel 3 Nudge Up"
+        },
+        {
+          "index": 5,
+          "output": 5,
+          "outputType": "Lamp",
+          "value1": 55,
+          "value2": null,
+          "label": "Reel 2 Nudge Down"
+        },
+        {
+          "index": 6,
+          "output": 6,
+          "outputType": "Lamp",
+          "value1": 54,
+          "value2": null,
+          "label": "Reel 2 Nudge Up"
+        },
+        {
+          "index": 7,
+          "output": 7,
+          "outputType": "Lamp",
+          "value1": 55,
+          "value2": null,
+          "label": "Reel 1 Nudge Down"
+        },
+        {
+          "index": 8,
+          "output": 8,
+          "outputType": "Lamp",
+          "value1": 54,
+          "value2": null,
+          "label": "Reel 1 Nudge Up"
+        },
+        {
+          "index": 9,
+          "output": 10,
+          "outputType": "Lamp",
+          "value1": 3,
+          "value2": null,
+          "label": "Reel 3 Hold"
+        },
+        {
+          "index": 10,
+          "output": 11,
+          "outputType": "Lamp",
+          "value1": 2,
+          "value2": null,
+          "label": "Reel2 Hold"
+        },
+        {
+          "index": 11,
+          "output": 12,
+          "outputType": "Lamp",
+          "value1": 1,
+          "value2": null,
+          "label": "Reel 1 Hold"
+        },
+        {
+          "index": 12,
+          "output": 13,
+          "outputType": "Lamp",
+          "value1": 4,
+          "value2": null,
+          "label": "Start",
+          "shortcut": 32
+        },
+        {
+          "index": 13,
+          "output": 13,
+          "outputType": "Lamp",
+          "value1": 59,
+          "value2": 35,
+          "label": "Collect"
+        },
+        {
+          "index": 14,
+          "output": 15,
+          "outputType": "Triac -> Hopper 2",
+          "value1": 10,
+          "value2": 1,
+          "label": "10p Token payout"
+        },
+        {
+          "index": 15,
+          "output": 16,
+          "outputType": "Triac -> Hopper 1",
+          "value1": 4,
+          "value2": 1,
+          "label": "10p payout"
+        }
+      ]
+    },
+    "switches": {
+      "Refill": 15,
+      "Service": null
+    }
+  }
+}

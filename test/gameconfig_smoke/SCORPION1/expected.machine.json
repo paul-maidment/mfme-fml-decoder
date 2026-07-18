@@ -1,0 +1,60 @@
+{
+  "System": "SCORPION1",
+  "Settings": {
+    "Caption": "Global - All in a days work by Clo06",
+    "Encryption": "Normal",
+    "Meter Effects": {
+      "rows": []
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 2",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 3",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "Global - All in a days work",
+    "Sampled Sound": "Global",
+    "Triac Effects": {
+      "rows": [
+        {
+          "triac": 3,
+          "on": "£1 Slide",
+          "off": ""
+        },
+        {
+          "triac": 4,
+          "on": "20p Slide",
+          "off": ""
+        },
+        {
+          "triac": 6,
+          "on": "£1 Slide",
+          "off": ""
+        }
+      ]
+    },
+    "Version": "",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "switches": {
+      "Cash": null,
+      "DM Busy": null,
+      "Pay Sense 1": null,
+      "Pay Sense 2": null,
+      "Pay Sense 3": null,
+      "Pay Sense 4": null,
+      "Refill": null,
+      "Service": null,
+      "Test": null
+    }
+  }
+}

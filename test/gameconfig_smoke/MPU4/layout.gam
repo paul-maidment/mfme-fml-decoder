@@ -1,0 +1,11 @@
+System MPU4
+DIP 1 00000000
+DIP 2 00000000
+SetPercent 0
+TotalIn 0
+TotalOut 0
+Effects 255
+Played 2
+DisplayPosition 1085 287 1270 894 725008070
+Layout layout.fml
+ROM dtw27.bin

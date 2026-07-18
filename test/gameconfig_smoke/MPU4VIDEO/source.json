@@ -1,0 +1,9 @@
+{
+  "system": "MPU4VIDEO",
+  "gam": "layout.gam",
+  "fml": "layout.fml",
+  "copiedFrom": {
+    "gam": "MPU4VIDEO/6-X (BWB)/6_-_X_(BWB)_[C01_6jp].gam",
+    "fml": "MPU4VIDEO/6-X (BWB)/6_-_X_(BWB)_[C01_6jp].fml"
+  }
+}

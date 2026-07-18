@@ -1,16 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>MfmeFmlDecoder</RootNamespace>
     <AssemblyName>MfmeFmlDecoder</AssemblyName>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <LangVersion>10</LangVersion>
+    <PublishAot>true</PublishAot>
+    <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <StripSymbols>true</StripSymbols>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <IlcOptimizationPreference>Size</IlcOptimizationPreference>
   </PropertyGroup>
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>MfmeFmlDecoder.UnitTests</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>FmlTagEdit</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>ScanEffects</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
@@ -18,13 +31,14 @@
     <Compile Remove="test/**/*.cs" />
     <Compile Remove="src/**/*Tests.cs" />
     <Compile Remove="tools/**" />
+    <Compile Remove="_tmp_scan_effects/**" />
     <Compile Remove="test\smoke_test\MaygayVideo\WithAngle\**" />
     <Compile Remove="test\smoke_test\PlasmaDisplay\WithAngle\**" />
     <EmbeddedResource Remove="src\Decoder\Core\**" />
     <EmbeddedResource Remove="tools/**" />
-    <EmbeddedResource Remove="test\smoke_test\MaygayVideo\WithAngle\**" />
-    <EmbeddedResource Remove="test\smoke_test\PlasmaDisplay\WithAngle\**" />
+    <EmbeddedResource Remove="_tmp_scan_effects/**" />
     <None Remove="tools/**" />
+    <None Remove="_tmp_scan_effects/**" />
 
     <Folder Include="test\smoke_test\AceVideo\WithoutAngle\" />
     <Folder Include="test\smoke_test\Alpha\WithoutAngle\" />

@@ -1,0 +1,87 @@
+{
+  "System": "M1VIDEO",
+  "Settings": {
+    "Caption": "Screen Play DX - Pook                                                              www.dxcellent.com",
+    "Meter Effects": {
+      "rows": [
+        {
+          "meter": 1,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 2,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 3,
+          "on": "Meter",
+          "off": ""
+        },
+        {
+          "meter": 4,
+          "on": "Meter",
+          "off": ""
+        }
+      ]
+    },
+    "Meters": {
+      "in": [
+        {
+          "source": "Meter 1",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 3",
+          "multiplier": "1"
+        }
+      ],
+      "out": [
+        {
+          "source": "Meter 2",
+          "multiplier": "1"
+        },
+        {
+          "source": "Meter 4",
+          "multiplier": "1"
+        }
+      ]
+    },
+    "Name In Manager": "Screen Play DX",
+    "PAC Drive Assignments": {
+      "records": []
+    },
+    "Triac Effects": {
+      "rows": [
+        {
+          "triac": 1,
+          "on": "20p Slide",
+          "off": ""
+        },
+        {
+          "triac": 2,
+          "on": "£1 Slide",
+          "off": ""
+        },
+        {
+          "triac": 3,
+          "on": "Token Slide",
+          "off": ""
+        },
+        {
+          "triac": 4,
+          "on": "10p Slide",
+          "off": ""
+        }
+      ]
+    },
+    "Version": "Pook_v6",
+    "switches": {
+      "Cash": -31,
+      "Refill": 33,
+      "Service": -30,
+      "Test": 8
+    }
+  }
+}
