@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using MfmeFmlDecoder.Model;
@@ -142,7 +143,8 @@ namespace MfmeFmlDecoder.src.Model.Component
         {
             JsonSerializerOptions options = new JsonSerializerOptions
             {
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                TypeInfoResolver = new DefaultJsonTypeInfoResolver()
             };
             options.Converters.Add(new BitmapEntryWithoutBytesJsonConverter());
             return options;
