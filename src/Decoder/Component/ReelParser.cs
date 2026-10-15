@@ -40,7 +40,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component
             { 0x26, new TagInfo(0x04, "BackgroundFillColour", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.ARGB_COLOR) },
             { 0x0D, new TagInfo(0x04, "BorderColour", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.ARGB_COLOR) },
             { 0x0B, new TagInfo(0x04, "NumberOfWinlines", new byte[] { 0x01, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x20, new TagInfo(0x04, "WinlinesOffset", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
+            { 0x20, new TagInfo(0x04, "WinlinesOffset", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.INT32) },
             { 0x0C, new TagInfo(0x04, "WinlinesThickness", new byte[] { 0x01, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
             { 0x0A, new TagInfo(0x04, "BorderThickness", new byte[] { 0x01, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
             { 0x1E, new TagInfo(0x04, "ReelNbrOffset", new byte[] { 0x01, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },

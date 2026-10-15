@@ -93,8 +93,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component
                 { 0x03, new TagInfo(0x00, "Brightmask Main", Array.Empty<byte>(), ValueRole.BITMAP) },
                 { 0x5A, new TagInfo(0x00, "Brightmask Mask", Array.Empty<byte>(), ValueRole.BITMAP) },
                 { 0x0C, new TagInfo(0x04, "Roundness", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-                { 0x21, new TagInfo(0x04, "X Offset", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-                { 0x22, new TagInfo(0x04, "Y Offset", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
+                { 0x21, new TagInfo(0x04, "X Offset", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.INT32) },
+                { 0x22, new TagInfo(0x04, "Y Offset", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.INT32) },
                 { 0x25, new TagInfo(0x04, "OutlineColour", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.ARGB_COLOR) },
                 { 0x0B, new TagInfo(0x04, "ShapeParamter", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) }, // TODO: Add a half number mode for this type.
                 { 0x0D, new TagInfo(0x04, "ShapeAngle", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
