@@ -25,6 +25,8 @@ namespace FmlTagEdit
             string outputPath = null;
             uint? removeTag = null;
             bool listTags = false;
+            bool unban = false;
+            var patches = new List<(int Offset, byte[] Bytes)>();
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -48,6 +50,45 @@ namespace FmlTagEdit
                     }
 
                     removeTag = tag;
+                }
+                else if (a is "--unban" or "-u")
+                {
+                    unban = true;
+                }
+                else if (a is "--patch" or "-p")
+                {
+                    if (i + 1 >= args.Length)
+                    {
+                        Console.Error.WriteLine("Missing value for --patch");
+                        return 1;
+                    }
+
+                    string spec = args[++i];
+                    int colon = spec.IndexOf(':');
+                    if (colon <= 0)
+                    {
+                        Console.Error.WriteLine("--patch wants <plaintextOffset>:<hex>");
+                        return 1;
+                    }
+
+                    if (!TryParseOffset(spec.Substring(0, colon), out int poff))
+                    {
+                        Console.Error.WriteLine($"Invalid patch offset: {spec}");
+                        return 1;
+                    }
+
+                    byte[] pbytes;
+                    try
+                    {
+                        pbytes = Convert.FromHexString(spec.Substring(colon + 1).Replace(" ", "").Replace("-", ""));
+                    }
+                    catch (FormatException)
+                    {
+                        Console.Error.WriteLine($"Invalid patch hex: {spec}");
+                        return 1;
+                    }
+
+                    patches.Add((poff, pbytes));
                 }
                 else if (a is "--output" or "-o")
                 {
@@ -83,9 +124,15 @@ namespace FmlTagEdit
                 return 1;
             }
 
-            if (!listTags && removeTag == null)
+            if (unban && (patches.Count > 0 || removeTag != null))
             {
-                Console.Error.WriteLine("Specify --list and/or --remove-tag <id>.");
+                Console.Error.WriteLine("--unban clears the layout blacklist; it cannot be combined with --patch or --remove-tag.");
+                return 1;
+            }
+
+            if (!listTags && removeTag == null && patches.Count == 0 && !unban)
+            {
+                Console.Error.WriteLine("Specify --list, --unban, --remove-tag <id> and/or --patch <offset>:<hex>.");
                 PrintUsage();
                 return 1;
             }
@@ -93,6 +140,63 @@ namespace FmlTagEdit
             byte[] fml = File.ReadAllBytes(inputPath);
             byte[] plain = FmlDecryptor.Decrypt(fml);
             Console.WriteLine($"Decrypted {inputPath} ({fml.Length:N0} → {plain.Length:N0} bytes)");
+
+            if (unban)
+            {
+                UnbanResult unbanResult = BlacklistUnbanner.Unban(plain);
+                Console.WriteLine(
+                    $"Blacklist scan: {unbanResult.PayloadsScanned} 0x{BlacklistUnbanner.LayoutPayloadTag:X2} " +
+                    $"payload(s), {unbanResult.RecordsScanned} record(s)");
+
+                foreach (string warning in unbanResult.Warnings)
+                    Console.WriteLine($"  warning: {warning}");
+
+                if (!unbanResult.Changed)
+                {
+                    Console.WriteLine("No blacklist marker found — file left untouched.");
+                    return 0;
+                }
+
+                foreach (UnbanEdit edit in unbanResult.Edits)
+                    Console.WriteLine($"  cleared {edit}");
+
+                plain = unbanResult.Plaintext;
+
+                if (outputPath == null)
+                {
+                    string backupPath = inputPath + ".bak";
+                    if (File.Exists(backupPath))
+                    {
+                        Console.WriteLine($"Backup kept: {backupPath} already exists (not overwritten)");
+                    }
+                    else
+                    {
+                        File.Copy(inputPath, backupPath);
+                        Console.WriteLine($"Backup written: {backupPath}");
+                    }
+
+                    outputPath = inputPath;
+                    Console.WriteLine($"Overwriting in place: {Path.GetFullPath(outputPath)}");
+                }
+            }
+
+            if (patches.Count > 0)
+            {
+                plain = (byte[])plain.Clone();
+                foreach ((int Offset, byte[] Bytes) p in patches)
+                {
+                    if (p.Offset < 0 || p.Offset + p.Bytes.Length > plain.Length)
+                    {
+                        Console.Error.WriteLine($"Patch at 0x{p.Offset:X} ({p.Bytes.Length} B) is outside the plaintext.");
+                        return 1;
+                    }
+
+                    Console.WriteLine(
+                        $"Patch 0x{p.Offset:X} ({p.Bytes.Length} B): " +
+                        $"{Convert.ToHexString(plain.AsSpan(p.Offset, p.Bytes.Length))} -> {Convert.ToHexString(p.Bytes)}");
+                    Array.Copy(p.Bytes, 0, plain, p.Offset, p.Bytes.Length);
+                }
+            }
 
             if (listTags)
             {
@@ -105,37 +209,66 @@ namespace FmlTagEdit
                 }
             }
 
-            if (removeTag == null)
-                return 0;
-
-            byte[] edited = FileLevelTagBag.RemoveTag(plain, removeTag.Value, out int removed);
-            if (removed == 0)
+            byte[] edited = plain;
+            if (removeTag != null)
             {
-                Console.Error.WriteLine($"Tag 0x{removeTag.Value:X} not found — nothing written.");
-                return 2;
-            }
+                edited = FileLevelTagBag.RemoveTag(plain, removeTag.Value, out int removed);
+                if (removed == 0)
+                {
+                    Console.Error.WriteLine($"Tag 0x{removeTag.Value:X} not found — nothing written.");
+                    return 2;
+                }
 
-            Console.WriteLine($"Removed {removed} occurrence(s) of tag 0x{removeTag.Value:X}");
-            Console.WriteLine($"Plaintext {plain.Length:N0} → {edited.Length:N0} bytes");
+                Console.WriteLine($"Removed {removed} occurrence(s) of tag 0x{removeTag.Value:X}");
+                Console.WriteLine($"Plaintext {plain.Length:N0} → {edited.Length:N0} bytes");
+            }
 
             byte[] repacked = FmlDecryptor.RepackAsSingleChunk(fml, edited);
             outputPath ??= Path.Combine(
                 Path.GetDirectoryName(Path.GetFullPath(inputPath)) ?? ".",
                 Path.GetFileNameWithoutExtension(inputPath) + ".edited.fml");
 
-            File.WriteAllBytes(outputPath, repacked);
+            WriteAllBytesKeepingAttributes(outputPath, repacked);
             Console.WriteLine($"Wrote {outputPath} ({repacked.Length:N0} bytes)");
 
-            // Quick sanity: decrypt again and confirm tag gone
+            // Quick sanity: decrypt again and confirm the edit survived
             byte[] verify = FmlDecryptor.Decrypt(repacked);
-            Dictionary<uint, byte[]> after = FileLevelTagBag.Parse(verify);
-            if (after.ContainsKey(removeTag.Value))
+            if (removeTag != null)
             {
-                Console.Error.WriteLine("Verify failed: tag still present after re-encrypt.");
-                return 3;
+                Dictionary<uint, byte[]> after = FileLevelTagBag.Parse(verify);
+                if (after.ContainsKey(removeTag.Value))
+                {
+                    Console.Error.WriteLine("Verify failed: tag still present after re-encrypt.");
+                    return 3;
+                }
             }
 
-            Console.WriteLine("Verify OK (decrypt + tag absent + chunk CRC).");
+            if (unban)
+            {
+                UnbanResult recheck = BlacklistUnbanner.Unban(verify);
+                if (recheck.Changed)
+                {
+                    Console.Error.WriteLine("Verify failed: blacklist marker still present after re-encrypt.");
+                    return 3;
+                }
+
+                Console.WriteLine(
+                    $"Verified: no blacklist marker in {recheck.RecordsScanned} record(s) of the rewritten file.");
+            }
+
+            foreach ((int Offset, byte[] Bytes) p in patches)
+            {
+                if (!verify.AsSpan(p.Offset, p.Bytes.Length).SequenceEqual(p.Bytes))
+                {
+                    Console.Error.WriteLine($"Verify failed: patch at 0x{p.Offset:X} did not survive re-encrypt.");
+                    return 3;
+                }
+            }
+
+            Console.WriteLine(
+                removeTag != null ? "Verify OK (decrypt + tag absent + chunk CRC)."
+                : unban ? "Verify OK (decrypt + marker cleared + chunk CRC)."
+                : "Verify OK (decrypt + patch present + chunk CRC).");
             uint crc = BitConverter.ToUInt32(repacked, 136);
             // For single-chunk outputs the CRC covers the full plaintext.
             if (BitConverter.ToUInt32(repacked, 12) == 1)
@@ -149,6 +282,37 @@ namespace FmlTagEdit
             }
 
             return 0;
+        }
+
+        /// <summary>
+        /// Writes <paramref name="bytes"/> to <paramref name="path"/>, temporarily
+        /// clearing the read-only attribute when overwriting such a file.
+        /// </summary>
+        private static void WriteAllBytesKeepingAttributes(string path, byte[] bytes)
+        {
+            FileAttributes original = File.Exists(path) ? File.GetAttributes(path) : 0;
+            bool readOnly = (original & FileAttributes.ReadOnly) != 0;
+            if (readOnly)
+                File.SetAttributes(path, original & ~FileAttributes.ReadOnly);
+
+            try
+            {
+                File.WriteAllBytes(path, bytes);
+            }
+            finally
+            {
+                if (readOnly)
+                    File.SetAttributes(path, original);
+            }
+        }
+
+        private static bool TryParseOffset(string text, out int value)
+        {
+            text = text.Trim();
+            if (text.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+                return int.TryParse(text.AsSpan(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out value);
+            return int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out value)
+                || int.TryParse(text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out value);
         }
 
         private static bool TryParseTag(string text, out uint tag)
@@ -181,17 +345,32 @@ namespace FmlTagEdit
         private static void PrintUsage()
         {
             Console.WriteLine(
-                "FmlTagEdit — list or remove file-level TLV tags from an FML" + Environment.NewLine +
+                "FmlTagEdit — list, clear or remove file-level TLV tags from an FML" + Environment.NewLine +
                 Environment.NewLine +
                 "Usage:" + Environment.NewLine +
                 "  FmlTagEdit <input.fml> --list" + Environment.NewLine +
+                "  FmlTagEdit <input.fml> --unban [-o output.fml]" + Environment.NewLine +
                 "  FmlTagEdit <input.fml> --remove-tag 0x0C [-o output.fml]" + Environment.NewLine +
-                "  FmlTagEdit <input.fml> --list --remove-tag 12 -o out.fml" + Environment.NewLine +
+                "  FmlTagEdit <input.fml> --patch 0xBAB:F894ECCE93BCF895FDD9 [-o out.fml]" + Environment.NewLine +
+                Environment.NewLine +
+                "Options:" + Environment.NewLine +
+                "  --unban, -u       Clear the layout blacklist markers MFME scans for in the" + Environment.NewLine +
+                "                    0x97 payload (exact match on record field 6, substrings on" + Environment.NewLine +
+                "                    field 2). Without -o the file is rewritten in place, after" + Environment.NewLine +
+                "                    copying it to <input>.fml.bak (an existing backup is kept)." + Environment.NewLine +
+                "                    A file with no marker is left untouched." + Environment.NewLine +
+                "  --patch, -p       Overwrite plaintext bytes at <plaintextOffset>:<hex>." + Environment.NewLine +
+                "                    Repeatable; offsets are decrypted-plaintext offsets." + Environment.NewLine +
+                "  --remove-tag, -r  Drop every file-level TLV entry with the given tag id." + Environment.NewLine +
+                "  --list, -l        Print the file-level tag table." + Environment.NewLine +
+                "  --output, -o      Write to this path instead of editing in place." + Environment.NewLine +
                 Environment.NewLine +
                 "Notes:" + Environment.NewLine +
                 "  - Decrypts, edits the TLV prologue (before 0xFFFFFFFF), re-encrypts" + Environment.NewLine +
                 "    with correct chunk CRC32 / AACS header (same password as input)." + Environment.NewLine +
-                "  - Default output: <input>.edited.fml");
+                "  - Re-encoded output is a single chunk, so it is usually smaller." + Environment.NewLine +
+                "  - Read-only inputs are overwritten and their attribute restored." + Environment.NewLine +
+                "  - Default output without -o and without --unban: <input>.edited.fml");
         }
     }
 }
