@@ -18,4 +18,5 @@ dist/
 **/[Pp]ackages/*
 !**/[Pp]ackages/build/
 
+# Local smoke-test data
 gamesV20.0.db

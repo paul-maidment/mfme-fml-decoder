@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace MfmeFmlDecoder.src.Model.Component
 {
+    [System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicProperties)]
     internal class SevenSeg : BaseComponent
     {
         // MFME sentinels for an undefined sublamp number (0xFFFFFFFE = -2, 0xFFFFFFFF = -1).

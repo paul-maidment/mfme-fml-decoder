@@ -27,6 +27,10 @@ jobs:
         shell: pwsh
         run: ./scripts/build-aot.ps1 -Target win-x64,win-arm64 -Clean
 
+      - name: Verify AOT JSON matches goldens
+        shell: pwsh
+        run: ./scripts/verify-aot-json.ps1 -DecoderPath dist/aot/win-x64/MfmeFmlDecoder.exe
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v6
         with:
@@ -61,6 +65,9 @@ jobs:
 
       - name: Publish Native AOT
         run: bash ./scripts/build-aot.sh --clean ${{ matrix.rid }}
+
+      - name: Verify AOT JSON matches goldens
+        run: pwsh ./scripts/verify-aot-json.ps1 -DecoderPath dist/aot/${{ matrix.rid }}/MfmeFmlDecoder
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v6

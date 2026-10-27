@@ -1,0 +1,102 @@
+{
+  "Components": [
+    {
+      "Type": "Background",
+      "OrdinalComponentIdentifier": 0,
+      "Geometry": {
+        "X": 0,
+        "Y": 0,
+        "Width": 1008,
+        "Height": 676,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "TransparencyType": "None",
+      "Values": {
+        "OffsetX": 0,
+        "OffsetY": 0,
+        "NoOverlayInFullscreenMode": false,
+        "RandomTile": false,
+        "Tiled": false,
+        "Transparency_UseAlphaChannel": false,
+        "Transparency_UseColour": false,
+        "BorderColour": "#000000FF",
+        "Colour": "#F0F0F0FF",
+        "TransparentColour": "#000000FF"
+      }
+    },
+    {
+      "Type": "Lamp",
+      "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 156,
+        "Y": 74,
+        "Width": 17,
+        "Height": 17,
+        "Number": 0,
+        "Angle": -20.5,
+        "Orientation": "Vertical"
+      },
+      "SubLampNumberTable": {
+        "NumberOfDefinedLampNumbers": 1,
+        "Lamp1": 0
+      },
+      "Fonts": {
+        "PrimaryFont": {
+          "Tag": 39,
+          "Role": "PrimaryFont",
+          "FontName": "Tahoma",
+          "FontSize": 8,
+          "ScriptStyleRaw": 1,
+          "ScriptStyleName": "Western",
+          "TextColour": "#000000FF",
+          "FontStyle": 0
+        }
+      },
+      "Values": {
+        "SelectedCoinNote": "",
+        "SelectedEffect": "",
+        "ButtonNumber": 0,
+        "InhibitLampNumber": 0,
+        "PieSize": 120,
+        "PieStart": 0,
+        "Roundness": 0,
+        "SelectedShapeIndex": 0,
+        "ShapeAngle": 0,
+        "ShapeParamter": 0,
+        "Shortcut 1": 0,
+        "Shortcut 2": 0,
+        "X Offset": 0,
+        "Y Offset": 0,
+        "Blend": false,
+        "ClickAll": false,
+        "Coin / Note Selected": false,
+        "Graphic": false,
+        "Inverted": false,
+        "LED": false,
+        "Lockout": false,
+        "No outline (inverted)": true,
+        "Preserve Aspect Ratio": false,
+        "RGBLED": false,
+        "Shortcut 1 Enabled": false,
+        "Shortcut 2 Enabled": false,
+        "Transparent": false,
+        "OffImageColour": "#F0F0F0FF",
+        "OutlineColour": "#00000000",
+        "Sublamp10Colour": "#FFFF00FF",
+        "Sublamp11Colour": "#FFFF00FF",
+        "Sublamp12Colour": "#FFFF00FF",
+        "Sublamp1Colour": "#FFFF00FF",
+        "Sublamp2Colour": "#FFFF00FF",
+        "Sublamp3Colour": "#FFFF00FF",
+        "Sublamp4Colour": "#FFFF00FF",
+        "Sublamp5Colour": "#FFFF00FF",
+        "Sublamp6Colour": "#FFFF00FF",
+        "Sublamp7Colour": "#FFFF00FF",
+        "Sublamp8Colour": "#FFFF00FF",
+        "Sublamp9Colour": "#FFFF00FF"
+      }
+    }
+  ]
+}

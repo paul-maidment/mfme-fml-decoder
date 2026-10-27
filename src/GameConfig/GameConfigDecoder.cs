@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using System.Text.Json.Nodes;
 using MfmeFmlDecoder.GameConfig.Structures;
 
@@ -20,7 +21,8 @@ namespace MfmeFmlDecoder.GameConfig
     {
         private static readonly JsonSerializerOptions WriteOptions = new JsonSerializerOptions
         {
-            WriteIndented = true
+            WriteIndented = true,
+            TypeInfoResolver = new DefaultJsonTypeInfoResolver()
         };
 
         public static bool TryDecode(

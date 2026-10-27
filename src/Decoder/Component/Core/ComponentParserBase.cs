@@ -4,13 +4,15 @@ using MfmeFmlDecoder.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
 
 namespace MfmeFmlDecoder.src.Decoder.Component.Core
 {
-    internal abstract class ComponentParserBase<T> where T : BaseComponent, new()
+    internal abstract class ComponentParserBase<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T>
+        where T : BaseComponent, new()
     {
         protected (T component, long offset, byte[] parseData) ParseBase(
             long componentOffset,

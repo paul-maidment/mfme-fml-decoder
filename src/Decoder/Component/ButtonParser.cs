@@ -54,8 +54,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component
             { 0x3F, new TagInfo(0x00, "Label (UTF-16)", new byte[] { }, ValueRole.TEXT) },
             { 0x30, new TagInfo(0x01, "Unknown 0x30", new byte[] { }, ValueRole.BOOLEAN) },
             { 0x19, new TagInfo(0x01, "Unknown 0x19", new byte[] { }, ValueRole.BOOLEAN) },
-            { 0x0D, new TagInfo(0x04, "XOffset", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x0E, new TagInfo(0x04, "YOffset", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
+            { 0x0D, new TagInfo(0x04, "XOffset", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.INT32) },
+            { 0x0E, new TagInfo(0x04, "YOffset", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.INT32) },
         };
 
         public Button Parse(long componentOffset, uint componentId, byte[] data)

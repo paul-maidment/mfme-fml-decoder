@@ -82,6 +82,14 @@ namespace MfmeFmlDecoder.Utilities
                     return false;
                 }
 
+                // MFME v20 reads the four bytes after 0x08 as one little-endian int32 of
+                // half-degree steps, so a negative angle is plain sign extension:
+                // -10 degrees is 08 EC FF FF FF. Accept that alongside the FD FF form.
+                if (angle < 0 && wire[1] == 0x08 && wire[4] == 0xFF && wire[5] == 0xFF)
+                {
+                    return true;
+                }
+
                 for (int i = 1; i < WireLength; i++)
                 {
                     if (wire[i] != rebuilt[i])
