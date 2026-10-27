@@ -26,8 +26,18 @@ namespace MfmeFmlDecoder.SmokeTests
 
         public static string FindDecoderDll(string repoRoot)
         {
+            // The ProjectReference copies the decoder next to the test assembly, so this
+            // works regardless of the current target framework.
+            var local = Path.Combine(AppContext.BaseDirectory, "MfmeFmlDecoder.dll");
+            if (File.Exists(local))
+            {
+                return local;
+            }
+
             string configuration = GetSolutionConfiguration();
-            var path = Path.Combine(repoRoot, "bin", configuration, "net6.0", "MfmeFmlDecoder.dll");
+            string targetFramework = new DirectoryInfo(
+                AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)).Name;
+            var path = Path.Combine(repoRoot, "bin", configuration, targetFramework, "MfmeFmlDecoder.dll");
             if (File.Exists(path))
             {
                 return path;
@@ -35,7 +45,7 @@ namespace MfmeFmlDecoder.SmokeTests
 
             foreach (string cfg in new[] { "Debug", "Release" })
             {
-                var fallback = Path.Combine(repoRoot, "bin", cfg, "net6.0", "MfmeFmlDecoder.dll");
+                var fallback = Path.Combine(repoRoot, "bin", cfg, targetFramework, "MfmeFmlDecoder.dll");
                 if (File.Exists(fallback))
                 {
                     return fallback;
@@ -43,7 +53,7 @@ namespace MfmeFmlDecoder.SmokeTests
             }
 
             throw new FileNotFoundException(
-                $"MfmeFmlDecoder.dll not found at {path}. Build the main project first (dotnet build).");
+                $"MfmeFmlDecoder.dll not found next to the test assembly or at {path}. Build the main project first (dotnet build).");
         }
 
         private static string GetSolutionConfiguration()

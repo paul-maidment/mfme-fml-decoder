@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MfmeFmlDecoder.src.Model.Component
 {
+    [System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicProperties)]
     internal class BFMLED : BaseComponent
     {
         public uint XSize { get; set; }

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization.Metadata;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using MfmeFmlDecoder.Model;
@@ -24,7 +23,6 @@ namespace MfmeFmlDecoder.src.Model.Component
         [JsonIgnore]
         public int Number { get; set; }
         [JsonIgnore]
-        [JsonConverter(typeof(AngleHalfStepJsonConverter))]
         public float Angle { get; set; }
         [JsonIgnore]
         public string Orientation { get; set; }
@@ -52,6 +50,7 @@ namespace MfmeFmlDecoder.src.Model.Component
         public Dictionary<string, byte> Bytes { get; } = new Dictionary<string, byte>(StringComparer.Ordinal);
         [JsonIgnore]
         public Dictionary<string, string> Colours { get; } = new Dictionary<string, string>(StringComparer.Ordinal);
+        [JsonIgnore]
         public Dictionary<string, BitmapEntry> Images { get; } = new Dictionary<string, BitmapEntry>(StringComparer.Ordinal);
 
         private static readonly JsonSerializerOptions ToJsonOptions = CreateToJsonOptions();
@@ -86,9 +85,8 @@ namespace MfmeFmlDecoder.src.Model.Component
         /// </summary>
         public virtual JsonObject ToJsonObject()
         {
-            JsonSerializerOptions options = CreateJsonWriteOptions(writeIndented: false);
-
-            JsonObject json = JsonSerializer.SerializeToNode(this, GetType(), options)?.AsObject() ?? new JsonObject();
+            JsonObject json = JsonSerializer.SerializeToNode(this, GetType(), ComponentJsonContext.Default)?.AsObject()
+                ?? new JsonObject();
             json.Remove(nameof(Images));
             json.Remove("Bitmaps");
             if (Fonts.Count == 0)
@@ -118,7 +116,7 @@ namespace MfmeFmlDecoder.src.Model.Component
 
             if (Images.Count > 0)
             {
-                json["Images"] = BuildImagesNode(options);
+                json["Images"] = BuildImagesNode();
             }
 
             JsonObject ordered = new JsonObject
@@ -141,40 +139,7 @@ namespace MfmeFmlDecoder.src.Model.Component
 
         private static JsonSerializerOptions CreateToJsonOptions()
         {
-            JsonSerializerOptions options = new JsonSerializerOptions
-            {
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                TypeInfoResolver = new DefaultJsonTypeInfoResolver()
-            };
-            options.Converters.Add(new BitmapEntryWithoutBytesJsonConverter());
-            return options;
-        }
-
-        private sealed class AngleHalfStepJsonConverter : JsonConverter<float>
-        {
-            public override float Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-                => reader.GetSingle();
-
-            public override void Write(Utf8JsonWriter writer, float value, JsonSerializerOptions options)
-            {
-                double stepped = Math.Round((double)value / 0.5, MidpointRounding.AwayFromZero) * 0.5;
-                writer.WriteNumberValue(stepped);
-            }
-        }
-
-        private sealed class BitmapEntryWithoutBytesJsonConverter : JsonConverter<BitmapEntry>
-        {
-            public override BitmapEntry Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-                => throw new NotSupportedException("Deserializing BitmapEntry from JSON is not supported.");
-
-            public override void Write(Utf8JsonWriter writer, BitmapEntry value, JsonSerializerOptions options)
-            {
-                writer.WriteStartObject();
-                writer.WriteNumber(nameof(BitmapEntry.Width), value.Width);
-                writer.WriteNumber(nameof(BitmapEntry.Height), value.Height);
-                writer.WriteNumber(nameof(BitmapEntry.BitsPerPixel), value.BitsPerPixel);
-                writer.WriteEndObject();
-            }
+            return new JsonSerializerOptions(ComponentJsonContext.Default.Options);
         }
 
         private JsonObject BuildGeometryNode()
@@ -197,13 +162,18 @@ namespace MfmeFmlDecoder.src.Model.Component
             return geometry;
         }
 
-        private JsonObject BuildImagesNode(JsonSerializerOptions options)
+        private JsonObject BuildImagesNode()
         {
             JsonObject images = new JsonObject();
 
             foreach (var kvp in Images.OrderBy(entry => entry.Key, StringComparer.Ordinal))
             {
-                images[kvp.Key] = JsonSerializer.SerializeToNode(kvp.Value, options);
+                images[kvp.Key] = new JsonObject
+                {
+                    [nameof(BitmapEntry.Width)] = kvp.Value.Width,
+                    [nameof(BitmapEntry.Height)] = kvp.Value.Height,
+                    [nameof(BitmapEntry.BitsPerPixel)] = kvp.Value.BitsPerPixel
+                };
             }
 
             return images;
