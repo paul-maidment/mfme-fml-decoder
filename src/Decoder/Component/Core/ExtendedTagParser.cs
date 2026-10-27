@@ -30,7 +30,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             IReadOnlyDictionary<string, FlagDropdownDefinition> FlagDropdownsByName,
             bool LogMatchedTags,
             string LogMatchedTagsPrefix,
-            bool IsNestedTagBlockParse = false
+            bool IsNestedTagBlockParse = false,
+            bool IsBaseSectionParse = false
         )
         {
             /// <summary>Baseline parse options. <see cref="LogMatchedTags"/> is enabled so TLV tags are traced unless explicitly turned off.</summary>
@@ -64,6 +65,13 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
 
             /// <summary>Marks recursive parse of inner TLV inside a <c>4C ?? 00</c> nested tag block (distinct diagnostic wording).</summary>
             public Options WithNestedTagBlockParseContext() => this with { IsNestedTagBlockParse = true };
+
+            /// <summary>
+            /// Parses the base section. A <c>4C ?? 00</c> header terminates the base section
+            /// (it carries the orientation byte and the base terminator), so the parser stops
+            /// there instead of reading the following own-section tags as base tags.
+            /// </summary>
+            public Options WithBaseSectionParse() => this with { IsBaseSectionParse = true };
 
             public Options WithFlagDropdown(
                 string dropdownName,
@@ -144,6 +152,39 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             byte? nestedTagBlockOrientationByte = null;
             long extendedSectionStart = offset;
 
+            ParseResult BuildResult(long resultOffset)
+            {
+                IReadOnlyDictionary<string, string> flagDropdownSelectionsByName =
+                    ResolveFlagDropdownSelections(options, encounteredTags, valuesByTag, nestedTagBlockResult);
+                ApplyDefaultsFromMap(
+                    componentTagMap,
+                    valuesByTag,
+                    floatsByAttributeName,
+                    uint32sByAttributeName,
+                    int32sByAttributeName,
+                    uint16sByAttributeName,
+                    booleansByAttributeName,
+                    bytesByAttributeName,
+                    coloursByAttributeName);
+                return new ParseResult(
+                    resultOffset,
+                    valuesByTag,
+                    fontsByRole,
+                    stringsByAttributeName,
+                    floatsByAttributeName,
+                    uint32sByAttributeName,
+                    int32sByAttributeName,
+                    uint16sByAttributeName,
+                    booleansByAttributeName,
+                    bytesByAttributeName,
+                    coloursByAttributeName,
+                    ToReadOnlyBitmapBlobMap(bitmapBlobsByTag),
+                    ToReadOnlyBitmapBlobMap(directBitmapBlobsByTag),
+                    flagDropdownSelectionsByName,
+                    nestedTagBlockResult,
+                    nestedTagBlockOrientationByte);
+            }
+
             while (offset < data.Length)
             {
                 if (data[offset] == 0x00)
@@ -157,35 +198,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                     }
 
                     offset++;
-                    IReadOnlyDictionary<string, string> flagDropdownSelectionsByName =
-                        ResolveFlagDropdownSelections(options, encounteredTags, valuesByTag, nestedTagBlockResult);
-                    ApplyDefaultsFromMap(
-                        componentTagMap,
-                        valuesByTag,
-                        floatsByAttributeName,
-                        uint32sByAttributeName,
-                        int32sByAttributeName,
-                        uint16sByAttributeName,
-                        booleansByAttributeName,
-                        bytesByAttributeName,
-                        coloursByAttributeName);
-                    return new ParseResult(
-                        offset,
-                        valuesByTag,
-                        fontsByRole,
-                        stringsByAttributeName,
-                        floatsByAttributeName,
-                        uint32sByAttributeName,
-                        int32sByAttributeName,
-                        uint16sByAttributeName,
-                        booleansByAttributeName,
-                        bytesByAttributeName,
-                        coloursByAttributeName,
-                        ToReadOnlyBitmapBlobMap(bitmapBlobsByTag),
-                        ToReadOnlyBitmapBlobMap(directBitmapBlobsByTag),
-                        flagDropdownSelectionsByName,
-                        nestedTagBlockResult,
-                        nestedTagBlockOrientationByte);
+                    return BuildResult(offset);
                 }
 
                 if (!TryReadNestedTagBlockHeader(data, offset, out uint tag, out TagInfo tagInfo, out int tagKeyLengthBytes)
@@ -224,6 +237,12 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                     if (!options.IsNestedTagBlockParse)
                     {
                         nestedTagBlockOrientationByte = data[checked((int)offset - tagKeyLengthBytes + 1)];
+                    }
+
+                    if (options.IsBaseSectionParse)
+                    {
+                        LogMatchedTag(options, tag, tagInfo, tagOffset: offset - tagKeyLengthBytes, valueOffset: valueAfterKey, length: 0);
+                        return BuildResult(valueAfterKey);
                     }
 
                     StoreEmbeddedNestedTagBlockValue(componentTagMap, data, offset, tagKeyLengthBytes, valuesByTag, encounteredTags);
@@ -412,35 +431,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             // end immediately after the final value (no trailing delimiter byte); offset lands on EOF.
             if (offset == data.Length)
             {
-                IReadOnlyDictionary<string, string> flagDropdownSelectionsByName =
-                    ResolveFlagDropdownSelections(options, encounteredTags, valuesByTag, nestedTagBlockResult);
-                ApplyDefaultsFromMap(
-                    componentTagMap,
-                    valuesByTag,
-                    floatsByAttributeName,
-                    uint32sByAttributeName,
-                    int32sByAttributeName,
-                    uint16sByAttributeName,
-                    booleansByAttributeName,
-                    bytesByAttributeName,
-                    coloursByAttributeName);
-                return new ParseResult(
-                    offset,
-                    valuesByTag,
-                    fontsByRole,
-                    stringsByAttributeName,
-                    floatsByAttributeName,
-                    uint32sByAttributeName,
-                    int32sByAttributeName,
-                    uint16sByAttributeName,
-                    booleansByAttributeName,
-                    bytesByAttributeName,
-                    coloursByAttributeName,
-                    ToReadOnlyBitmapBlobMap(bitmapBlobsByTag),
-                    ToReadOnlyBitmapBlobMap(directBitmapBlobsByTag),
-                    flagDropdownSelectionsByName,
-                    nestedTagBlockResult,
-                    nestedTagBlockOrientationByte);
+                return BuildResult(offset);
             }
 
             throw new InvalidOperationException("Extended tag section did not terminate with 0x00.");

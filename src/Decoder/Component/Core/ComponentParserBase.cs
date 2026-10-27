@@ -14,6 +14,47 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
     internal abstract class ComponentParserBase<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T>
         where T : BaseComponent, new()
     {
+        // The 20.x base-section reader is activated only for the known 20.1 base-section
+        // signatures. Other components keep the existing single-stream normalization path
+        // so their decoded JSON is unchanged.
+        private bool v20BaseSectionReaderActive;
+
+        private static bool ShouldUseV20BaseSectionReader(byte[] data)
+        {
+            if (data is null || data.Length < 36)
+            {
+                return false;
+            }
+
+            // 20.1 base-section signatures found by the full archive scan:
+            //   Button:    0x06 before the 0x07 angle tag
+            //   DiscReel:  07 01 0A 00 (zero angle, then base 0x0A/0x0B)
+            //   AlphaNew:  07 01 36 42 4D (zero angle, then the overlay bitmap)
+            if (typeof(T) == typeof(Button))
+            {
+                return data[30] == 0x06 && data[35] == 0x07;
+            }
+
+            if (typeof(T) == typeof(DiscReel))
+            {
+                return data[30] == 0x07
+                    && data[31] == 0x01
+                    && data[32] == 0x0A
+                    && data[33] == 0x00;
+            }
+
+            if (typeof(T) == typeof(AlphaNew))
+            {
+                return data[30] == 0x07
+                    && data[31] == 0x01
+                    && data[32] == 0x36
+                    && data[33] == 0x42
+                    && data[34] == 0x4D;
+            }
+
+            return false;
+        }
+
         protected (T component, long offset, byte[] parseData) ParseBase(
             long componentOffset,
             uint componentId,
@@ -24,9 +65,47 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
         {
             // Record layout: 4-byte component id + 4-byte length, then payload in `data`.
             long payloadFileOffset = componentOffset + 8;
-            normalizationRule ??= new GeometryAngleNormalization.Rule();
-            (byte[] parseData, int offsetAdjustment, int? preferredExtendedOffset, string normalizationModeLog) =
-                GeometryAngleNormalization.Normalize(data, normalizationRule);
+            v20BaseSectionReaderActive = ShouldUseV20BaseSectionReader(data);
+
+            if (!v20BaseSectionReaderActive)
+            {
+                normalizationRule ??= new GeometryAngleNormalization.Rule();
+                (byte[] normalizedData, int offsetAdjustment, int? preferredExtendedOffset, string normalizationModeLog) =
+                    GeometryAngleNormalization.Normalize(data, normalizationRule);
+
+                RunLog.WriteLine($"\nProcessing {typeof(T).Name} Component at {componentOffset:X8} (ID: {componentId}, Length: {normalizedData.Length}, payload @ {payloadFileOffset:X8})\n");
+                RunLog.WriteLine("Initial hex dump:\n");
+                HexDumpUtility.PrintHexDump((uint)payloadFileOffset, normalizedData);
+                RunLog.WriteLine("");
+
+                var oldComponent = new T();
+                var oldGeometryParser = new GeometryParser();
+                long oldOffset = oldGeometryParser.ParseInto(
+                    oldComponent,
+                    normalizedData,
+                    offset: 5,
+                    validAngleTrailingSkipBytes: geometryValidAngleTrailingSkipBytes).Offset;
+                oldOffset += offsetAdjustment;
+                if (preferredExtendedOffset.HasValue)
+                {
+                    oldOffset = preferredExtendedOffset.Value;
+                }
+                oldOffset += finalOffsetAdjustment;
+                RunLog.WriteLine($"\nFinal offset position: {oldOffset} (index into payload; file position {payloadFileOffset + oldOffset:X8})");
+                if (!string.IsNullOrWhiteSpace(normalizationModeLog))
+                {
+                    RunLog.WriteLine(normalizationModeLog);
+                }
+
+                DumpRemaining(componentOffset, normalizedData, oldOffset);
+
+                return (oldComponent, oldOffset, normalizedData);
+            }
+
+            _ = normalizationRule;
+            _ = finalOffsetAdjustment;
+            _ = geometryValidAngleTrailingSkipBytes;
+            byte[] parseData = data;
 
             RunLog.WriteLine($"\nProcessing {typeof(T).Name} Component at {componentOffset:X8} (ID: {componentId}, Length: {parseData.Length}, payload @ {payloadFileOffset:X8})\n");
             RunLog.WriteLine("Initial hex dump:\n");
@@ -39,24 +118,14 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                 component,
                 parseData,
                 offset: 5,
-                validAngleTrailingSkipBytes: geometryValidAngleTrailingSkipBytes).Offset;
-            offset += offsetAdjustment;
-            if (preferredExtendedOffset.HasValue)
-            {
-                offset = preferredExtendedOffset.Value;
-            }
-            offset += finalOffsetAdjustment;
-            RunLog.WriteLine($"\nFinal offset position: {offset} (index into payload; file position {payloadFileOffset + offset:X8})");
-            if (!string.IsNullOrWhiteSpace(normalizationModeLog))
-            {
-                RunLog.WriteLine(normalizationModeLog);
-            }
+                validAngleTrailingSkipBytes: 0,
+                v20BaseSectionMode: true).Offset;
+            RunLog.WriteLine($"\nBase section starts at payload index {offset} (file position {payloadFileOffset + offset:X8})");
 
             DumpRemaining(componentOffset, parseData, offset);
 
             return (component, offset, parseData);
         }
-
         protected void DumpRemaining(long componentOffset, byte[] data, long offset)
         {
             long payloadFileOffset = componentOffset + 8;
@@ -101,7 +170,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
         private void AssignBitmapEntriesFromParseResult(
             T component,
             ExtendedTagParser.ParseResult parseResult,
-            ComponentTagMap componentTagMap)
+            ComponentTagMap componentTagMap,
+            bool clearExisting = true)
         {
             if (component is null) throw new ArgumentNullException(nameof(component));
             if (parseResult is null) throw new ArgumentNullException(nameof(parseResult));
@@ -110,7 +180,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                 component,
                 parseResult,
                 componentTagMap,
-                clearExisting: true);
+                clearExisting);
             if (parseResult.NestedTagBlockResult is not null && componentTagMap?.NestedTagBlockMap is not null)
             {
                 AssignBitmapEntriesByTag(
@@ -199,8 +269,72 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             if (componentTagMap is null) throw new ArgumentNullException(nameof(componentTagMap));
             if (data is null) throw new ArgumentNullException(nameof(data));
 
-            ExtendedTagParser.ParseResult parseResult =
-                new ExtendedTagParser().Parse(componentTagMap, data, offset, options);
+            options ??= ExtendedTagParser.Options.Default;
+
+            if (!v20BaseSectionReaderActive)
+            {
+                ExtendedTagParser.ParseResult legacyResult =
+                    new ExtendedTagParser().Parse(componentTagMap, data, offset, options);
+                AssignParseResult(component, legacyResult, componentTagMap, clearExisting: true);
+                return legacyResult;
+            }
+
+            // Types with a nested 4C block keep the existing single-stream parse: the 4C opens
+            // their own-section nested map, not a base-section terminator.
+            if (componentTagMap.NestedTagBlockMap is not null)
+            {
+                ExtendedTagParser.ParseResult fullResult =
+                    new ExtendedTagParser().Parse(componentTagMap, data, offset, options);
+                AssignParseResult(component, fullResult, componentTagMap, clearExisting: true);
+                return fullResult;
+            }
+
+            BaseSectionTagMapBuilder.BaseSectionTagMap baseTagMap =
+                BaseSectionTagMapBuilder.Build(componentTagMap);
+            ExtendedTagParser.ParseResult baseResult = null;
+            long ownSectionOffset = offset;
+
+            try
+            {
+                baseResult = new ExtendedTagParser().Parse(
+                    baseTagMap.Map,
+                    data,
+                    offset,
+                    options.WithBaseSectionParse());
+                ownSectionOffset = baseResult.Offset;
+            }
+            catch (InvalidOperationException ex)
+            {
+                RunLog.WriteDiagnosticLine(
+                    $"Base section parse failed at payload index {offset} (0x{offset:X}); " +
+                    $"falling back to the type map at that offset. {ex.Message}");
+                baseResult = null;
+                ownSectionOffset = offset;
+            }
+
+            ExtendedTagParser.ParseResult ownResult =
+                new ExtendedTagParser().Parse(componentTagMap, data, ownSectionOffset, options);
+
+            AssignParseResult(component, ownResult, componentTagMap, clearExisting: true);
+            if (baseResult is not null)
+            {
+                AssignParseResult(component, baseResult, baseTagMap.Map, clearExisting: false);
+            }
+
+            return MergeParseResults(ownResult, baseResult, baseTagMap.TypeMappedTags);
+        }
+
+        private void AssignParseResult(
+            T component,
+            ExtendedTagParser.ParseResult parseResult,
+            ComponentTagMap componentTagMap,
+            bool clearExisting)
+        {
+            if (!clearExisting)
+            {
+                RemoveParseResultKeys(component, parseResult);
+            }
+
             AssignStringsFromParseResult(component, parseResult);
             AssignFloatsFromParseResult(component, parseResult);
             AssignUInt32sFromParseResult(component, parseResult);
@@ -210,9 +344,75 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             AssignBytesFromParseResult(component, parseResult);
             AssignFontsFromParseResult(component, parseResult);
             AssignColoursFromParseResult(component, parseResult);
-            AssignBitmapEntriesFromParseResult(component, parseResult, componentTagMap);
+            AssignBitmapEntriesFromParseResult(component, parseResult, componentTagMap, clearExisting);
             ApplyNestedTagBlockOrientation(component, parseResult);
-            return parseResult;
+        }
+
+        private static void RemoveParseResultKeys(
+            T component,
+            ExtendedTagParser.ParseResult parseResult)
+        {
+            foreach (string key in parseResult.StringsByAttributeName.Keys) component.Strings.Remove(key);
+            foreach (string key in parseResult.FloatsByAttributeName.Keys) component.Floats.Remove(key);
+            foreach (string key in parseResult.UInt32sByAttributeName.Keys) component.UInt32s.Remove(key);
+            foreach (string key in parseResult.Int32sByAttributeName.Keys) component.Int32s.Remove(key);
+            foreach (string key in parseResult.UInt16sByAttributeName.Keys) component.UInt16s.Remove(key);
+            foreach (string key in parseResult.BooleansByAttributeName.Keys) component.Booleans.Remove(key);
+            foreach (string key in parseResult.BytesByAttributeName.Keys) component.Bytes.Remove(key);
+            foreach (string key in parseResult.FontsByRole.Keys) component.Fonts.Remove(key);
+            foreach (string key in parseResult.ColoursByAttributeName.Keys) component.Colours.Remove(key);
+        }
+
+        private static ExtendedTagParser.ParseResult MergeParseResults(
+            ExtendedTagParser.ParseResult ownResult,
+            ExtendedTagParser.ParseResult baseResult,
+            IReadOnlySet<uint> baseTypeMappedTags)
+        {
+            if (baseResult is null)
+            {
+                return ownResult;
+            }
+
+            var mergedValuesByTag = new Dictionary<uint, object>(ownResult.ValuesByTag);
+            foreach (var kvp in baseResult.ValuesByTag)
+            {
+                if (baseTypeMappedTags.Contains(kvp.Key) || !mergedValuesByTag.ContainsKey(kvp.Key))
+                {
+                    mergedValuesByTag[kvp.Key] = kvp.Value;
+                }
+            }
+
+            return ownResult with
+            {
+                ValuesByTag = mergedValuesByTag,
+                FontsByRole = MergePreferSecond(ownResult.FontsByRole, baseResult.FontsByRole),
+                StringsByAttributeName = MergePreferSecond(ownResult.StringsByAttributeName, baseResult.StringsByAttributeName),
+                FloatsByAttributeName = MergePreferSecond(ownResult.FloatsByAttributeName, baseResult.FloatsByAttributeName),
+                UInt32sByAttributeName = MergePreferSecond(ownResult.UInt32sByAttributeName, baseResult.UInt32sByAttributeName),
+                Int32sByAttributeName = MergePreferSecond(ownResult.Int32sByAttributeName, baseResult.Int32sByAttributeName),
+                UInt16sByAttributeName = MergePreferSecond(ownResult.UInt16sByAttributeName, baseResult.UInt16sByAttributeName),
+                BooleansByAttributeName = MergePreferSecond(ownResult.BooleansByAttributeName, baseResult.BooleansByAttributeName),
+                BytesByAttributeName = MergePreferSecond(ownResult.BytesByAttributeName, baseResult.BytesByAttributeName),
+                ColoursByAttributeName = MergePreferSecond(ownResult.ColoursByAttributeName, baseResult.ColoursByAttributeName),
+                BitmapBlobsByTag = MergePreferSecond(ownResult.BitmapBlobsByTag, baseResult.BitmapBlobsByTag),
+                DirectBitmapBlobsByTag = MergePreferSecond(ownResult.DirectBitmapBlobsByTag, baseResult.DirectBitmapBlobsByTag),
+                FlagDropdownSelectionsByName = MergePreferSecond(ownResult.FlagDropdownSelectionsByName, baseResult.FlagDropdownSelectionsByName),
+                NestedTagBlockOrientationByte =
+                    baseResult.NestedTagBlockOrientationByte ?? ownResult.NestedTagBlockOrientationByte,
+            };
+        }
+
+        private static IReadOnlyDictionary<TKey, TValue> MergePreferSecond<TKey, TValue>(
+            IReadOnlyDictionary<TKey, TValue> first,
+            IReadOnlyDictionary<TKey, TValue> second)
+        {
+            var merged = new Dictionary<TKey, TValue>(first);
+            foreach (var kvp in second)
+            {
+                merged[kvp.Key] = kvp.Value;
+            }
+
+            return merged;
         }
 
         /// <summary>

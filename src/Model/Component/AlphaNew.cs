@@ -26,8 +26,8 @@ namespace MfmeFmlDecoder.src.Model.Component
             {
                 string label = (int)value switch
                 {
-                    0 => "Old Charset",
-                    1 => "OKI 1937",
+                    0 => "OKI 1937",
+                    1 => "Old Charset",
                     2 => "BFM Charset",
                     _ => value.ToString(),
                 };

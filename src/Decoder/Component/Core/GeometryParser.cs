@@ -20,7 +20,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             BaseComponent component,
             byte[] data,
             long offset = 5,
-            int validAngleTrailingSkipBytes = 5
+            int validAngleTrailingSkipBytes = 5,
+            bool v20BaseSectionMode = false
         )
         {
             if (component is null) throw new ArgumentNullException(nameof(component));
@@ -82,12 +83,19 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                         offset += 4;
                         break;
 
-                    case 0x07: // Angle — six-byte MFME wire (01 08 + int16 half-steps + sign ext), else legacy fixed-point
+                    case 0x07: // Angle
                         if (MfmeAngleWireCodec.TryReadWireAngle(data, (int)offset, out double wireAngle))
                         {
                             isRawAngleInRange = wireAngle is >= -360.0 and <= 360.0;
                             angle = (float)wireAngle;
                             offset += MfmeAngleWireCodec.WireLength;
+                        }
+                        else if (v20BaseSectionMode)
+                        {
+                            // MFME 20.x zero angle: 07 00 / 07 01 followed immediately by the base-section tag.
+                            isRawAngleInRange = true;
+                            angle = 0.0f;
+                            offset += 1;
                         }
                         else
                         {
@@ -102,6 +110,13 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                     default:
                         offset += 4;
                         break;
+                }
+
+                // In the 20.x base-section mode the angle is the last geometry tag; everything
+                // after it belongs to the base section.
+                if (v20BaseSectionMode && tag == 0x07)
+                {
+                    break;
                 }
             }
 
@@ -119,7 +134,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             component.Number = number.Value;
             component.Angle = angle.Value;
 
-            if (isRawAngleInRange && validAngleTrailingSkipBytes > 0)
+            if (!v20BaseSectionMode && isRawAngleInRange && validAngleTrailingSkipBytes > 0)
             {
                 // Only skip the post-angle run when a 0x00 geometry terminator is present.
                 if (offset < endOffset && data[offset] == 0x00)
@@ -131,7 +146,6 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
 
             return new GeometryParseResult(offset, isRawAngleInRange);
         }
-
         /// <summary>
         /// Locates a geometry-section tag value (tags <c>0x01</c>–<c>0x07</c> after the 4-byte component header)
         /// without running full <see cref="ParseInto"/>.
