@@ -1,5 +1,7 @@
+using MfmeFmlDecoder.Decoder;
 using MfmeFmlDecoder.Model;
 using MfmeFmlDecoder.src.Decoder.Component.Core;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles;
 using MfmeFmlDecoder.src.Model.Component;
 using MfmeFmlDecoder.Utilities;
 using System;
@@ -14,29 +16,16 @@ namespace MfmeFmlDecoder.src.Decoder.Component
         /// </summary>
         private const uint AlphaCharacterBitmapSyntheticTag = 0xACBC01u;
 
-        private ComponentTagMap componentTagMap = new ComponentTagMap
+
+
+        public Alpha Parse(ParsingContext context, long componentOffset, uint componentId, byte[] data)
         {
-            { 0x01, new TagInfo(0x04, "Colour", Array.Empty<byte>(), ValueRole.ARGB_COLOR) },
-            { 0x02, new TagInfo(0x04, "DigitWidth", new byte[] { 0x11, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x03, new TagInfo(0x04, "Columns", new byte[] { 0x10, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x04, new TagInfo(0x00, "Alpha Character Bitmap", Array.Empty<byte>(), ValueRole.BITMAP) },
-            { 0x08, new TagInfo(0x04, "Unknown 0x08", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x36, new TagInfo(0x00, "Overlay Image", Array.Empty<byte>(), ValueRole.BITMAP) },
-            { 0x3B, new TagInfo(0x04, "Unknown3B", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x40, new TagInfo(0x01, "Reversed", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
-        };
+            ComponentProfile profile = ComponentProfileCatalog.Resolve(MFMEComponentType.Alpha, context.Version);
+            var (component, offset, parseData) = ParseBase(context, profile, componentOffset, componentId, data);
 
-        private static readonly ExtendedTagParser.Options extendedTagOptions =
-            ExtendedTagParser.Options.WithBitmapTags(0x04, 0x36);
+                        var parseResult = ParseExtendedTags(component, profile, parseData, offset);
 
-        public Alpha Parse(long componentOffset, uint componentId, byte[] data)
-        {
-            var (component, offset, parseData) = ParseBase(componentOffset, componentId, data);
-
-            var parseOptions = WithComponentTagLogging(extendedTagOptions);
-            var parseResult = ParseExtendedTags(component, componentTagMap, parseData, offset, parseOptions);
-
-            ApplyExtendedTags(component, parseResult, componentTagMap);
+            ApplyExtendedTags(component, parseResult, profile.Tags);
 
             return component;
         }

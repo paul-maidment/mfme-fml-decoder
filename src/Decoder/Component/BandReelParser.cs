@@ -1,8 +1,10 @@
+using MfmeFmlDecoder.Decoder;
 using MfmeFmlDecoder.Model;
 using MfmeFmlDecoder.src.Model.Component;
 using System.Collections.Generic;
 using System;
 using MfmeFmlDecoder.src.Decoder.Component.Core;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles;
 
 namespace MfmeFmlDecoder.src.Decoder.Component
 {
@@ -85,53 +87,16 @@ namespace MfmeFmlDecoder.src.Decoder.Component
             { 0x3, "White"},
         };
 
-        private ComponentTagMap componentTagMap = new ComponentTagMap
-        {
-            { 0x01, new TagInfo(0x04, "Stops", new byte[] { 0x10, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x02, new TagInfo(0x04, "HalfSteps", new byte[] { 0x40, 0x01 }, ValueRole.UINT32) },
-            { 0x13, new TagInfo(0x04, "View", new byte[] { 0x05, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x03, new TagInfo(0x04, "Offset", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x19, new TagInfo(0x04, "Spacing", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x0E, new TagInfo(0x04, "OptoTab", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x04, new TagInfo(0x04, "BorderWidth", new byte[] { 0x01, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x05, new TagInfo(0x04, "BorderColour", new byte[] { 0x00, 0x00, 0x00, 0xFF }, ValueRole.ARGB_COLOR) },
-            { 0x40, new TagInfo(0x01, "Reverse", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
-            { 0x3C, new TagInfo(0x01, "Inverted", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
-            { 0x0C, new TagInfo(0x01, "Opaque", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
-            { 0x10, new TagInfo(0x01, "Custom", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
-            { 0x06, new TagInfo(0x01, "Lamps", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
-            { 0x4C, new TagInfo(0x02, "HorizontalVertical", new byte[] { 0x01, 0x00 }, ValueRole.UINT16) },
-            { 0x17, new TagInfo(0x01, "OffLevel", new byte[] { 0x40 }, ValueRole.BYTE) },
-            { 0x18, new TagInfo(0x01, "SelectedOffColour", new byte[] { 0x00 }, ValueRole.BYTE) },
-            { 0x1C, new TagInfo(0x04, "NonNullSublampCount", new byte[] { 0x00 }, ValueRole.UINT32) },
-            { 0x38, new TagInfo(0x04, "SublampCount", new byte[] { 0x00 }, ValueRole.SUBLAMP_COUNT) },
-            { 0x39, new TagInfo(0x04, "SublampTable", new byte[] { 0x00 }, ValueRole.LAMP_SUBLAMP_TABLE) },
-            { 0x3B, new TagInfo(0x04, "Unknown 0x3B", new byte[] { 0x00 }, ValueRole.UINT32) },
-            { 0x36, new TagInfo(0x00, "Overlay Image", Array.Empty<byte>(), ValueRole.BITMAP) },
-            { 0x09, new TagInfo(0x00, "Band Image", Array.Empty<byte>(), ValueRole.BITMAP) },
-            { 0x07, new TagInfo(0x00, "Lamp Mask 1-20 Image", Array.Empty<byte>(), ValueRole.BITMAP) },
-            { 0x0D, new TagInfo(0x00, "Lamp Mask 21-40 Image", Array.Empty<byte>(), ValueRole.BITMAP) },
-            { 0x16, new TagInfo(0x00, "Lamp Mask 41-60 Image", Array.Empty<byte>(), ValueRole.BITMAP) },
-        };
 
-        public BandReel Parse(long componentOffset, uint componentId, byte[] data)
+        public BandReel Parse(ParsingContext context, long componentOffset, uint componentId, byte[] data)
         {
+            ComponentProfile profile = ComponentProfileCatalog.Resolve(MFMEComponentType.BandReel, context.Version);
             // Normalize for MFME angle bug
-            var (component, offset, parseData) = ParseBase(
-                componentOffset,
-                componentId,
-                data,
-                normalizationRule: new GeometryAngleNormalization.Rule(
-                    RewriteTriggerOffsetDelta: 0,
-                    ValidAngleOffsetDelta: 0));
+            var (component, offset, parseData) = ParseBase(context, profile, componentOffset, componentId, data);
 
             DumpRemaining(componentOffset, parseData, offset);
 
-            var parseOptions = WithComponentTagLogging(
-                ExtendedTagParser.Options
-                .WithBitmapTags(0x36, 0x09, 0x07, 0x0D, 0x16)
-            );
-            var parseResult = ParseExtendedTags(component, componentTagMap, parseData, offset, parseOptions);
+                        var parseResult = ParseExtendedTags(component, profile, parseData, offset);
 
             ApplyExtendedTags(component, parseResult.ValuesByTag, offColourOptions);
 
@@ -139,7 +104,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component
             if (parseResult.ValuesByTag.TryGetValue(0x39, out var sublampData) &&
                 sublampData is List<LampSublampTableEntry> sublampTable)
             {
-                PopulateMaskSlotsFromSublampTable(component, sublampTable);
+                PopulateMaskSlotsFromSublampTable(component, sublampTable, profile.Defaults);
             }
 
             return component;
@@ -149,11 +114,24 @@ namespace MfmeFmlDecoder.src.Decoder.Component
         {
             if (valuesByTag.TryGetValue(0x13, out var view)) component.View = (uint)view;
             if (valuesByTag.TryGetValue(0x18, out var selectedOffColour)) component.Strings.Add("OffColour", offColourOptions[(byte)selectedOffColour]);
+
+            if (valuesByTag.TryGetValue(0x0A, out object orientationValue)
+                && orientationValue is byte orientationFlag)
+            {
+                component.Orientation = orientationFlag == 0 ? "Vertical" : "Horizontal";
+                component.UInt16s.Remove("HorizontalVertical");
+            }
+            else if (component.UInt16s.TryGetValue("HorizontalVertical", out ushort horizontalVertical))
+            {
+                component.Orientation = horizontalVertical == 0 ? "Vertical" : "Horizontal";
+                component.UInt16s.Remove("HorizontalVertical");
+            }
         }
 
         private static void PopulateMaskSlotsFromSublampTable(
             BandReel component,
-            List<LampSublampTableEntry> sublampTable)
+            List<LampSublampTableEntry> sublampTable,
+            DefaultsProfile defaults)
         {
             foreach (var mapping in SlotToIndexMap)
             {
@@ -165,6 +143,20 @@ namespace MfmeFmlDecoder.src.Decoder.Component
                 {
                     var entry = sublampTable[index];
                     component.MaskSlots.Masks[maskName][slotName].SublampNumber = entry.SublampNumber;
+                }
+            }
+
+            if (defaults?.DefaultUndefinedMaskSlotsToMinusTwo == true)
+            {
+                foreach (var mask in component.MaskSlots.Masks.Values)
+                {
+                    foreach (var slot in mask.Values)
+                    {
+                        if (slot.SublampNumber == 0)
+                        {
+                            slot.SublampNumber = -2;
+                        }
+                    }
                 }
             }
         }

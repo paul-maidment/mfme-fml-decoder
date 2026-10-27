@@ -24,7 +24,7 @@ namespace MfmeFmlDecoder.Model
             message.Append(recordOffset.ToString("X8", CultureInfo.InvariantCulture));
             message.Append(": '");
             message.Append(MfmeVersionReader.FormatVersion(versionBytes));
-            message.Append("'. Only MFME v20.1 is supported.");
+            message.Append("'. Supported versions: 20.1, 19.8.");
             return message.ToString();
         }
     }

@@ -1,3 +1,4 @@
+using MfmeFmlDecoder.Decoder;
 using MfmeFmlDecoder.Model;
 using MfmeFmlDecoder.src.Decoder.Component;
 using MfmeFmlDecoder.src.Model.Component;
@@ -26,7 +27,7 @@ namespace MfmeFmlDecoder.UnitTests
                 .Terminator()
                 .Build();
 
-            Button component = new ButtonParser().Parse(0, 0, payload);
+            Button component = new ButtonParser().Parse(ParsingContext.V20_1, 0, 0, payload);
 
             Assert.Equal(47, component.Number);
             Assert.Equal(47u, component.UInt32s["Button Number"]);
@@ -58,7 +59,7 @@ namespace MfmeFmlDecoder.UnitTests
                 .Terminator()
                 .Build();
 
-            DiscReel component = new DiscReelParser().Parse(0, 0, payload);
+            DiscReel component = new DiscReelParser().Parse(ParsingContext.V20_1, 0, 0, payload);
 
             Assert.Equal(155u, component.OuterH);
             Assert.Equal(108u, component.OuterL);
@@ -94,7 +95,7 @@ namespace MfmeFmlDecoder.UnitTests
                 .Terminator()
                 .Build();
 
-            AlphaNew component = new AlphaNewParser().Parse(0, 0, payload);
+            AlphaNew component = new AlphaNewParser().Parse(ParsingContext.V20_1, 0, 0, payload);
 
             Assert.True(component.Booleans["Reversed"]);
             Assert.True(component.Booleans["Segment16"]);

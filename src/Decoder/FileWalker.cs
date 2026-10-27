@@ -5,21 +5,24 @@ using System.Text;
 using MfmeFmlDecoder.Model;
 using MfmeFmlDecoder.src.Model;
 using MfmeFmlDecoder.Utilities;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles;
 
 namespace MfmeFmlDecoder.Decoder
 {
     internal sealed class FileWalker
     {
         private const uint TlvTerminationTag = 0xFFFFFFFF;
-        private const string SupportedMfmeVersion = "20.1";
+        private MfmeVersion _version = MfmeVersion.V20_1;
 
         private ComponentWalker _componentWalker;
+        private readonly bool _allowUnsupportedVersions;
 
         public LayoutFileHeader Header { get; } = new LayoutFileHeader();
 
-        public FileWalker(ComponentWalker componentWalker)
+        public FileWalker(ComponentWalker componentWalker, bool allowUnsupportedVersions = false)
         {
             _componentWalker = componentWalker;
+            _allowUnsupportedVersions = allowUnsupportedVersions;
         }
 
         public void WalkTlv(string fileName, uint offset)
@@ -92,7 +95,12 @@ namespace MfmeFmlDecoder.Decoder
                     RunLog.WriteLine($"TLV Termination tag 0xFFFFFFFF found at offset 0x{recordStartOffset:X8}");
                     RunLog.WriteLine($"Current offset: 0x{currentOffset:X8}");
 
-                    _componentWalker.WalkComponents(fileStream, reader, currentOffset);
+                    var context = new ParsingContext(
+                        _version,
+                        null,
+                        _allowUnsupportedVersions,
+                        ComponentProfileCatalog.GetComponentOrdering(_version));
+                    _componentWalker.WalkComponents(fileStream, reader, currentOffset, context);
                     break;
                 }
             }
@@ -179,10 +187,16 @@ namespace MfmeFmlDecoder.Decoder
             return string.Join("\n", parts);
         }
 
-        private static void ValidateMfmeVersion(long recordStartOffset, byte[] values)
+        private void ValidateMfmeVersion(long recordStartOffset, byte[] values)
         {
-            string version = MfmeVersionReader.FormatVersion(values);
-            if (string.Equals(version, SupportedMfmeVersion, StringComparison.Ordinal))
+            string versionText = MfmeVersionReader.FormatVersion(values);
+            if (MfmeVersion.TryParse(versionText, out MfmeVersion version))
+            {
+                _version = version;
+            }
+
+            if (_allowUnsupportedVersions
+                || ComponentProfileCatalog.SupportsVersion(_version))
             {
                 return;
             }

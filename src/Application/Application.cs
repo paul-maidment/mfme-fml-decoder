@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using MfmeFmlDecoder.Decryption;
+using MfmeFmlDecoder.Diagnostics;
 using MfmeFmlDecoder.Decoder;
 using MfmeFmlDecoder.GameConfig;
 using MfmeFmlDecoder.src.Decoder.Component;
@@ -18,6 +19,11 @@ namespace MfmeFmlDecoder.Application
 
         public int Run(string[] args)
         {
+            if (LegacyPairVerifier.TryRun(args, out int verifierExitCode))
+            {
+                return verifierExitCode;
+            }
+
             if (!TryParseArgs(
                     args,
                     out string fileName,
@@ -26,6 +32,7 @@ namespace MfmeFmlDecoder.Application
                     out bool exportLayout,
                     out string exportOutputPath,
                     out bool printMfmeVersion,
+                    out bool allowUnsupportedVersion,
                     out string parseError))
             {
                 if (!string.IsNullOrEmpty(parseError))
@@ -54,8 +61,8 @@ namespace MfmeFmlDecoder.Application
                 var fileWalker = new FileWalker(
                     new ComponentWalker(
                         componentParser
-                    )
-                );
+                    ),
+                    allowUnsupportedVersions: allowUnsupportedVersion);
 
                 byte[] layoutBytes;
                 if (string.Equals(Path.GetExtension(inputPath), ".fml", StringComparison.OrdinalIgnoreCase))
@@ -162,6 +169,7 @@ namespace MfmeFmlDecoder.Application
             out bool exportLayout,
             out string exportOutputPath,
             out bool printMfmeVersion,
+            out bool allowUnsupportedVersion,
             out string error)
         {
             fileName = null;
@@ -170,6 +178,7 @@ namespace MfmeFmlDecoder.Application
             exportLayout = false;
             exportOutputPath = null;
             printMfmeVersion = false;
+            allowUnsupportedVersion = false;
             error = null;
 
             var positionals = new List<string>();
@@ -212,6 +221,10 @@ namespace MfmeFmlDecoder.Application
                 else if (a == "--mfme-version")
                 {
                     printMfmeVersion = true;
+                }
+                else if (a == "--allow-unsupported-version")
+                {
+                    allowUnsupportedVersion = true;
                 }
                 else if (!a.StartsWith("-", StringComparison.Ordinal))
                 {
@@ -330,6 +343,8 @@ namespace MfmeFmlDecoder.Application
             Console.WriteLine("                      and game.json (GAM settings) into the zip.");
             Console.WriteLine("                      Default output: <input-file>.zip in the same directory as the input file.");
             Console.WriteLine("  --mfme-version      Print the MFME version from the layout file (TLV tag 0x2F) on standard output.");
+            Console.WriteLine("  --allow-unsupported-version");
+            Console.WriteLine("                      Diagnostic only: attempt to parse a non-20.1 layout with the 20.1 reader.");
             Console.WriteLine();
             Console.WriteLine("Examples:");
             Console.WriteLine("  MfmeFmlDecoder file.dat --json");

@@ -1,8 +1,10 @@
+using MfmeFmlDecoder.Decoder;
 using MfmeFmlDecoder.Model;
 using MfmeFmlDecoder.src.Model.Component;
 using System.Collections.Generic;
 using System;
 using MfmeFmlDecoder.src.Decoder.Component.Core;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles;
 
 namespace MfmeFmlDecoder.src.Decoder.Component
 {
@@ -27,40 +29,16 @@ namespace MfmeFmlDecoder.src.Decoder.Component
             { 0x8, "DP"},
         };
 
-        private ComponentTagMap componentTagMap = new ComponentTagMap
-        {
-            { 0x1C, new TagInfo(0x04, "Unknown 0x1C", new byte[] { }, ValueRole.UINT32) },
-            { 0x38, new TagInfo(0x04, "Unknown 0x38", new byte[] { }, ValueRole.UINT32) },
-            { 0x39, new TagInfo(0x04, "Unknown 0x39", new byte[] { }, ValueRole.UINT32) },
-            { 0x3B, new TagInfo(0x04, "Unknown 0x3B", new byte[] { }, ValueRole.UINT32) },
-            { 0x01, new TagInfo(0x04, "OnColour", new byte[] { }, ValueRole.ARGB_COLOR) },
-            { 0x02, new TagInfo(0x04, "OffColour", new byte[] { }, ValueRole.ARGB_COLOR) },
-            { 0x03, new TagInfo(0x04, "SelectedStyleIndex", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x04, new TagInfo(0x04, "SelectedSegmentIndex", new byte[] { 0xFF, 0xFF, 0xFF, 0xFF }, ValueRole.INT32) },
-            { 0x05, new TagInfo(0x01, "Led", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
-            { 0x06, new TagInfo(0x01, "NoOutline", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
-            { 0x07, new TagInfo(0x01, "NoShadow", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
-            { 0x36, new TagInfo(0x00, "Overlay Image", Array.Empty<byte>(), ValueRole.BITMAP) },
-        };
 
-        public Led Parse(long componentOffset, uint componentId, byte[] data)
+        public Led Parse(ParsingContext context, long componentOffset, uint componentId, byte[] data)
         {
+            ComponentProfile profile = ComponentProfileCatalog.Resolve(MFMEComponentType.Led, context.Version);
             // Normalize for MFME angle bug
-            var (component, offset, parseData) = ParseBase(
-                componentOffset,
-                componentId,
-                data,
-                normalizationRule: new GeometryAngleNormalization.Rule(
-                    RewriteTriggerOffsetDelta: 5,
-                    ValidAngleOffsetDelta: 0));
+            var (component, offset, parseData) = ParseBase(context, profile, componentOffset, componentId, data);
 
             DumpRemaining(componentOffset, parseData, offset);
 
-            var parseOptions = WithComponentTagLogging(
-                ExtendedTagParser.Options
-                .WithBitmapTags(0x36)
-            );
-            var parseResult = ParseExtendedTags(component, componentTagMap, parseData, offset, parseOptions);
+                        var parseResult = ParseExtendedTags(component, profile, parseData, offset);
 
             ApplyExtendedTags(component, parseResult.ValuesByTag, styleOptions, segmentOptions);
 

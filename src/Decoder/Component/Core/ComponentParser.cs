@@ -1,9 +1,11 @@
 using MfmeFmlDecoder.Model;
 using MfmeFmlDecoder.src.Decoder.Component.Helper;
+using MfmeFmlDecoder.src.Decoder.Component.Behaviours;
 using MfmeFmlDecoder.src.Model;
 using MfmeFmlDecoder.src.Model.Component;
 using System;
 using System.Collections.Generic;
+using MfmeFmlDecoder.Decoder;
 
 namespace MfmeFmlDecoder.src.Decoder.Component.Core
 {
@@ -50,12 +52,15 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
         private readonly CoinmasterVideoParser coinmasterVideoParser = new();
 
         private readonly List<BaseComponent> components = new();
+        private ComponentOrderingMode _ordering = ComponentOrderingMode.InFileOrder;
 
-        public void ParseComponent(long componentOffset, uint componentId, uint length, byte[] data)
+
+        public void ParseComponent(ParsingContext context, long componentOffset, uint componentId, uint length, byte[] data)
         {
+            _ordering = context.Ordering;
             try
             {
-                ParseComponentCore(componentOffset, componentId, length, data);
+                ParseComponentCore(context, componentOffset, componentId, length, data);
             }
             catch (UnknownComponentTypeException)
             {
@@ -70,126 +75,126 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             }
         }
 
-        private void ParseComponentCore(long componentOffset, uint componentId, uint length, byte[] data)
+        private void ParseComponentCore(ParsingContext context, long componentOffset, uint componentId, uint length, byte[] data)
         {
             switch (componentId)
             {
                 case (uint)MFMEComponentType.Background:
-                    components.Add(backgroundParser.Parse(componentOffset, componentId, data));
+                    components.Add(backgroundParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.Reel:
-                    components.Add(reelParser.Parse(componentOffset, componentId, data));
+                    components.Add(reelParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.Lamp:
-                    components.Add(lampParser.Parse(componentOffset, componentId, data));
+                    components.Add(lampParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.Button:
-                    components.Add(buttonParser.Parse(componentOffset, componentId, data));
+                    components.Add(buttonParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.DiscReel:
-                    components.Add(discReelParser.Parse(componentOffset, componentId, data));
+                    components.Add(discReelParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.Alpha:
-                    components.Add(alphaParser.Parse(componentOffset, componentId, data));
+                    components.Add(alphaParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.BandReel:
-                    components.Add(bandReelParser.Parse(componentOffset, componentId, data));
+                    components.Add(bandReelParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.Frame:
-                    components.Add(frameParser.Parse(componentOffset, componentId, data));
+                    components.Add(frameParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.Label:
-                    components.Add(labelParser.Parse(componentOffset, componentId, data));
+                    components.Add(labelParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.Bitmap:
-                    components.Add(bitmapParser.Parse(componentOffset, componentId, data));
+                    components.Add(bitmapParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.BFMAlpha:
-                    components.Add(bfmAlphaParser.Parse(componentOffset, componentId, data));
+                    components.Add(bfmAlphaParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.DotMatrix:
-                    components.Add(dotMatrixParser.Parse(componentOffset, componentId, data));
+                    components.Add(dotMatrixParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.SevenSeg:
-                    components.Add(sevenSegParser.Parse(componentOffset, componentId, data));
+                    components.Add(sevenSegParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.BarcrestBWBVideo:
-                    components.Add(barcrestBWBVideoParser.Parse(componentOffset, componentId, data));
+                    components.Add(barcrestBWBVideoParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.AceMatrix:
-                    components.Add(aceMatrixParser.Parse(componentOffset, componentId, data));
+                    components.Add(aceMatrixParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.ProconnMatrix:
-                    components.Add(proconnMatrixParser.Parse(componentOffset, componentId, data));
+                    components.Add(proconnMatrixParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.Led:
-                    components.Add(ledParser.Parse(componentOffset, componentId, data));
+                    components.Add(ledParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.DotAlpha:
-                    components.Add(dotAlphaParser.Parse(componentOffset, componentId, data));
+                    components.Add(dotAlphaParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.Checkbox:
-                    components.Add(checkboxParser.Parse(componentOffset, componentId, data));
+                    components.Add(checkboxParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.BFMLED:
-                    components.Add(bfmLedParser.Parse(componentOffset, componentId, data));
+                    components.Add(bfmLedParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.EpochDotAlpha:
-                    components.Add(epochDotAlphaParser.Parse(componentOffset, componentId, data));
+                    components.Add(epochDotAlphaParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.AlphaNew:
-                    components.Add(alphaNewParser.Parse(componentOffset, componentId, data));
+                    components.Add(alphaNewParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.MatrixAlpha:
-                    components.Add(matrixAlphaParser.Parse(componentOffset, componentId, data));
+                    components.Add(matrixAlphaParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.Border:
-                    components.Add(borderParser.Parse(componentOffset, componentId, data));
+                    components.Add(borderParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.SevenSegBlock:
-                    components.Add(sevenSegBlockParser.Parse(componentOffset, componentId, data));
+                    components.Add(sevenSegBlockParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.BFMVideo:
-                    components.Add(bfmVideoParser.Parse(componentOffset, componentId, data));
+                    components.Add(bfmVideoParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.IGTVfd:
-                    components.Add(igtVfdParser.Parse(componentOffset, componentId, data));
+                    components.Add(igtVfdParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.AceVideo:
-                    components.Add(aceVideoParser.Parse(componentOffset, componentId, data));
+                    components.Add(aceVideoParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.EpochMatrix:
-                    components.Add(epochMatrixParser.Parse(componentOffset, componentId, data));
+                    components.Add(epochMatrixParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.PlasmaDisplay:
-                    components.Add(plasmaDisplayParser.Parse(componentOffset, componentId, data));
+                    components.Add(plasmaDisplayParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.BFMColourLed:
-                    components.Add(bfmColourLedParser.Parse(componentOffset, componentId, data));
+                    components.Add(bfmColourLedParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.RGBLed:
-                    components.Add(rgbLedParser.Parse(componentOffset, componentId, data));
+                    components.Add(rgbLedParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.ReelBonusReel:
-                    components.Add(reelBonusReelParser.Parse(componentOffset, componentId, data));
+                    components.Add(reelBonusReelParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.MaygayVideo:
-                    components.Add(maygayVideoParser.Parse(componentOffset, componentId, data));
+                    components.Add(maygayVideoParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.PrismLamp:
-                    components.Add(prismLampParser.Parse(componentOffset, componentId, data));
+                    components.Add(prismLampParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.AstraMatrix:
-                    components.Add(astraMatrixParser.Parse(componentOffset, componentId, data));
+                    components.Add(astraMatrixParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.FlipReel:
-                    components.Add(flipReelParser.Parse(componentOffset, componentId, data));
+                    components.Add(flipReelParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.MaygayMatrix:
-                    components.Add(maygayMatrixParser.Parse(componentOffset, componentId, data));
+                    components.Add(maygayMatrixParser.Parse(context, componentOffset, componentId, data));
                     break;
                 case (uint)MFMEComponentType.CoinmasterVideo:
-                    components.Add(coinmasterVideoParser.Parse(componentOffset, componentId, data));
+                    components.Add(coinmasterVideoParser.Parse(context, componentOffset, componentId, data));
                     break;
                 default:
                     throw new UnknownComponentTypeException(componentId, componentOffset, length, data);
@@ -198,6 +203,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
 
         public Layout ToLayout(LayoutFileHeader header = null)
         {
+            LegacyBorderOrderBehaviour.Apply(components, _ordering);
             BorderOwnershipAssigner.Annotate(components);
             return new Layout(components, header);
         }

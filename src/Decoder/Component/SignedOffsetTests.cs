@@ -1,3 +1,4 @@
+using MfmeFmlDecoder.Decoder;
 using System.Collections.Generic;
 using Xunit;
 
@@ -34,7 +35,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component
                 0x0E, 0xFF, 0xFF, 0xFF, 0xFF,  // YOffset -1
                 0x00);
 
-            var button = new ButtonParser().Parse(0, 5, data);
+            var button = new ButtonParser().Parse(ParsingContext.V20_1, 0, 5, data);
 
             Assert.Equal(-2, button.Int32s["XOffset"]);
             Assert.Equal(-1, button.Int32s["YOffset"]);
@@ -49,7 +50,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component
                 0x22, 0xF6, 0xFF, 0xFF, 0xFF,  // Y Offset -10
                 0x00);
 
-            var lamp = new LampParser().Parse(0, 4, data);
+            var lamp = new LampParser().Parse(ParsingContext.V20_1, 0, 4, data);
 
             Assert.Equal(-5, lamp.Int32s["X Offset"]);
             Assert.Equal(-10, lamp.Int32s["Y Offset"]);
@@ -63,7 +64,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component
                 0x20, 0xFC, 0xFF, 0xFF, 0xFF,  // WinlinesOffset -4
                 0x00);
 
-            var reel = new ReelParser().Parse(0, 3, data);
+            var reel = new ReelParser().Parse(ParsingContext.V20_1, 0, 3, data);
 
             Assert.Equal(-4, reel.Int32s["WinlinesOffset"]);
         }

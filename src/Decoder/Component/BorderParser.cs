@@ -1,5 +1,7 @@
+using MfmeFmlDecoder.Decoder;
 using MfmeFmlDecoder.Model;
 using MfmeFmlDecoder.src.Decoder.Component.Core;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles;
 using MfmeFmlDecoder.src.Model.Component;
 using System;
 using static MfmeFmlDecoder.src.Decoder.Component.Core.ExtendedTagParser;
@@ -13,49 +15,20 @@ namespace MfmeFmlDecoder.src.Decoder.Component
         private const uint PaneSplitTagId = 0x07;
         private const int PaneSplitLength = 0x10;
 
-        private readonly ComponentTagMap componentTagMap = new ComponentTagMap
+
+
+        public Border Parse(ParsingContext context, long componentOffset, uint componentId, byte[] data)
         {
-            { 0x0A, new TagInfo(0x01, "Unknown 0x0A", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
-            { 0x0B, new TagInfo(0x01, "Unknown 0x0B", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
-            { 0x37, new TagInfo(0x04, "Unknown 0x37", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x36, new TagInfo(0x00, "Overlay Image", Array.Empty<byte>(), ValueRole.BITMAP) },
-            { 0x3B, new TagInfo(0x04, "Unknown 0x3B", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x3F, new TagInfo(0x00, "Label", Array.Empty<byte>(), ValueRole.TEXT) },
-        }.WithNestedTagBlock(new ComponentTagMap
-        {
-            { 0x01, new TagInfo(0x04, "OuterColour", new byte[] { 0x00, 0x00, 0xFF, 0xFF }, ValueRole.ARGB_COLOR) },
-            { 0x02, new TagInfo(0x04, "BorderWidth", new byte[] { 0x08, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x03, new TagInfo(0x00, "Border Image", Array.Empty<byte>(), ValueRole.BITMAP) },
-            { 0x04, new TagInfo(0x04, "Unknown 0x04", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x05, new TagInfo(0x04, "InnerColour", new byte[] { 0x00, 0xFF, 0x00, 0xFF }, ValueRole.ARGB_COLOR) },
-            // Four LE uint32s: BoxX, BoxY (always 0), BoxWidth, BoxHeight.
-            { BoundingBoxTagId, new TagInfo(BoundingBoxLength, "BoundingBox", Array.Empty<byte>(), ValueRole.RAW) },
-            // Four LE uint32s: LeftWidth, TopHeight, RightWidth, BottomHeight (2×2 pane split).
-            { PaneSplitTagId, new TagInfo(PaneSplitLength, "PaneSplit", Array.Empty<byte>(), ValueRole.RAW) },
-            { 0x08, new TagInfo(0x04, "Spacing", new byte[] { 0x09, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-        });
+            ComponentProfile profile = ComponentProfileCatalog.Resolve(MFMEComponentType.Border, context.Version);
+            var (component, offset, parseData) = ParseBase(context, profile, componentOffset, componentId, data);
 
-        private static readonly Options ExtendedTagOptions =
-            Options.WithBitmapTags(0x03, 0x36);
+                        var parseResult = ParseExtendedTags(component, profile, parseData, offset);
 
-        public Border Parse(long componentOffset, uint componentId, byte[] data)
-        {
-            var (component, offset, parseData) = ParseBase(
-                componentOffset,
-                componentId,
-                data,
-                normalizationRule: new GeometryAngleNormalization.Rule(
-                    RewriteTriggerOffsetDelta: 0,
-                    ValidAngleOffsetDelta: 0));
-
-            var parseOptions = WithComponentTagLogging(ExtendedTagOptions);
-            var parseResult = ParseExtendedTags(component, componentTagMap, parseData, offset, parseOptions);
-
-            ApplyExtendedTags(component, parseResult);
+            ApplyExtendedTags(component, parseResult, profile.Tags);
             return component;
         }
 
-        private void ApplyExtendedTags(Border component, ParseResult parseResult)
+        private void ApplyExtendedTags(Border component, ParseResult parseResult, ComponentTagMap componentTagMap)
         {
             ApplyExtendedTagsByReflection(component, parseResult, componentTagMap);
 

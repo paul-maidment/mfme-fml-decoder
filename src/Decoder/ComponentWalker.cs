@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using MfmeFmlDecoder.src.Decoder.Component.Core;
 using MfmeFmlDecoder.Utilities;
@@ -14,7 +14,7 @@ namespace MfmeFmlDecoder.Decoder
         }
 
         // Walk the components portion of the stream
-        public void WalkComponents(Stream fileStream, BinaryReader reader, long offset)
+        public void WalkComponents(Stream fileStream, BinaryReader reader, long offset, ParsingContext context)
         {
             RunLog.WriteLine($"ComponentWalker called");
             while (fileStream.Position < fileStream.Length)
@@ -29,20 +29,20 @@ namespace MfmeFmlDecoder.Decoder
                     byte[] values = reader.ReadBytes((int)length);
 
                     // Pass the record start offset to OnRecordRead
-                    OnRecordRead(componentId, recordStartOffset, length, values);
+                    OnRecordRead(context, componentId, recordStartOffset, length, values);
                 }
                 catch (EndOfStreamException)
                 {
                     break;
                 }
             }
-            
+
         }
 
-        private void OnRecordRead(uint componentId, long offset, uint length, byte[] values)
+        private void OnRecordRead(ParsingContext context, uint componentId, long offset, uint length, byte[] values)
         {
             RunLog.WriteLine($"Offset: 0x{offset:X8}, Component ID: 0x{componentId:X8}, Length: 0x{length + 8:X2}");
-            _componentParser.ParseComponent(offset, componentId, length, values);
+            _componentParser.ParseComponent(context, offset, componentId, length, values);
         }
     }
 }

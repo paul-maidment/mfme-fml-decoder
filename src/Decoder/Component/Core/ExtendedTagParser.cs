@@ -31,7 +31,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             bool LogMatchedTags,
             string LogMatchedTagsPrefix,
             bool IsNestedTagBlockParse = false,
-            bool IsBaseSectionParse = false
+            bool IsBaseSectionParse = false,
+            bool PreferMappedTag4C = false
         )
         {
             /// <summary>Baseline parse options. <see cref="LogMatchedTags"/> is enabled so TLV tags are traced unless explicitly turned off.</summary>
@@ -73,6 +74,9 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             /// </summary>
             public Options WithBaseSectionParse() => this with { IsBaseSectionParse = true };
 
+            /// <summary>Legacy BandReel stores a real 0x4C UINT16 value; prefer the tag map over the 4C nested-block header.</summary>
+            public Options WithMappedTag4C() => this with { PreferMappedTag4C = true };
+
             public Options WithFlagDropdown(
                 string dropdownName,
                 string defaultOption,
@@ -109,7 +113,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             IReadOnlyDictionary<uint, IReadOnlyList<byte[]>> DirectBitmapBlobsByTag,
             IReadOnlyDictionary<string, string> FlagDropdownSelectionsByName,
             ParseResult NestedTagBlockResult = null,
-            byte? NestedTagBlockOrientationByte = null
+            byte? NestedTagBlockOrientationByte = null,
+            IReadOnlySet<uint> ExplicitTags = null
         );
 
         internal static string ResolveNestedTagBlockOrientation(byte orientationByte)
@@ -128,7 +133,13 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             IReadOnlyDictionary<uint, string> OptionByTag
         );
 
-        public ParseResult Parse(ComponentTagMap componentTagMap, byte[] data, long offset, Options options = null)
+        public ParseResult Parse(
+            ComponentTagMap componentTagMap,
+            byte[] data,
+            long offset,
+            Options options = null,
+            IReadOnlySet<uint> defaultSuppressionTags = null,
+            bool stopAtUnknownTag = false)
         {
             if (componentTagMap is null) throw new ArgumentNullException(nameof(componentTagMap));
             if (data is null) throw new ArgumentNullException(nameof(data));
@@ -165,7 +176,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                     uint16sByAttributeName,
                     booleansByAttributeName,
                     bytesByAttributeName,
-                    coloursByAttributeName);
+                    coloursByAttributeName,
+                    defaultSuppressionTags);
                 return new ParseResult(
                     resultOffset,
                     valuesByTag,
@@ -182,7 +194,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                     ToReadOnlyBitmapBlobMap(directBitmapBlobsByTag),
                     flagDropdownSelectionsByName,
                     nestedTagBlockResult,
-                    nestedTagBlockOrientationByte);
+                    nestedTagBlockOrientationByte,
+                    new HashSet<uint>(encounteredTags));
             }
 
             while (offset < data.Length)
@@ -201,9 +214,28 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                     return BuildResult(offset);
                 }
 
-                if (!TryReadNestedTagBlockHeader(data, offset, out uint tag, out TagInfo tagInfo, out int tagKeyLengthBytes)
-                    && !TryReadTag(componentTagMap, data, offset, out tag, out tagInfo, out tagKeyLengthBytes))
+                bool readTag;
+                uint tag;
+                TagInfo tagInfo;
+                int tagKeyLengthBytes;
+                if (options.PreferMappedTag4C)
                 {
+                    readTag = TryReadTag(componentTagMap, data, offset, out tag, out tagInfo, out tagKeyLengthBytes)
+                        || TryReadNestedTagBlockHeader(data, offset, out tag, out tagInfo, out tagKeyLengthBytes);
+                }
+                else
+                {
+                    readTag = TryReadNestedTagBlockHeader(data, offset, out tag, out tagInfo, out tagKeyLengthBytes)
+                        || TryReadTag(componentTagMap, data, offset, out tag, out tagInfo, out tagKeyLengthBytes);
+                }
+
+                if (!readTag)
+                {
+                    if (stopAtUnknownTag)
+                    {
+                        return BuildResult(offset);
+                    }
+
                     bool nothingMatchedYet = offset == extendedSectionStart && valuesByTag.Count == 0 && fontsByRole.Count == 0
                         && bitmapBlobsByTag.Count == 0 && directBitmapBlobsByTag.Count == 0;
                     string tailHint = nothingMatchedYet
@@ -1669,11 +1701,13 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             Dictionary<string, ushort> uint16sByAttributeName,
             Dictionary<string, bool> booleansByAttributeName,
             Dictionary<string, byte> bytesByAttributeName,
-            Dictionary<string, string> coloursByAttributeName)
+            Dictionary<string, string> coloursByAttributeName,
+            IReadOnlySet<uint> defaultSuppressionTags = null)
         {
             foreach (var kvp in componentTagMap)
             {
                 if (valuesByTag.ContainsKey(kvp.Key)) continue;
+                if (defaultSuppressionTags is not null && defaultSuppressionTags.Contains(kvp.Key)) continue;
                 if (!TryGetDefaultValue(kvp.Value, out object defaultValue))
                 {
                     continue;

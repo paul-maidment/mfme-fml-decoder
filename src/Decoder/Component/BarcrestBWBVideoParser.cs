@@ -1,5 +1,7 @@
+using MfmeFmlDecoder.Decoder;
 using MfmeFmlDecoder.Model;
 using MfmeFmlDecoder.src.Decoder.Component.Core;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles;
 using MfmeFmlDecoder.src.Model.Component;
 using System;
 
@@ -7,30 +9,16 @@ namespace MfmeFmlDecoder.src.Decoder.Component
 {
     internal sealed class BarcrestBWBVideoParser : ComponentParserBase<BarcrestBWBVideo>
     {
-        private ComponentTagMap componentTagMap = new ComponentTagMap
-        {
-            { 0x01, new TagInfo(0x01, "Unknown 0x01", new byte[] { }, ValueRole.BOOLEAN) },
-            { 0x36, new TagInfo(0x00, "Overlay Image", Array.Empty<byte>(), ValueRole.BITMAP) },
-            { 0x05, new TagInfo(0x04, "LeftSkew", Array.Empty<byte>(), ValueRole.UINT32) },
-            { 0x06, new TagInfo(0x04, "RightSkew", Array.Empty<byte>(), ValueRole.INT32) }, // This can be negative
-            { 0x3B, new TagInfo(0x04, "Unknown 0x3B", new byte[] { 0x00 }, ValueRole.UINT32) },
-        };
 
-        public BarcrestBWBVideo Parse(long componentOffset, uint componentId, byte[] data)
+        public BarcrestBWBVideo Parse(ParsingContext context, long componentOffset, uint componentId, byte[] data)
         {
+            ComponentProfile profile = ComponentProfileCatalog.Resolve(MFMEComponentType.BarcrestBWBVideo, context.Version);
             // Normalize for MFME angle bug
-            var (component, offset, parseData) = ParseBase(
-                componentOffset,
-                componentId,
-                data,
-                normalizationRule: new GeometryAngleNormalization.Rule(
-                    RewriteTriggerOffsetDelta: -4,
-                    ValidAngleOffsetDelta: 0));
+            var (component, offset, parseData) = ParseBase(context, profile, componentOffset, componentId, data);
 
             DumpRemaining(componentOffset, data, offset);
 
-            var parseOptions = WithComponentTagLogging(ExtendedTagParser.Options.Default);
-            var parseResult = ParseExtendedTags(component, componentTagMap, data, offset, parseOptions);
+                        var parseResult = ParseExtendedTags(component, profile, data, offset);
 
             return component;
         }

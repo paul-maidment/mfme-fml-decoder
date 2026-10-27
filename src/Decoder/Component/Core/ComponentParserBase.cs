@@ -1,6 +1,8 @@
 using MfmeFmlDecoder.src.Model.Component;
 using MfmeFmlDecoder.Utilities;
 using MfmeFmlDecoder.Model;
+using MfmeFmlDecoder.Decoder;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles;
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
@@ -14,12 +16,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
     internal abstract class ComponentParserBase<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T>
         where T : BaseComponent, new()
     {
-        // The 20.x base-section reader is activated only for the known 20.1 base-section
-        // signatures. Other components keep the existing single-stream normalization path
-        // so their decoded JSON is unchanged.
-        private bool v20BaseSectionReaderActive;
-
-        private static bool ShouldUseV20BaseSectionReader(byte[] data)
+        private static bool ShouldUseV20BaseSectionReader(MFMEComponentType kind, byte[] data)
         {
             if (data is null || data.Length < 36)
             {
@@ -30,46 +27,56 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             //   Button:    0x06 before the 0x07 angle tag
             //   DiscReel:  07 01 0A 00 (zero angle, then base 0x0A/0x0B)
             //   AlphaNew:  07 01 36 42 4D (zero angle, then the overlay bitmap)
-            if (typeof(T) == typeof(Button))
+            switch (kind)
             {
-                return data[30] == 0x06 && data[35] == 0x07;
+                case MFMEComponentType.Button:
+                    return data[30] == 0x06 && data[35] == 0x07;
+                case MFMEComponentType.DiscReel:
+                    return data[30] == 0x07
+                        && data[31] == 0x01
+                        && data[32] == 0x0A
+                        && data[33] == 0x00;
+                case MFMEComponentType.AlphaNew:
+                    return data[30] == 0x07
+                        && data[31] == 0x01
+                        && data[32] == 0x36
+                        && data[33] == 0x42
+                        && data[34] == 0x4D;
+                default:
+                    return false;
+            }
+        }
+
+        private static BaseSectionMode ResolveBaseSectionMode(ComponentProfile profile, byte[] data)
+        {
+            if (profile.BaseSection.Mode != BaseSectionMode.V20Signature)
+            {
+                return profile.BaseSection.Mode;
             }
 
-            if (typeof(T) == typeof(DiscReel))
-            {
-                return data[30] == 0x07
-                    && data[31] == 0x01
-                    && data[32] == 0x0A
-                    && data[33] == 0x00;
-            }
-
-            if (typeof(T) == typeof(AlphaNew))
-            {
-                return data[30] == 0x07
-                    && data[31] == 0x01
-                    && data[32] == 0x36
-                    && data[33] == 0x42
-                    && data[34] == 0x4D;
-            }
-
-            return false;
+            return ShouldUseV20BaseSectionReader(profile.Kind, data)
+                ? BaseSectionMode.V20Signature
+                : BaseSectionMode.SingleStream;
         }
 
         protected (T component, long offset, byte[] parseData) ParseBase(
+            ParsingContext context,
+            ComponentProfile profile,
             long componentOffset,
             uint componentId,
-            byte[] data,
-            GeometryAngleNormalization.Rule normalizationRule = null,
-            int finalOffsetAdjustment = 0,
-            int geometryValidAngleTrailingSkipBytes = 5)
+            byte[] data)
         {
+            if (profile is null) throw new ArgumentNullException(nameof(profile));
+            if (data is null) throw new ArgumentNullException(nameof(data));
+
             // Record layout: 4-byte component id + 4-byte length, then payload in `data`.
             long payloadFileOffset = componentOffset + 8;
-            v20BaseSectionReaderActive = ShouldUseV20BaseSectionReader(data);
+            BaseSectionMode mode = ResolveBaseSectionMode(profile, data);
 
-            if (!v20BaseSectionReaderActive)
+            if (mode != BaseSectionMode.V20Signature)
             {
-                normalizationRule ??= new GeometryAngleNormalization.Rule();
+                GeometryAngleNormalization.Rule normalizationRule =
+                    profile.Angle.NormalizationRule ?? new GeometryAngleNormalization.Rule();
                 (byte[] normalizedData, int offsetAdjustment, int? preferredExtendedOffset, string normalizationModeLog) =
                     GeometryAngleNormalization.Normalize(data, normalizationRule);
 
@@ -84,13 +91,13 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                     oldComponent,
                     normalizedData,
                     offset: 5,
-                    validAngleTrailingSkipBytes: geometryValidAngleTrailingSkipBytes).Offset;
+                    validAngleTrailingSkipBytes: profile.Angle.ValidAngleTrailingSkipBytes).Offset;
                 oldOffset += offsetAdjustment;
                 if (preferredExtendedOffset.HasValue)
                 {
                     oldOffset = preferredExtendedOffset.Value;
                 }
-                oldOffset += finalOffsetAdjustment;
+                oldOffset += profile.Angle.FinalOffsetAdjustment;
                 RunLog.WriteLine($"\nFinal offset position: {oldOffset} (index into payload; file position {payloadFileOffset + oldOffset:X8})");
                 if (!string.IsNullOrWhiteSpace(normalizationModeLog))
                 {
@@ -102,9 +109,6 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                 return (oldComponent, oldOffset, normalizedData);
             }
 
-            _ = normalizationRule;
-            _ = finalOffsetAdjustment;
-            _ = geometryValidAngleTrailingSkipBytes;
             byte[] parseData = data;
 
             RunLog.WriteLine($"\nProcessing {typeof(T).Name} Component at {componentOffset:X8} (ID: {componentId}, Length: {parseData.Length}, payload @ {payloadFileOffset:X8})\n");
@@ -260,23 +264,34 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
         /// </summary>
         protected ExtendedTagParser.ParseResult ParseExtendedTags(
             T component,
-            ComponentTagMap componentTagMap,
+            ComponentProfile profile,
             byte[] data,
-            long offset,
-            ExtendedTagParser.Options options = null)
+            long offset)
         {
             if (component is null) throw new ArgumentNullException(nameof(component));
-            if (componentTagMap is null) throw new ArgumentNullException(nameof(componentTagMap));
+            if (profile is null) throw new ArgumentNullException(nameof(profile));
+            if (profile.Tags is null) throw new ArgumentNullException(nameof(profile.Tags));
             if (data is null) throw new ArgumentNullException(nameof(data));
 
-            options ??= ExtendedTagParser.Options.Default;
+            ComponentTagMap componentTagMap = profile.Tags;
+            ExtendedTagParser.Options options = profile.Options ?? ExtendedTagParser.Options.Default;
+            BaseSectionMode mode = ResolveBaseSectionMode(profile, data);
 
-            if (!v20BaseSectionReaderActive)
+            if (mode == BaseSectionMode.SingleStream)
             {
                 ExtendedTagParser.ParseResult legacyResult =
                     new ExtendedTagParser().Parse(componentTagMap, data, offset, options);
                 AssignParseResult(component, legacyResult, componentTagMap, clearExisting: true);
+                ApplyProfileDefaults(component, profile);
                 return legacyResult;
+            }
+
+            if (mode == BaseSectionMode.LegacyTwoSection)
+            {
+                ExtendedTagParser.ParseResult twoSectionResult =
+                    ParseLegacyTwoSections(component, profile, data, offset);
+                ApplyProfileDefaults(component, profile);
+                return twoSectionResult;
             }
 
             // Types with a nested 4C block keep the existing single-stream parse: the 4C opens
@@ -286,6 +301,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                 ExtendedTagParser.ParseResult fullResult =
                     new ExtendedTagParser().Parse(componentTagMap, data, offset, options);
                 AssignParseResult(component, fullResult, componentTagMap, clearExisting: true);
+                ApplyProfileDefaults(component, profile);
                 return fullResult;
             }
 
@@ -321,7 +337,164 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                 AssignParseResult(component, baseResult, baseTagMap.Map, clearExisting: false);
             }
 
+            ApplyProfileDefaults(component, profile);
             return MergeParseResults(ownResult, baseResult, baseTagMap.TypeMappedTags);
+        }
+
+        private ExtendedTagParser.ParseResult ParseLegacyTwoSections(
+            T component,
+            ComponentProfile profile,
+            byte[] data,
+            long offset)
+        {
+            ComponentTagMap firstTags = profile.Tags;
+            ComponentTagMap secondTags = profile.BaseSection.SecondSectionTags ?? firstTags;
+            ExtendedTagParser.Options options = profile.Options ?? ExtendedTagParser.Options.Default;
+
+            ExtendedTagParser.ParseResult firstResult =
+                new ExtendedTagParser().Parse(firstTags, data, offset, options, stopAtUnknownTag: true);
+
+            bool hasSecondSection = firstResult.Offset < data.Length;
+            if (!hasSecondSection && ReferenceEquals(firstTags, secondTags))
+            {
+                AssignParseResult(component, firstResult, firstTags, clearExisting: true);
+                return firstResult;
+            }
+
+            ExtendedTagParser.ParseResult secondResult;
+            try
+            {
+                secondResult = hasSecondSection
+                    ? new ExtendedTagParser().Parse(
+                        secondTags,
+                        data,
+                        firstResult.Offset,
+                        options,
+                        defaultSuppressionTags: ReferenceEquals(firstTags, secondTags)
+                            ? firstResult.ExplicitTags
+                            : null,
+                        stopAtUnknownTag: true)
+                    : new ExtendedTagParser().Parse(
+                        secondTags,
+                        new byte[] { 0x00 },
+                        0,
+                        options);
+            }
+            catch (Exception ex) when (ex is ComponentTagParseException || ex is InvalidOperationException)
+            {
+                RunLog.WriteDiagnosticLine(
+                    $"Legacy second section parse failed at payload index {firstResult.Offset} " +
+                    $"(0x{firstResult.Offset:X}); keeping the first section. {ex.Message}");
+                AssignParseResult(component, firstResult, firstTags, clearExisting: true);
+                return firstResult;
+            }
+
+            AssignParseResult(component, firstResult, firstTags, clearExisting: true);
+            AssignParseResult(component, secondResult, secondTags, clearExisting: false);
+            return MergeLegacySections(firstResult, secondResult, firstTags);
+        }
+
+        private static ExtendedTagParser.ParseResult MergeLegacySections(
+            ExtendedTagParser.ParseResult first,
+            ExtendedTagParser.ParseResult second,
+            ComponentTagMap firstTags)
+        {
+            var mergedValuesByTag = new Dictionary<uint, object>(first.ValuesByTag);
+            foreach (var kvp in second.ValuesByTag)
+            {
+                if (firstTags.TryGetValue(kvp.Key, out TagInfo firstInfo)
+                    && (firstInfo.Role == ValueRole.LAMP_SUBLAMP_TABLE
+                        || firstInfo.Role == ValueRole.SUBLAMP_COUNT))
+                {
+                    continue;
+                }
+                mergedValuesByTag[kvp.Key] = kvp.Value;
+            }
+
+            return second with
+            {
+                ValuesByTag = mergedValuesByTag,
+                FontsByRole = MergePreferSecond(first.FontsByRole, second.FontsByRole),
+                StringsByAttributeName = MergePreferSecond(first.StringsByAttributeName, second.StringsByAttributeName),
+                FloatsByAttributeName = MergePreferSecond(first.FloatsByAttributeName, second.FloatsByAttributeName),
+                UInt32sByAttributeName = MergePreferSecond(first.UInt32sByAttributeName, second.UInt32sByAttributeName),
+                Int32sByAttributeName = MergePreferSecond(first.Int32sByAttributeName, second.Int32sByAttributeName),
+                UInt16sByAttributeName = MergePreferSecond(first.UInt16sByAttributeName, second.UInt16sByAttributeName),
+                BooleansByAttributeName = MergePreferSecond(first.BooleansByAttributeName, second.BooleansByAttributeName),
+                BytesByAttributeName = MergePreferSecond(first.BytesByAttributeName, second.BytesByAttributeName),
+                ColoursByAttributeName = MergePreferSecond(first.ColoursByAttributeName, second.ColoursByAttributeName),
+                BitmapBlobsByTag = MergePreferSecond(first.BitmapBlobsByTag, second.BitmapBlobsByTag),
+                DirectBitmapBlobsByTag = MergePreferSecond(first.DirectBitmapBlobsByTag, second.DirectBitmapBlobsByTag),
+                FlagDropdownSelectionsByName = MergePreferSecond(first.FlagDropdownSelectionsByName, second.FlagDropdownSelectionsByName),
+                NestedTagBlockResult = second.NestedTagBlockResult ?? first.NestedTagBlockResult,
+                NestedTagBlockOrientationByte =
+                    second.NestedTagBlockOrientationByte ?? first.NestedTagBlockOrientationByte,
+            };
+        }
+
+        private static void ApplyDictionaryDefaults(T component, DefaultsProfile defaults)
+        {
+            if (defaults.Values is null || defaults.Values.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var kvp in defaults.Values)
+            {
+                switch (kvp.Value)
+                {
+                    case uint uintValue:
+                        component.UInt32s.TryAdd(kvp.Key, uintValue);
+                        break;
+                    case int intValue:
+                        component.Int32s.TryAdd(kvp.Key, intValue);
+                        break;
+                    case bool boolValue:
+                        component.Booleans.TryAdd(kvp.Key, boolValue);
+                        break;
+                    case byte byteValue:
+                        component.Bytes.TryAdd(kvp.Key, byteValue);
+                        break;
+                    case float floatValue:
+                        component.Floats.TryAdd(kvp.Key, floatValue);
+                        break;
+                    case string stringValue:
+                        component.Strings.TryAdd(kvp.Key, stringValue);
+                        break;
+                }
+            }
+        }
+
+        private static void ApplyProfileDefaults(T component, ComponentProfile profile)
+        {
+            if (profile.Defaults is null)
+            {
+                return;
+            }
+
+            ApplyDictionaryDefaults(component, profile.Defaults);
+
+            if (component.Orientation is not null && !profile.Defaults.OverrideOrientation)
+            {
+                return;
+            }
+
+            component.Orientation = profile.Defaults.Orientation switch
+            {
+                OrientationDefaultMode.Vertical => "Vertical",
+                OrientationDefaultMode.Horizontal => "Horizontal",
+                OrientationDefaultMode.ReelAspect => component.Width >= component.Height
+                    ? "Horizontal"
+                    : "Vertical",
+                _ => null,
+            };
+
+            if (component.Orientation is null
+                && profile.Defaults.TryGetValue("Orientation", out object orientation)
+                && orientation is string orientationText)
+            {
+                component.Orientation = orientationText;
+            }
         }
 
         private void AssignParseResult(

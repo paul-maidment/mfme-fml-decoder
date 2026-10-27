@@ -40,7 +40,24 @@ namespace MfmeFmlDecoder.Decoder
                 fileWalker.WalkTlv(data, offset: 0));
 
             Assert.Equal("19.0", ex.FoundVersion);
-            Assert.Contains("Only MFME v20.1 is supported.", ex.Message);
+            Assert.Contains("Supported versions: 20.1, 19.8.", ex.Message);
+        }
+
+        [Fact]
+        public void WalkTlv_AllowsUnsupportedVersionWhenEnabled()
+        {
+            byte[] data =
+            {
+                0x2F, 0x00, 0x00, 0x00,
+                0x04, 0x00, 0x00, 0x00,
+                0x31, 0x39, 0x2E, 0x30,
+            };
+
+            var fileWalker = new FileWalker(
+                new ComponentWalker(new ComponentParser()),
+                allowUnsupportedVersions: true);
+
+            fileWalker.WalkTlv(data, offset: 0);
         }
 
         [Fact]
