@@ -24,9 +24,10 @@ namespace MfmeFmlDecoder.src.Decoder.Component
             // Normalize for MFME angle bug
             var (component, offset, parseData) = ParseBase(context, profile, componentOffset, componentId, data);
 
-            DumpRemaining(componentOffset, data, offset);
+            byte[] extendedData = profile.Defaults?.UseNormalizedExtendedData == true ? parseData : data;
+            DumpRemaining(componentOffset, extendedData, offset);
 
-                        var parseResult = ParseExtendedTags(component, profile, data, offset);
+                        var parseResult = ParseExtendedTags(component, profile, extendedData, offset);
 
             ApplyExtendedTags(component, parseResult.ValuesByTag, qualityOptions);
 

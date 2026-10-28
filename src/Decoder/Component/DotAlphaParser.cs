@@ -21,7 +21,22 @@ namespace MfmeFmlDecoder.src.Decoder.Component
 
                         var parseResult = ParseExtendedTags(component, profile, parseData, offset);
 
+            if (profile.Defaults?.DotAlphaAutoSize == true)
+            {
+                uint xSize = GetUInt32(component, "XSize", 2);
+                uint ySize = GetUInt32(component, "YSize", 2);
+                uint digitSpacing = GetUInt32(component, "DigitSpacing", 2);
+                uint dotSpacing = GetUInt32(component, "DotSpacing", 1);
+                component.Width = (uint)(((xSize + dotSpacing) * 6 + digitSpacing) * 16 + 3);
+                component.Height = (uint)((ySize + dotSpacing) * 7 + 6);
+            }
+
             return component;
+        }
+
+        private static uint GetUInt32(DotAlpha component, string key, uint fallback)
+        {
+            return component.UInt32s.TryGetValue(key, out uint value) ? value : fallback;
         }
     }
 }

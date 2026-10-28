@@ -49,14 +49,20 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
 
         private static BaseSectionMode ResolveBaseSectionMode(ComponentProfile profile, byte[] data)
         {
-            if (profile.BaseSection.Mode != BaseSectionMode.V20Signature)
+            if (profile.BaseSection.Mode != BaseSectionMode.V20Signature
+                && profile.BaseSection.Mode != BaseSectionMode.V20SignatureOrLegacyTwoSection)
             {
                 return profile.BaseSection.Mode;
             }
 
-            return ShouldUseV20BaseSectionReader(profile.Kind, data)
-                ? BaseSectionMode.V20Signature
-                : BaseSectionMode.SingleStream;
+            if (ShouldUseV20BaseSectionReader(profile.Kind, data))
+            {
+                return BaseSectionMode.V20Signature;
+            }
+
+            return profile.BaseSection.Mode == BaseSectionMode.V20Signature
+                ? BaseSectionMode.SingleStream
+                : BaseSectionMode.LegacyTwoSection;
         }
 
         protected (T component, long offset, byte[] parseData) ParseBase(
@@ -78,7 +84,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                 GeometryAngleNormalization.Rule normalizationRule =
                     profile.Angle.NormalizationRule ?? new GeometryAngleNormalization.Rule();
                 (byte[] normalizedData, int offsetAdjustment, int? preferredExtendedOffset, string normalizationModeLog) =
-                    GeometryAngleNormalization.Normalize(data, normalizationRule);
+                    GeometryAngleNormalization.Normalize(data, normalizationRule, profile.Angle.PreListTag6);
 
                 RunLog.WriteLine($"\nProcessing {typeof(T).Name} Component at {componentOffset:X8} (ID: {componentId}, Length: {normalizedData.Length}, payload @ {payloadFileOffset:X8})\n");
                 RunLog.WriteLine("Initial hex dump:\n");
@@ -273,7 +279,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             if (profile.Tags is null) throw new ArgumentNullException(nameof(profile.Tags));
             if (data is null) throw new ArgumentNullException(nameof(data));
 
-            ComponentTagMap componentTagMap = profile.Tags;
+            ComponentTagMap componentTagMap = profile.EffectiveClassTags;
             ExtendedTagParser.Options options = profile.Options ?? ExtendedTagParser.Options.Default;
             BaseSectionMode mode = ResolveBaseSectionMode(profile, data);
 
@@ -347,7 +353,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             byte[] data,
             long offset)
         {
-            ComponentTagMap firstTags = profile.Tags;
+            ComponentTagMap firstTags = profile.EffectiveBaseTags;
             ComponentTagMap secondTags = profile.BaseSection.SecondSectionTags ?? firstTags;
             ExtendedTagParser.Options options = profile.Options ?? ExtendedTagParser.Options.Default;
 
@@ -391,20 +397,24 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
 
             AssignParseResult(component, firstResult, firstTags, clearExisting: true);
             AssignParseResult(component, secondResult, secondTags, clearExisting: false);
-            return MergeLegacySections(firstResult, secondResult, firstTags);
+            return MergeLegacySections(firstResult, secondResult, firstTags, secondTags);
         }
 
         private static ExtendedTagParser.ParseResult MergeLegacySections(
             ExtendedTagParser.ParseResult first,
             ExtendedTagParser.ParseResult second,
-            ComponentTagMap firstTags)
+            ComponentTagMap firstTags,
+            ComponentTagMap secondTags)
         {
             var mergedValuesByTag = new Dictionary<uint, object>(first.ValuesByTag);
             foreach (var kvp in second.ValuesByTag)
             {
                 if (firstTags.TryGetValue(kvp.Key, out TagInfo firstInfo)
                     && (firstInfo.Role == ValueRole.LAMP_SUBLAMP_TABLE
-                        || firstInfo.Role == ValueRole.SUBLAMP_COUNT))
+                        || firstInfo.Role == ValueRole.SUBLAMP_COUNT
+                        || (firstInfo.Role != ValueRole.BITMAP
+                            && secondTags.TryGetValue(kvp.Key, out TagInfo secondInfo)
+                            && secondInfo.Role == ValueRole.BITMAP)))
                 {
                     continue;
                 }
@@ -429,6 +439,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                 NestedTagBlockResult = second.NestedTagBlockResult ?? first.NestedTagBlockResult,
                 NestedTagBlockOrientationByte =
                     second.NestedTagBlockOrientationByte ?? first.NestedTagBlockOrientationByte,
+                BaseSectionValuesByTag = first.ValuesByTag,
+                BaseSectionExplicitTags = first.ExplicitTags,
             };
         }
 
@@ -1158,7 +1170,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
 
         public static (byte[] normalizedData, int offsetAdjustment, int? preferredExtendedOffset, string normalizationModeLog) Normalize(
             byte[] data,
-            Rule rule)
+            Rule rule,
+            bool preListTag6 = false)
         {
             if (data is null) throw new ArgumentNullException(nameof(data));
             rule ??= new Rule();
@@ -1175,6 +1188,12 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             for (int tag = 0x01; tag <= 0x05; tag++)
             {
                 if (pos + 5 > data.Length) break;
+                stream.Write(data, pos, 5);
+                pos += 5;
+            }
+
+            if (preListTag6 && pos + 5 <= data.Length && data[pos] == 0x06)
+            {
                 stream.Write(data, pos, 5);
                 pos += 5;
             }

@@ -20,6 +20,33 @@ namespace MfmeFmlDecoder.src.Decoder.Component
                         var parseResult = ParseExtendedTags(component, profile, parseData, offset);
 
             ApplyExtendedTags(component, parseResult, profile.Tags);
+            if (profile.Defaults.MoveIsHorizontalToProperty
+                && component.Booleans.TryGetValue("IsHorizontal", out bool isHorizontal)
+                && isHorizontal)
+            {
+                component.Booleans.Remove("IsHorizontal");
+            }
+
+            if (parseResult.ValuesByTag.TryGetValue(0x08, out object orientationValue)
+                && orientationValue is byte orientationFlag)
+            {
+                component.Orientation = orientationFlag == 0 ? "Vertical" : "Horizontal";
+            }
+
+            if (profile.Defaults?.SynthesizeOffImage == true
+                && !component.Images.ContainsKey("off_image"))
+            {
+                int width = checked((int)component.Width);
+                int height = checked((int)component.Height);
+                component.Images["off_image"] = new BitmapEntry(
+                    width,
+                    height,
+                    32,
+                    new byte[checked(width * height * 4)])
+                {
+                    Purpose = "off_image",
+                };
+            }
 
             return component;
         }

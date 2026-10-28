@@ -12,13 +12,31 @@ namespace MfmeFmlDecoder.Decoder
     {
         public static readonly MfmeVersion V20_1 = new("20.1", 20, 1, hasMinor: true);
         public static readonly MfmeVersion V19_8 = new("19.8", 19, 8, hasMinor: true);
+        public static readonly MfmeVersion V19_6 = new("19.6", 19, 6, hasMinor: true);
+        public static readonly MfmeVersion V19_5 = new("19.5", 19, 5, hasMinor: true);
+        public static readonly MfmeVersion V19_4 = new("19.4", 19, 4, hasMinor: true);
+        public static readonly MfmeVersion V19_3 = new("19.3", 19, 3, hasMinor: true);
+        public static readonly MfmeVersion V19_2 = new("19.2", 19, 2, hasMinor: true);
+        public static readonly MfmeVersion V19_1 = new("19.1", 19, 1, hasMinor: true);
+        public static readonly MfmeVersion V19_0 = new("19.0", 19, 0, hasMinor: true);
+        public static readonly MfmeVersion V20_0 = new("20.0", 20, 0, hasMinor: true);
+        public static readonly MfmeVersion V6_1 = new("6.1", 6, 1, hasMinor: true);
+        public static readonly MfmeVersion V6_0 = new("6.0", 6, 0, hasMinor: true);
+        public static readonly MfmeVersion V5_2 = new("5.2", 5, 2, hasMinor: true);
+        public static readonly MfmeVersion V5 = new("5", 5, 0, hasMinor: false);
+        public static readonly MfmeVersion V18_0 = new("18.0", 18, 0, hasMinor: true);
+        public static readonly MfmeVersion MFME = new("MFME", 0, 0, hasMinor: false);
 
         public string Raw { get; }
         public int Major { get; }
         public int Minor { get; }
         public bool HasMinor { get; }
 
-        public string Canonical => HasMinor ? $"{Major}.{Minor}" : Major.ToString();
+        public string Canonical => Major == 0 && !HasMinor
+            ? "MFME"
+            : HasMinor
+                ? $"{Major}.{Minor}"
+                : Major.ToString();
 
         private MfmeVersion(string raw, int major, int minor, bool hasMinor)
         {
@@ -43,7 +61,13 @@ namespace MfmeFmlDecoder.Decoder
                 return false;
             }
 
-            string text = Regex.Replace(raw.Trim(), @"\s+", " ");
+            string text = Regex.Replace(raw.Replace("\0", string.Empty).Trim(), @"\s+", " ");
+            if (string.Equals(text, "MFME", StringComparison.OrdinalIgnoreCase))
+            {
+                version = MFME;
+                return true;
+            }
+
             if (text.StartsWith("MFME", StringComparison.OrdinalIgnoreCase))
             {
                 text = text.Substring(4).Trim();

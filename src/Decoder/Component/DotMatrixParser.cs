@@ -21,6 +21,13 @@ namespace MfmeFmlDecoder.src.Decoder.Component
 
                         var parseResult = ParseExtendedTags(component, profile, parseData, offset);
 
+            if (profile.Defaults?.DotMatrixAutoSize == true)
+            {
+                uint size = component.UInt32s.TryGetValue("Size", out uint value) ? value : 7;
+                component.Width = size * 0x41 + 1;
+                component.Height = size * 0x15 + 1;
+            }
+
             return component;
         }
     }

@@ -19,7 +19,22 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles
         OrientationDefaultMode Orientation = OrientationDefaultMode.None,
         bool DefaultWhiteLampNumberZero = false,
         bool OverrideOrientation = false,
-        bool DefaultUndefinedMaskSlotsToMinusTwo = false)
+        bool DefaultUndefinedMaskSlotsToMinusTwo = false,
+        bool MoveIsHorizontalToProperty = false,
+        bool LegacyCoinNoteFromBaseTag1A = false,
+        bool LegacyTokenEffectDefaults = false,
+        bool LegacyScaledSkew = false,
+        bool UseNormalizedExtendedData = false,
+        bool SynthesizeOffImage = false,
+        bool DiscReelLampCountFromStops = false,
+        bool DotAlphaAutoSize = false,
+        bool DotMatrixAutoSize = false,
+        bool SynthesizeButtonLamp1 = false,
+        bool BfmLedSizeFromXSize = false,
+        bool ClearDuplicateButtonShortcut2 = false,
+        bool ClearDuplicateLampShortcut2 = false,
+        bool LegacyBbTokenEffects = false,
+        bool SequentialBandReelMaskSlots = false)
     {
         public static readonly DefaultsProfile Empty =
             new(new Dictionary<string, object>());

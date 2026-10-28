@@ -57,6 +57,12 @@ namespace MfmeFmlDecoder.src.Decoder.Component
                 component.Orientation = orientationFlag == 0 ? "Vertical" : "Horizontal";
             }
 
+            if (parseResult.ValuesByTag.TryGetValue(0x13, out object legacyReversed)
+                && legacyReversed is bool reversed)
+            {
+                component.Booleans["Reversed"] = reversed;
+            }
+
             ApplyReelMode(component);
         }
 

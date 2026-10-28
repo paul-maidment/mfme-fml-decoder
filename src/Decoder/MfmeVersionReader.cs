@@ -79,7 +79,7 @@ namespace MfmeFmlDecoder.Decoder
                 return string.Empty;
             }
 
-            return Encoding.ASCII.GetString(versionBytes);
+            return Encoding.ASCII.GetString(versionBytes).Replace("\0", string.Empty).Trim();
         }
     }
 }

@@ -13,6 +13,9 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles
         /// </summary>
         V20Signature,
 
+        /// <summary>Use the 20.1 signature reader when present, otherwise legacy two-section.</summary>
+        V20SignatureOrLegacyTwoSection,
+
         /// <summary>
         /// Legacy layouts that store the base section and the own section as two TLV
         /// streams separated by a single <c>0x00</c>.
@@ -22,7 +25,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles
 
     internal sealed record BaseSectionProfile(
         BaseSectionMode Mode,
-        ComponentTagMap SecondSectionTags = null)
+        ComponentTagMap SecondSectionTags = null,
+        ComponentTagMap FirstSectionTags = null)
     {
         public static readonly BaseSectionProfile SingleStream =
             new(BaseSectionMode.SingleStream);
@@ -30,9 +34,14 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles
         public static readonly BaseSectionProfile V20Signature =
             new(BaseSectionMode.V20Signature);
 
-        public static BaseSectionProfile LegacyTwoSection(ComponentTagMap secondSectionTags)
+        public static readonly BaseSectionProfile V20SignatureOrLegacyTwoSection =
+            new(BaseSectionMode.V20SignatureOrLegacyTwoSection);
+
+        public static BaseSectionProfile LegacyTwoSection(
+            ComponentTagMap secondSectionTags,
+            ComponentTagMap firstSectionTags = null)
         {
-            return new BaseSectionProfile(BaseSectionMode.LegacyTwoSection, secondSectionTags);
+            return new BaseSectionProfile(BaseSectionMode.LegacyTwoSection, secondSectionTags, firstSectionTags);
         }
     }
 }

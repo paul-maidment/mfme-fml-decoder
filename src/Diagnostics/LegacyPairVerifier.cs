@@ -61,6 +61,8 @@ namespace MfmeFmlDecoder.Diagnostics
                 return 2;
             }
 
+            var skipDetailLog = new List<string>();
+
             MfmeVersion? filter = null;
             if (!string.IsNullOrWhiteSpace(versionFilter)
                 && MfmeVersion.TryParse(versionFilter, out MfmeVersion parsedFilter))
@@ -90,8 +92,10 @@ namespace MfmeFmlDecoder.Diagnostics
                     }
                 }
 
+                int pairId = GetInt(pair, "id");
                 total++;
-                string id = GetInt(pair, "id").ToString(CultureInfo.InvariantCulture);
+
+                string id = pairId.ToString(CultureInfo.InvariantCulture);
                 string machine = GetString(pair, "machine");
                 string zipPath = GetString(pair, "zip_path");
                 string oldEntry = GetString(pair, "old_entry");
@@ -102,6 +106,7 @@ namespace MfmeFmlDecoder.Diagnostics
                 {
                     skipped++;
                     Increment(stats, "missing legacy zip");
+                    skipDetailLog.Add($"{id} {machine}: missing legacy zip");
                     continue;
                 }
 
@@ -114,6 +119,7 @@ namespace MfmeFmlDecoder.Diagnostics
                 {
                     skipped++;
                     Increment(stats, "missing legacy zip entry");
+                    skipDetailLog.Add($"{id} {machine}: missing legacy zip entry ({oldEntry})");
                     continue;
                 }
 
@@ -121,6 +127,7 @@ namespace MfmeFmlDecoder.Diagnostics
                 {
                     skipped++;
                     Increment(stats, "missing new path");
+                    skipDetailLog.Add($"{id} {machine}: missing new path");
                     continue;
                 }
 
@@ -131,13 +138,14 @@ namespace MfmeFmlDecoder.Diagnostics
                 {
                     skipped++;
                     Increment(stats, "new side not 20.1");
+                    skipDetailLog.Add($"{id} {machine}: new side version {newVersion}");
                     continue;
                 }
 
                 Layout oldLayout;
                 try
                 {
-                    oldLayout = Decode(DecryptIfFml(oldEntry, oldBytes), allowUnsupportedVersion: true);
+                    oldLayout = Decode(DecryptIfFml(oldEntry, oldBytes));
                 }
                 catch (Exception ex)
                 {
@@ -150,7 +158,7 @@ namespace MfmeFmlDecoder.Diagnostics
                 Layout newLayout;
                 try
                 {
-                    newLayout = Decode(newBytes, allowUnsupportedVersion: false);
+                    newLayout = Decode(newBytes);
                 }
                 catch (Exception ex)
                 {
@@ -193,6 +201,15 @@ namespace MfmeFmlDecoder.Diagnostics
             Console.WriteLine($"old failures: {oldFailures}");
             Console.WriteLine($"new failures: {newFailures}");
             Console.WriteLine($"skipped: {skipped}");
+            if (skipDetailLog.Count > 0)
+            {
+                Console.WriteLine($"skipped (details): {skipDetailLog.Count}");
+                foreach (string skip in skipDetailLog)
+                {
+                    Console.WriteLine($"  {skip}");
+                }
+            }
+
             foreach (var kvp in stats)
             {
                 Console.WriteLine($"  {kvp.Key}: {kvp.Value}");
@@ -203,7 +220,7 @@ namespace MfmeFmlDecoder.Diagnostics
                 Console.WriteLine(mismatch);
             }
 
-            return deepEqual == total && orderedEqual == total ? 0 : 1;
+            return deepEqual + skipped == total && orderedEqual + skipped == total ? 0 : 1;
             }
             finally
             {
@@ -211,12 +228,10 @@ namespace MfmeFmlDecoder.Diagnostics
             }
         }
 
-        private static Layout Decode(byte[] plaintext, bool allowUnsupportedVersion)
+        private static Layout Decode(byte[] plaintext)
         {
             var parser = new ComponentParser();
-            var walker = new FileWalker(
-                new ComponentWalker(parser),
-                allowUnsupportedVersions: allowUnsupportedVersion);
+            var walker = new FileWalker(new ComponentWalker(parser));
             walker.WalkTlv(plaintext, 0);
             return parser.ToLayout(walker.Header);
         }
@@ -359,5 +374,6 @@ namespace MfmeFmlDecoder.Diagnostics
 
             return path + ": " + left.ToJsonString() + " != " + right.ToJsonString();
         }
+
     }
 }

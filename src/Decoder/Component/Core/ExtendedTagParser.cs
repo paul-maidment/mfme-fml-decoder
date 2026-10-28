@@ -32,7 +32,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             string LogMatchedTagsPrefix,
             bool IsNestedTagBlockParse = false,
             bool IsBaseSectionParse = false,
-            bool PreferMappedTag4C = false
+            bool PreferMappedTag4C = false,
+            bool LegacyAnsiText = false
         )
         {
             /// <summary>Baseline parse options. <see cref="LogMatchedTags"/> is enabled so TLV tags are traced unless explicitly turned off.</summary>
@@ -114,7 +115,9 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             IReadOnlyDictionary<string, string> FlagDropdownSelectionsByName,
             ParseResult NestedTagBlockResult = null,
             byte? NestedTagBlockOrientationByte = null,
-            IReadOnlySet<uint> ExplicitTags = null
+            IReadOnlySet<uint> ExplicitTags = null,
+            IReadOnlyDictionary<uint, object> BaseSectionValuesByTag = null,
+            IReadOnlySet<uint> BaseSectionExplicitTags = null
         );
 
         internal static string ResolveNestedTagBlockOrientation(byte orientationByte)
@@ -307,8 +310,15 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                 else if (tagInfo.Role == ValueRole.TEXT)
                 {
                     int valueOffset = checked((int)offset);
-                    long tagKeyStartOffset = valueOffset - tagKeyLengthBytes;
-                    length = ReadDelphiUtf16WideStringTlvLength(data, valueOffset, tagKeyStartOffset);
+                    if (options.LegacyAnsiText)
+                    {
+                        length = ReadAnsiStringTlvLength(data, valueOffset);
+                    }
+                    else
+                    {
+                        long tagKeyStartOffset = valueOffset - tagKeyLengthBytes;
+                        length = ReadDelphiUtf16WideStringTlvLength(data, valueOffset, tagKeyStartOffset);
+                    }
 
                     if (length <= 0)
                     {
@@ -341,11 +351,13 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                 LogMatchedTag(options, tag, tagInfo, tagOffset: offset - tagKeyLengthBytes, valueOffset: offset, length: length);
 
                 object value = tagInfo.Role == ValueRole.TEXT
-                    ? ParseDelphiUtf16WideStringTlv(
-                        data,
-                        checked((int)offset),
-                        length,
-                        tagKeyByteOffset: offset - tagKeyLengthBytes)
+                    ? (options.LegacyAnsiText
+                        ? ParseAnsiStringTlv(data, checked((int)offset), length)
+                        : ParseDelphiUtf16WideStringTlv(
+                            data,
+                            checked((int)offset),
+                            length,
+                            tagKeyByteOffset: offset - tagKeyLengthBytes))
                     : ParseValue(
                         tagInfo.Role,
                         data,
@@ -2128,6 +2140,89 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                 int wcharBytes = (int)(charCount * 2);
                 return Encoding.Unicode.GetString(data.AsSpan(valueOffset + 4, wcharBytes));
             }
+        }
+
+        private static int ReadAnsiStringTlvLength(byte[] data, int valueOffset)
+        {
+            checked
+            {
+                const uint maxBytes = 1_000_000;
+
+                if (data is null) throw new ArgumentNullException(nameof(data));
+                if (valueOffset < 0 || valueOffset >= data.Length)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(valueOffset));
+                }
+
+                if (valueOffset + 4 > data.Length)
+                {
+                    throw new InvalidOperationException(
+                        $"ANSI TEXT TLV at value offset 0x{valueOffset:X} needs at least 4 bytes for byte count, " +
+                        $"but only {data.Length - valueOffset} remain.");
+                }
+
+                uint byteCount = BinaryPrimitives.ReadUInt32LittleEndian(data.AsSpan(valueOffset, 4));
+                if (byteCount > maxBytes)
+                {
+                    throw new InvalidOperationException(
+                        $"ANSI TEXT TLV byte count {byteCount} exceeds maximum {maxBytes}.");
+                }
+
+                if (valueOffset + 4 + byteCount > data.Length)
+                {
+                    throw new InvalidOperationException(
+                        $"ANSI TEXT payload ({byteCount} bytes) at offset 0x{valueOffset:X} extends past buffer end " +
+                        $"(buffer length {data.Length}).");
+                }
+
+                return 4 + (int)byteCount;
+            }
+        }
+
+        private static string ParseAnsiStringTlv(byte[] data, int valueOffset, int totalSpanBytes)
+        {
+            checked
+            {
+                if (totalSpanBytes < 4)
+                {
+                    throw new InvalidOperationException(
+                        $"ANSI TEXT TLV span length must be >= 4, got {totalSpanBytes}.");
+                }
+
+                if (valueOffset < 0 || valueOffset > data.Length - totalSpanBytes)
+                {
+                    throw new InvalidOperationException(
+                        $"ANSI TEXT TLV at payload index {valueOffset}, span={totalSpanBytes}, buffer={data.Length} is out of range.");
+                }
+
+                uint byteCount = BinaryPrimitives.ReadUInt32LittleEndian(data.AsSpan(valueOffset, 4));
+                if (byteCount == 0)
+                {
+                    return string.Empty;
+                }
+
+                return DecodeWindows1252(data, valueOffset + 4, (int)byteCount);
+            }
+        }
+
+        private static readonly char[] Windows1252High =
+        {
+            '\u20AC','\u0081','\u201A','\u0192','\u201E','\u2026','\u2020','\u2021',
+            '\u02C6','\u2030','\u0160','\u2039','\u0152','\u008D','\u017D','\u008F',
+            '\u0090','\u2018','\u2019','\u201C','\u201D','\u2022','\u2013','\u2014',
+            '\u02DC','\u2122','\u0161','\u203A','\u0153','\u009D','\u017E','\u0178',
+        };
+
+        private static string DecodeWindows1252(byte[] data, int offset, int count)
+        {
+            char[] chars = new char[count];
+            for (int i = 0; i < count; i++)
+            {
+                byte b = data[offset + i];
+                chars[i] = b >= 0x80 && b <= 0x9F ? Windows1252High[b - 0x80] : (char)b;
+            }
+
+            return new string(chars);
         }
 
         private static ushort ParseUInt16(byte[] data, int offset, int length)

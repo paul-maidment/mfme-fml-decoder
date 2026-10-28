@@ -74,6 +74,11 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             int nameLength = checked((int)fontNameLength);
             EnsureAvailable(data, cursor, nameLength, "font name bytes", end);
             string fontName = Encoding.ASCII.GetString(data, cursor, nameLength);
+            int nulIndex = fontName.IndexOf('\0');
+            if (nulIndex >= 0)
+            {
+                fontName = fontName.Substring(0, nulIndex);
+            }
             cursor += nameLength;
 
             EnsureAvailable(data, cursor, 4, "font size", end);

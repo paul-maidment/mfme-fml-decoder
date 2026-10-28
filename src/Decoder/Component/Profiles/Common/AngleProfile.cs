@@ -9,7 +9,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles
     internal sealed record AngleProfile(
         GeometryAngleNormalization.Rule NormalizationRule,
         int ValidAngleTrailingSkipBytes = 5,
-        int FinalOffsetAdjustment = 0)
+        int FinalOffsetAdjustment = 0,
+        bool PreListTag6 = false)
     {
         public static readonly AngleProfile Default =
             new(new GeometryAngleNormalization.Rule(), ValidAngleTrailingSkipBytes: 5);

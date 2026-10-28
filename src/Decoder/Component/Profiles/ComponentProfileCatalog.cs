@@ -3,7 +3,21 @@ using System.Collections.Generic;
 using MfmeFmlDecoder.Decoder;
 using MfmeFmlDecoder.Model;
 using MfmeFmlDecoder.src.Decoder.Component.Profiles.V19_8;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles.V19_6;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles.V19_5;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles.V19_4;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles.V19_3;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles.V19_2;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles.V19_1;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles.V19_0;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_0;
 using MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles.V6_1;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles.V6_0;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles.V5;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles.V5_2;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles.MFME;
+using MfmeFmlDecoder.src.Decoder.Component.Profiles.V18_0;
 
 namespace MfmeFmlDecoder.src.Decoder.Component.Profiles
 {
@@ -32,19 +46,9 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles
 
         public static ComponentOrderingMode GetComponentOrdering(MfmeVersion version)
         {
-            return version == MfmeVersion.V19_8
-                ? ComponentOrderingMode.BordersLastReversed
-                : ComponentOrderingMode.InFileOrder;
-        }
-
-        public static bool SupportsVersion(MfmeVersion version)
-        {
-            foreach (var key in Profiles.Keys)
-            {
-                if (key.Version == version) return true;
-            }
-
-            return false;
+            return version == MfmeVersion.V20_1
+                ? ComponentOrderingMode.InFileOrder
+                : ComponentOrderingMode.BordersLastReversed;
         }
 
         public static IReadOnlyCollection<(MFMEComponentType Kind, MfmeVersion Version)> Registered => Profiles.Keys;
@@ -132,6 +136,22 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles
             Register(SevenSegBlockProfileV19_8.Profile);
             Register(SevenSegProfileV20_1.Profile);
             Register(SevenSegProfileV19_8.Profile);
+
+            foreach (ComponentProfile profile in V19_6Profiles.All) Register(profile);
+            foreach (ComponentProfile profile in V19_5Profiles.All) Register(profile);
+            foreach (ComponentProfile profile in V19_4Profiles.All) Register(profile);
+            foreach (ComponentProfile profile in V19_3Profiles.All) Register(profile);
+            foreach (ComponentProfile profile in V19_2Profiles.All) Register(profile);
+            foreach (ComponentProfile profile in V19_1Profiles.All) Register(profile);
+            foreach (ComponentProfile profile in V19_0Profiles.All) Register(profile);
+            foreach (ComponentProfile profile in V20_0Profiles.All) Register(profile);
+            foreach (ComponentProfile profile in V6_1Profiles.All) Register(profile);
+            foreach (ComponentProfile profile in V6_0Profiles.All) Register(profile);
+            foreach (ComponentProfile profile in V5_2Profiles.All) Register(profile);
+            foreach (ComponentProfile profile in V5Profiles.All) Register(profile);
+            Register(LampProfileV5.Profile);
+            foreach (ComponentProfile profile in MFMEProfiles.All) Register(profile);
+            foreach (ComponentProfile profile in V18_0Profiles.All) Register(profile);
             return profiles;
         }
     }

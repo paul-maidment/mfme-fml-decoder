@@ -112,6 +112,12 @@ namespace MfmeFmlDecoder.src.Decoder.Component
 
         private static void ApplyExtendedTags(BandReel component, System.Collections.Generic.IReadOnlyDictionary<uint, object> valuesByTag, Dictionary<uint, string> offColourOptions)
         {
+            if (valuesByTag.TryGetValue(0x0B, out object legacyReverse)
+                && legacyReverse is bool reverse)
+            {
+                component.Booleans["Reverse"] = reverse;
+            }
+
             if (valuesByTag.TryGetValue(0x13, out var view)) component.View = (uint)view;
             if (valuesByTag.TryGetValue(0x18, out var selectedOffColour)) component.Strings.Add("OffColour", offColourOptions[(byte)selectedOffColour]);
 
@@ -128,25 +134,66 @@ namespace MfmeFmlDecoder.src.Decoder.Component
             }
         }
 
+        private static void PopulateSequentialMaskSlots(BandReel component, List<LampSublampTableEntry> sublampTable)
+        {
+            for (int mask = 0; mask < 3; mask++)
+            {
+                string maskName = $"mask{mask + 1}";
+                int baseIndex = mask * 10;
+
+                for (int slot = 0; slot < 5; slot++)
+                {
+                    component.MaskSlots.Masks[maskName][$"{slot + 1}a"].SublampNumber = -2;
+                    component.MaskSlots.Masks[maskName][$"{slot + 1}b"].SublampNumber = -2;
+                }
+
+                for (int slot = 0; slot < 5; slot++)
+                {
+                    SetMaskSlot(component, sublampTable, maskName, $"{slot + 1}a", baseIndex + slot);
+                    SetMaskSlot(component, sublampTable, maskName, $"{slot + 1}b", baseIndex + 5 + slot);
+                }
+            }
+        }
+
+        private static void SetMaskSlot(
+            BandReel component,
+            List<LampSublampTableEntry> sublampTable,
+            string maskName,
+            string slotName,
+            int index)
+        {
+            if (index < sublampTable.Count)
+            {
+                component.MaskSlots.Masks[maskName][slotName].SublampNumber = sublampTable[index].SublampNumber;
+            }
+        }
+
         private static void PopulateMaskSlotsFromSublampTable(
             BandReel component,
             List<LampSublampTableEntry> sublampTable,
             DefaultsProfile defaults)
         {
-            foreach (var mapping in SlotToIndexMap)
+            if (defaults?.SequentialBandReelMaskSlots == true)
             {
-                string maskName = mapping.Key.mask;
-                string slotName = mapping.Key.slot;
-                int index = mapping.Value;
-
-                if (index < sublampTable.Count)
+                PopulateSequentialMaskSlots(component, sublampTable);
+            }
+            else
+            {
+                foreach (var mapping in SlotToIndexMap)
                 {
-                    var entry = sublampTable[index];
-                    component.MaskSlots.Masks[maskName][slotName].SublampNumber = entry.SublampNumber;
+                    string maskName = mapping.Key.mask;
+                    string slotName = mapping.Key.slot;
+                    int index = mapping.Value;
+
+                    if (index < sublampTable.Count)
+                    {
+                        var entry = sublampTable[index];
+                        component.MaskSlots.Masks[maskName][slotName].SublampNumber = entry.SublampNumber;
+                    }
                 }
             }
 
-            if (defaults?.DefaultUndefinedMaskSlotsToMinusTwo == true)
+            if (defaults?.DefaultUndefinedMaskSlotsToMinusTwo == true && defaults.SequentialBandReelMaskSlots != true)
             {
                 foreach (var mask in component.MaskSlots.Masks.Values)
                 {

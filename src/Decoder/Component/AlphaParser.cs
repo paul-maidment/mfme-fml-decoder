@@ -34,6 +34,12 @@ namespace MfmeFmlDecoder.src.Decoder.Component
         {
 
             ApplyExtendedTagsByReflection(component, parseResult, componentTagMap);
+
+            if (parseResult.ValuesByTag.TryGetValue(0x05, out object legacyReversed)
+                && legacyReversed is bool reversed)
+            {
+                component.Booleans["Reversed"] = reversed;
+            }
         }
     }
 }

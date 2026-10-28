@@ -15,14 +15,12 @@ namespace MfmeFmlDecoder.Decoder
         private MfmeVersion _version = MfmeVersion.V20_1;
 
         private ComponentWalker _componentWalker;
-        private readonly bool _allowUnsupportedVersions;
 
         public LayoutFileHeader Header { get; } = new LayoutFileHeader();
 
-        public FileWalker(ComponentWalker componentWalker, bool allowUnsupportedVersions = false)
+        public FileWalker(ComponentWalker componentWalker)
         {
             _componentWalker = componentWalker;
-            _allowUnsupportedVersions = allowUnsupportedVersions;
         }
 
         public void WalkTlv(string fileName, uint offset)
@@ -76,7 +74,7 @@ namespace MfmeFmlDecoder.Decoder
 
                 if (tag == MfmeVersionReader.MfmeVersionTag)
                 {
-                    ValidateMfmeVersion(recordStartOffset, values);
+                    ReadMfmeVersion(values);
                 }
 
                 if (LengthPrefixedStringTableScanner.IsFileLevelTag(tag))
@@ -98,7 +96,6 @@ namespace MfmeFmlDecoder.Decoder
                     var context = new ParsingContext(
                         _version,
                         null,
-                        _allowUnsupportedVersions,
                         ComponentProfileCatalog.GetComponentOrdering(_version));
                     _componentWalker.WalkComponents(fileStream, reader, currentOffset, context);
                     break;
@@ -187,21 +184,13 @@ namespace MfmeFmlDecoder.Decoder
             return string.Join("\n", parts);
         }
 
-        private void ValidateMfmeVersion(long recordStartOffset, byte[] values)
+        private void ReadMfmeVersion(byte[] values)
         {
             string versionText = MfmeVersionReader.FormatVersion(values);
             if (MfmeVersion.TryParse(versionText, out MfmeVersion version))
             {
                 _version = version;
             }
-
-            if (_allowUnsupportedVersions
-                || ComponentProfileCatalog.SupportsVersion(_version))
-            {
-                return;
-            }
-
-            throw new UnsupportedMfmeVersionException(recordStartOffset, values);
         }
     }
 }

@@ -21,6 +21,12 @@ namespace MfmeFmlDecoder.src.Decoder.Component
 
                         var parseResult = ParseExtendedTags(component, profile, parseData, offset);
 
+            if (parseResult.ValuesByTag.TryGetValue(0x06, out object legacyReversed)
+                && legacyReversed is bool reversed)
+            {
+                component.Booleans["Reversed"] = reversed;
+            }
+
             return component;
         }
     }

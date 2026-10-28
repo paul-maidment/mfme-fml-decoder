@@ -16,7 +16,10 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles
             BaseSectionProfile baseSection = null,
             IReadOnlyList<string> valueOrder = null,
             IReadOnlyList<string> imageOrder = null,
-            DefaultsProfile defaults = null)
+            DefaultsProfile defaults = null,
+            ComponentTagMap baseTags = null,
+            TagMapOverrides baseOverrides = null,
+            TagMapOverrides classOverrides = null)
         {
             return new ComponentProfile(
                 version,
@@ -27,7 +30,10 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles
                 options ?? ExtendedTagParser.Options.Default,
                 valueOrder ?? ComponentValueOrder.Empty,
                 imageOrder ?? ComponentValueOrder.Empty,
-                defaults ?? DefaultsProfile.Empty);
+                defaults ?? DefaultsProfile.Empty,
+                baseTags,
+                baseOverrides,
+                classOverrides);
         }
     }
 }

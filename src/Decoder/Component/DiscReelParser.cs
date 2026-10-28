@@ -25,6 +25,14 @@ namespace MfmeFmlDecoder.src.Decoder.Component
 
             ApplyExtendedTags(component, parseResult, profile.Tags);
 
+            if (profile.Defaults?.DiscReelLampCountFromStops == true
+                && parseResult.ExplicitTags?.Contains(0x98) != true
+                && parseResult.BaseSectionExplicitTags?.Contains(0x98) != true
+                && component.UInt32s.TryGetValue("Stops", out uint stops))
+            {
+                component.UInt32s["NumberOfLamps"] = stops;
+            }
+
             return component;
         }
 
@@ -36,6 +44,28 @@ namespace MfmeFmlDecoder.src.Decoder.Component
                 && sublampTableValue is IReadOnlyList<LampSublampTableEntry> sublampTable)
             {
                 component.SublampTable = sublampTable;
+            }
+
+            bool hasExplicit3C = parseResult.BaseSectionExplicitTags?.Contains(0x3C) == true
+                || parseResult.ExplicitTags?.Contains(0x3C) == true;
+            bool hasExplicit04 = parseResult.ExplicitTags?.Contains(0x04) == true;
+            if (hasExplicit04
+                && parseResult.ValuesByTag.TryGetValue(0x04, out object legacyInverted)
+                && legacyInverted is bool inverted
+                && !hasExplicit3C)
+            {
+                component.Booleans["Inverted"] = inverted;
+            }
+
+            bool hasExplicit12 = parseResult.BaseSectionExplicitTags?.Contains(0x12) == true
+                || parseResult.ExplicitTags?.Contains(0x12) == true;
+            if (hasExplicit12
+                && parseResult.ValuesByTag.TryGetValue(0x12, out object legacyReversed)
+                && legacyReversed is bool reversed
+                && reversed
+                && !hasExplicit3C)
+            {
+                component.Booleans["Reversed"] = true;
             }
         }
     }

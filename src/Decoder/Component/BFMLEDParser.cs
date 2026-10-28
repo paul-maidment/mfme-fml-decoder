@@ -21,6 +21,14 @@ namespace MfmeFmlDecoder.src.Decoder.Component
 
                         var parseResult = ParseExtendedTags(component, profile, parseData, offset);
 
+            if (profile.Defaults?.BfmLedSizeFromXSize == true
+                && parseResult.ExplicitTags?.Contains(0x07) != true
+                && parseResult.BaseSectionExplicitTags?.Contains(0x07) != true
+                && component.UInt32s.TryGetValue("XSize", out uint xSize))
+            {
+                component.UInt32s["LedSize"] = (xSize >= 5u ? xSize : 7u);
+            }
+
             return component;
         }
     }
