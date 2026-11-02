@@ -57,8 +57,6 @@
       "Values": {
         "SelectedCoinNote": "",
         "SelectedEffect": "",
-        "ButtonNumber": 0,
-        "InhibitLampNumber": 0,
         "PieSize": 120,
         "PieStart": 0,
         "Roundness": 0,

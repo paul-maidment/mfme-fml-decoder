@@ -14,8 +14,12 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             tags: new ComponentTagMap
         {
             { 0x17, new TagInfo(0x01, "Unknown 0x17", new byte[] { 0x01 }, ValueRole.BOOLEAN) },
-            { 0x18, new TagInfo(0x04, "Button Number", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x4A, new TagInfo(0x04, "InhibitLamp", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
+            // Button Number is the button's machine input. Blank (tag absent) means "no input", so it must
+            // not be defaulted to 0: a real input of 0 is a distinct value and must survive to the JSON.
+            { 0x18, new TagInfo(0x04, "Button Number", Array.Empty<byte>(), ValueRole.UINT32) },
+            // InhibitLamp is nullable in MFME (written only when >= 0; ctor default -1 = "no inhibit"),
+            // so it must not be defaulted to 0: a real inhibit of lamp 0 must survive to the JSON.
+            { 0x4A, new TagInfo(0x04, "InhibitLamp", Array.Empty<byte>(), ValueRole.UINT32) },
             { 0x15, new TagInfo(0x01, "Shortcut 1 Enabled", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
             { 0x16, new TagInfo(0x04, "Shortcut 1", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
             { 0x2A, new TagInfo(0x01, "Shortcut 2 Enabled", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
