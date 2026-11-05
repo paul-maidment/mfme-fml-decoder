@@ -15,7 +15,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
         {
             { 0x01, new TagInfo(0x04, "Stops", new byte[] { 0x47, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
             { 0x02, new TagInfo(0x04, "HalfSteps", new byte[] { 0xB0, 0x01, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x03, new TagInfo(0x04, "Offset", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
+            { 0x03, new TagInfo(0x04, "Offset", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.INT32) },
             { 0x05, new TagInfo(0x04, "BorderColour", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.ARGB_COLOR) },
             { 0x04, new TagInfo(0x04, "BorderWidth", new byte[] { 0x04, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
             { 0x08, new TagInfo(0x00, "Reel Image", Array.Empty<byte>(), ValueRole.BITMAP) },
