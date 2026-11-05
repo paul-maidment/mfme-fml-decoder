@@ -137,7 +137,7 @@ namespace MfmeFmlDecoder.Tests.Decoder.Component.Helper
                 .OrderBy(id => id)
                 .ToArray();
 
-        private static Border Border(uint x, uint y, uint w, uint h, int ordinal) =>
+        private static Border Border(int x, int y, uint w, uint h, int ordinal) =>
             new Border
             {
                 X = x,
@@ -147,7 +147,7 @@ namespace MfmeFmlDecoder.Tests.Decoder.Component.Helper
                 OrdinalComponentIdentifier = ordinal,
             };
 
-        private static Lamp Lamp(uint x, uint y, uint w, uint h, int ordinal) =>
+        private static Lamp Lamp(int x, int y, uint w, uint h, int ordinal) =>
             new Lamp
             {
                 X = x,

@@ -55,9 +55,9 @@ namespace MfmeFmlDecoder.src.Decoder.Component
             component.BoxWidth = boxWidth;
             component.BoxHeight = boxHeight;
 
-            // Presentation: absolute origin = geometry + local box offset.
-            component.UInt32s["BoxX"] = checked(component.X + boxX);
-            component.UInt32s["BoxY"] = checked(component.Y + boxY);
+            // Presentation: absolute origin = geometry + local box offset (signed geometry).
+            component.Int32s["BoxX"] = checked(component.X + (int)boxX);
+            component.Int32s["BoxY"] = checked(component.Y + (int)boxY);
             component.UInt32s["BoxWidth"] = boxWidth;
             component.UInt32s["BoxHeight"] = boxHeight;
         }

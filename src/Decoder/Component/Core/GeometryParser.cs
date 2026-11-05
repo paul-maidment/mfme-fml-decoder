@@ -31,8 +31,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
 
             long endOffset = data.Length;
 
-            uint? x = null;
-            uint? y = null;
+            int? x = null;
+            int? y = null;
             uint? width = null;
             uint? height = null;
             int? number = null;
@@ -59,12 +59,12 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                 switch (tag)
                 {
                     case 0x01: // X
-                        x = BitConverter.ToUInt32(data, (int)offset);
+                        x = BitConverter.ToInt32(data, (int)offset);
                         offset += 4;
                         break;
 
                     case 0x02: // Y
-                        y = BitConverter.ToUInt32(data, (int)offset);
+                        y = BitConverter.ToInt32(data, (int)offset);
                         offset += 4;
                         break;
 

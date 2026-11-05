@@ -144,7 +144,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Helper
         }
 
         public static Offset LocalOffset(BaseComponent border, BaseComponent child) =>
-            new Offset(checked((int)child.X - (int)border.X), checked((int)child.Y - (int)border.Y));
+            new Offset(checked(child.X - border.X), checked(child.Y - border.Y));
 
         public static bool Contains(BaseComponent border, BaseComponent other)
         {

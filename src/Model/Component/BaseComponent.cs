@@ -13,9 +13,9 @@ namespace MfmeFmlDecoder.src.Model.Component
     internal abstract class BaseComponent
     {
         [JsonIgnore]
-        public uint X { get; set; }
+        public int X { get; set; }
         [JsonIgnore]
-        public uint Y { get; set; }
+        public int Y { get; set; }
         [JsonIgnore]
         public uint Width { get; set; }
         [JsonIgnore]
