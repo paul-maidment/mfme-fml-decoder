@@ -44,8 +44,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component
                 return;
             }
 
-            uint boxX = BitConverter.ToUInt32(raw, 0);
-            uint boxY = BitConverter.ToUInt32(raw, 4);
+            int boxX = BitConverter.ToInt32(raw, 0);
+            int boxY = BitConverter.ToInt32(raw, 4);
             uint boxWidth = BitConverter.ToUInt32(raw, 8);
             uint boxHeight = BitConverter.ToUInt32(raw, 12);
 
@@ -56,8 +56,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component
             component.BoxHeight = boxHeight;
 
             // Presentation: absolute origin = geometry + local box offset (signed geometry).
-            component.Int32s["BoxX"] = checked(component.X + (int)boxX);
-            component.Int32s["BoxY"] = checked(component.Y + (int)boxY);
+            component.Int32s["BoxX"] = checked(component.X + boxX);
+            component.Int32s["BoxY"] = checked(component.Y + boxY);
             component.UInt32s["BoxWidth"] = boxWidth;
             component.UInt32s["BoxHeight"] = boxHeight;
         }
@@ -69,20 +69,20 @@ namespace MfmeFmlDecoder.src.Decoder.Component
                 return;
             }
 
-            uint leftWidth = BitConverter.ToUInt32(raw, 0);
-            uint topHeight = BitConverter.ToUInt32(raw, 4);
-            uint rightWidth = BitConverter.ToUInt32(raw, 8);
-            uint bottomHeight = BitConverter.ToUInt32(raw, 12);
+            int leftWidth = BitConverter.ToInt32(raw, 0);
+            int topHeight = BitConverter.ToInt32(raw, 4);
+            int rightWidth = BitConverter.ToInt32(raw, 8);
+            int bottomHeight = BitConverter.ToInt32(raw, 12);
 
             component.LeftWidth = leftWidth;
             component.TopHeight = topHeight;
             component.RightWidth = rightWidth;
             component.BottomHeight = bottomHeight;
 
-            component.UInt32s["LeftWidth"] = leftWidth;
-            component.UInt32s["TopHeight"] = topHeight;
-            component.UInt32s["RightWidth"] = rightWidth;
-            component.UInt32s["BottomHeight"] = bottomHeight;
+            component.Int32s["LeftWidth"] = leftWidth;
+            component.Int32s["TopHeight"] = topHeight;
+            component.Int32s["RightWidth"] = rightWidth;
+            component.Int32s["BottomHeight"] = bottomHeight;
         }
 
         private static bool TryGetFixedRaw(

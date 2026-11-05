@@ -14,25 +14,25 @@ namespace MfmeFmlDecoder.src.Model.Component
         public uint Spacing { get; set; }
 
         /// <summary>Wire BoxX from tag 0x06; observed as always zero. JSON Values uses Geometry.X + BoxX.</summary>
-        public uint BoxX { get; set; }
+        public int BoxX { get; set; }
 
         /// <summary>Wire BoxY from tag 0x06; observed as always zero. JSON Values uses Geometry.Y + BoxY.</summary>
-        public uint BoxY { get; set; }
+        public int BoxY { get; set; }
 
         public uint BoxWidth { get; set; }
         public uint BoxHeight { get; set; }
 
         /// <summary>Tag 0x07: left column width of the 2×2 pane split (LeftWidth + RightWidth == BoxWidth).</summary>
-        public uint LeftWidth { get; set; }
+        public int LeftWidth { get; set; }
 
         /// <summary>Tag 0x07: top row height of the 2×2 pane split (TopHeight + BottomHeight == BoxHeight).</summary>
-        public uint TopHeight { get; set; }
+        public int TopHeight { get; set; }
 
         /// <summary>Tag 0x07: right column width of the 2×2 pane split.</summary>
-        public uint RightWidth { get; set; }
+        public int RightWidth { get; set; }
 
         /// <summary>Tag 0x07: bottom row height of the 2×2 pane split.</summary>
-        public uint BottomHeight { get; set; }
+        public int BottomHeight { get; set; }
 
         /// <summary>
         /// Ordinals of layout components owned by this border (post-parse assignment).
