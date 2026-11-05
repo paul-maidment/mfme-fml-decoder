@@ -15,7 +15,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
         {
             { 0x01, new TagInfo(0x01, "Unknown 0x01", new byte[] { }, ValueRole.BOOLEAN) },
             { 0x36, new TagInfo(0x00, "Overlay Image", Array.Empty<byte>(), ValueRole.BITMAP) },
-            { 0x05, new TagInfo(0x04, "LeftSkew", Array.Empty<byte>(), ValueRole.UINT32) },
+            { 0x05, new TagInfo(0x04, "LeftSkew", Array.Empty<byte>(), ValueRole.INT32) },
             { 0x06, new TagInfo(0x04, "RightSkew", Array.Empty<byte>(), ValueRole.INT32) }, // This can be negative
             { 0x3B, new TagInfo(0x04, "Unknown 0x3B", new byte[] { 0x00 }, ValueRole.UINT32) },
         },
