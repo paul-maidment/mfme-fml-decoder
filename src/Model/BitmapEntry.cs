@@ -10,6 +10,7 @@ namespace MfmeFmlDecoder.Model
     )
     {
         public string Purpose { get; init; }
+        public bool Synthesized { get; init; }
     };
 }
 

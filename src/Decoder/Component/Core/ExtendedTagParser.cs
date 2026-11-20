@@ -117,7 +117,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             byte? NestedTagBlockOrientationByte = null,
             IReadOnlySet<uint> ExplicitTags = null,
             IReadOnlyDictionary<uint, object> BaseSectionValuesByTag = null,
-            IReadOnlySet<uint> BaseSectionExplicitTags = null
+            IReadOnlySet<uint> BaseSectionExplicitTags = null,
+            IReadOnlyDictionary<uint, byte[]> RawValuesByTag = null
         );
 
         internal static string ResolveNestedTagBlockOrientation(byte orientationByte)
@@ -161,6 +162,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             Dictionary<string, string> coloursByAttributeName = new(StringComparer.Ordinal);
             Dictionary<uint, List<byte[]>> bitmapBlobsByTag = new();
             Dictionary<uint, List<byte[]>> directBitmapBlobsByTag = new();
+            Dictionary<uint, byte[]> rawValues = new();
             HashSet<uint> encounteredTags = new();
             ParseResult nestedTagBlockResult = null;
             byte? nestedTagBlockOrientationByte = null;
@@ -198,7 +200,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                     flagDropdownSelectionsByName,
                     nestedTagBlockResult,
                     nestedTagBlockOrientationByte,
-                    new HashSet<uint>(encounteredTags));
+                    new HashSet<uint>(encounteredTags),
+                    RawValuesByTag: rawValues);
             }
 
             while (offset < data.Length)
@@ -349,6 +352,22 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                 }
 
                 LogMatchedTag(options, tag, tagInfo, tagOffset: offset - tagKeyLengthBytes, valueOffset: offset, length: length);
+
+                // Record every tag that is actually present (presence + raw bytes). The writer
+                // uses presence to reproduce MFME's sparse output; typed values are still
+                // re-encoded from the model, opaque tags reuse the raw bytes.
+                rawValues[tag] = CopyRaw(data, checked((int)offset), length);
+
+                // BandReel's 0x4C is a real HorizontalVertical UINT16 when PreferMappedTag4C is set.
+                // Its low byte is the same orientation byte the nested-opener path would expose,
+                // so keep deriving Geometry.Orientation from it.
+                if (options.PreferMappedTag4C
+                    && tag == NestedTagBlockHeaderTag
+                    && tagInfo.Role == ValueRole.UINT16
+                    && length >= 1)
+                {
+                    nestedTagBlockOrientationByte ??= data[checked((int)offset)];
+                }
 
                 object value = tagInfo.Role == ValueRole.TEXT
                     ? (options.LegacyAnsiText
@@ -2555,4 +2574,5 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
         }
     }
 }
+
 

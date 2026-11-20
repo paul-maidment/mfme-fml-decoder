@@ -14,7 +14,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             tags: new ComponentTagMap
         {
             { 0x01, new TagInfo(0x04, "Stops", new byte[] { 0x10, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x02, new TagInfo(0x04, "HalfSteps", new byte[] { 0x40, 0x01 }, ValueRole.UINT32) },
+            { 0x02, new TagInfo(0x04, "HalfSteps", new byte[] { 0x40, 0x01, 0x00, 0x00 }, ValueRole.UINT32) },
             { 0x13, new TagInfo(0x04, "View", new byte[] { 0x05, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
             { 0x03, new TagInfo(0x04, "Offset", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.INT32) },
             { 0x19, new TagInfo(0x04, "Spacing", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
@@ -40,7 +40,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             { 0x16, new TagInfo(0x00, "Lamp Mask 41-60 Image", Array.Empty<byte>(), ValueRole.BITMAP) },
         },
             angle: AngleProfile.Rewrite(0),
-            options: ExtendedTagParser.Options .WithBitmapTags(0x36, 0x09, 0x07, 0x0D, 0x16),
+            options: ExtendedTagParser.Options .WithBitmapTags(0x36, 0x09, 0x07, 0x0D, 0x16).WithMappedTag4C(),
             baseSection: BaseSectionProfile.SingleStream);
     }
 }

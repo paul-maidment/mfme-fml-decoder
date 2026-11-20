@@ -24,6 +24,14 @@ namespace MfmeFmlDecoder.src.Model.Component
         public int Number { get; set; }
         [JsonIgnore]
         public float Angle { get; set; }
+        /// <summary>
+        /// Raw lead byte of the MFME angle wire (the byte after tag 0x07) as observed in the
+        /// source, when it is a 20.1 file. MFME uses 0x00 to mark shape/helper lamps (no graphic)
+        /// and 0x01 for graphic lamps; the writer echoes this so the render matches. Null for
+        /// legacy sources or when no wire was seen, in which case the writer uses its default.
+        /// </summary>
+        [JsonIgnore]
+        internal byte? GeometryAngleFlag { get; set; }
         [JsonIgnore]
         public string Orientation { get; set; }
 
@@ -52,6 +60,17 @@ namespace MfmeFmlDecoder.src.Model.Component
         public Dictionary<string, string> Colours { get; } = new Dictionary<string, string>(StringComparer.Ordinal);
         [JsonIgnore]
         public Dictionary<string, BitmapEntry> Images { get; } = new Dictionary<string, BitmapEntry>(StringComparer.Ordinal);
+
+        /// <summary>
+        /// Raw bytes of tags the decoder treats as opaque (attribute names starting "Unknown",
+        /// or <see cref="ValueRole.RAW"/>). Not part of the JSON model, but re-emitted by the
+        /// writer so rendering-relevant tags survive a decode/re-encode round-trip.
+        /// </summary>
+        [JsonIgnore]
+        internal Dictionary<uint, byte[]> RawTagValues { get; } = new Dictionary<uint, byte[]>();
+
+        [JsonIgnore]
+        internal Dictionary<uint, byte[]> NestedRawTagValues { get; } = new Dictionary<uint, byte[]>();
 
         private static readonly JsonSerializerOptions ToJsonOptions = CreateToJsonOptions();
 

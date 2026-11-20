@@ -27,8 +27,46 @@
       }
     },
     {
-      "Type": "Lamp",
+      "Type": "Border",
       "OrdinalComponentIdentifier": 1,
+      "Geometry": {
+        "X": 443,
+        "Y": 297,
+        "Width": 139,
+        "Height": 99,
+        "Number": 0,
+        "Angle": 0,
+        "Orientation": "Vertical"
+      },
+      "OwnedOrdinalComponentIdentifiers": [
+        2,
+        3
+      ],
+      "Values": {
+        "BorderWidth": 8,
+        "BoxHeight": 99,
+        "BoxWidth": 139,
+        "Spacing": 9,
+        "BottomHeight": 99,
+        "BoxX": 443,
+        "BoxY": 297,
+        "LeftWidth": 18,
+        "RightWidth": 121,
+        "TopHeight": 0,
+        "InnerColour": "#00FF00FF",
+        "OuterColour": "#FF0000FF"
+      },
+      "Images": {
+        "border_image": {
+          "Width": 139,
+          "Height": 99,
+          "BitsPerPixel": 32
+        }
+      }
+    },
+    {
+      "Type": "Lamp",
+      "OrdinalComponentIdentifier": 2,
       "Geometry": {
         "X": 444,
         "Y": 298,
@@ -98,7 +136,7 @@
     },
     {
       "Type": "Lamp",
-      "OrdinalComponentIdentifier": 2,
+      "OrdinalComponentIdentifier": 3,
       "Geometry": {
         "X": 564,
         "Y": 378,
@@ -164,44 +202,6 @@
         "Sublamp7Colour": "#FFFF00FF",
         "Sublamp8Colour": "#FFFF00FF",
         "Sublamp9Colour": "#FFFF00FF"
-      }
-    },
-    {
-      "Type": "Border",
-      "OrdinalComponentIdentifier": 3,
-      "Geometry": {
-        "X": 443,
-        "Y": 297,
-        "Width": 139,
-        "Height": 99,
-        "Number": 0,
-        "Angle": 0,
-        "Orientation": "Vertical"
-      },
-      "OwnedOrdinalComponentIdentifiers": [
-        1,
-        2
-      ],
-      "Values": {
-        "BorderWidth": 8,
-        "BoxHeight": 99,
-        "BoxWidth": 139,
-        "Spacing": 9,
-        "BottomHeight": 99,
-        "BoxX": 443,
-        "BoxY": 297,
-        "LeftWidth": 18,
-        "RightWidth": 121,
-        "TopHeight": 0,
-        "InnerColour": "#00FF00FF",
-        "OuterColour": "#FF0000FF"
-      },
-      "Images": {
-        "border_image": {
-          "Width": 139,
-          "Height": 99,
-          "BitsPerPixel": 32
-        }
       }
     }
   ]

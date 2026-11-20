@@ -61,6 +61,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component
                     new byte[checked(width * height * 4)])
                 {
                     Purpose = "lamp_1_image",
+                    Synthesized = true,
                 };
             }
 
@@ -80,6 +81,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component
                     new byte[checked(width * height * 4)])
                 {
                     Purpose = "off_image",
+                    Synthesized = true,
                 };
             }
 

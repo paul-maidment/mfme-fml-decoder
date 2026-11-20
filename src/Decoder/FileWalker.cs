@@ -18,6 +18,17 @@ namespace MfmeFmlDecoder.Decoder
 
         public LayoutFileHeader Header { get; } = new LayoutFileHeader();
 
+        /// <summary>
+        /// Byte length of the file-level TLV prologue, including its <c>0xFFFFFFFF</c> terminator
+        /// record. Components begin immediately after this offset.
+        /// </summary>
+        public int PrologueEndOffset { get; private set; }
+
+        public MfmeVersion Version => _version;
+
+        /// <summary>True when the file's MFME version tag was recognised (so <see cref="Version"/> is trustworthy).</summary>
+        public bool VersionParsed { get; private set; }
+
         public FileWalker(ComponentWalker componentWalker)
         {
             _componentWalker = componentWalker;
@@ -88,6 +99,7 @@ namespace MfmeFmlDecoder.Decoder
                 if (tag == TlvTerminationTag)
                 {
                     long currentOffset = fileStream.Position;
+                    PrologueEndOffset = (int)currentOffset;
 
                     RunLog.WriteLine();
                     RunLog.WriteLine($"TLV Termination tag 0xFFFFFFFF found at offset 0x{recordStartOffset:X8}");
@@ -190,7 +202,9 @@ namespace MfmeFmlDecoder.Decoder
             if (MfmeVersion.TryParse(versionText, out MfmeVersion version))
             {
                 _version = version;
+                VersionParsed = true;
             }
         }
     }
 }
+

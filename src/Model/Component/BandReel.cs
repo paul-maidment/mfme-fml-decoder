@@ -178,6 +178,9 @@ namespace MfmeFmlDecoder.src.Model.Component
 
     internal class SlotValue
     {
-        public int SublampNumber { get; set; }
+        // MFME 20.1 writes -2 for mask slots that have no lamp defined. Default to that so
+        // legacy sources (whose tables don't cover every slot) rebuild the same 60-entry table
+        // MFME's own 20.1 conversion produces.
+        public int SublampNumber { get; set; } = -2;
     }
 }

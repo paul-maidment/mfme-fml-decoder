@@ -4,6 +4,7 @@ using System.IO;
 using MfmeFmlDecoder.Decryption;
 using MfmeFmlDecoder.Diagnostics;
 using MfmeFmlDecoder.Decoder;
+using MfmeFmlDecoder.Decoder.Writer;
 using MfmeFmlDecoder.GameConfig;
 using MfmeFmlDecoder.src.Decoder.Component;
 using MfmeFmlDecoder.Utilities;
@@ -32,6 +33,8 @@ namespace MfmeFmlDecoder.Application
                     out bool exportLayout,
                     out string exportOutputPath,
                     out bool printMfmeVersion,
+                    out bool writeFmlOut,
+                    out string fmlOutPath,
                     out string parseError))
             {
                 if (!string.IsNullOrEmpty(parseError))
@@ -54,6 +57,11 @@ namespace MfmeFmlDecoder.Application
                     string version = ReadMfmeVersion(inputPath, offset);
                     Console.Out.WriteLine(version);
                     return 0;
+                }
+
+                if (writeFmlOut)
+                {
+                    return RunFmlOut(inputPath, fmlOutPath);
                 }
 
                 var componentParser = new ComponentParser();
@@ -113,6 +121,51 @@ namespace MfmeFmlDecoder.Application
             }
         }
 
+        private static int RunFmlOut(string inputPath, string outputPath)
+        {
+            if (!string.Equals(Path.GetExtension(inputPath), ".fml", StringComparison.OrdinalIgnoreCase))
+            {
+                RunLog.WriteErrorLine(
+                    "Error: classic .dat conversion is not implemented yet (see plan T1-T3/T5). " +
+                    "--fmlout currently accepts .fml input only.");
+                return 1;
+            }
+
+            byte[] plaintext = FmlDecryptor.Decrypt(ReadFileBytes(inputPath));
+
+            var componentParser = new ComponentParser();
+            var fileWalker = new FileWalker(new ComponentWalker(componentParser));
+
+            bool previousQuiet = RunLog.Quiet;
+            RunLog.Quiet = true;
+            try
+            {
+                fileWalker.WalkTlv(plaintext, 0);
+                var layout = componentParser.ToLayout(fileWalker.Header);
+                // Always emit the 20.1 format. When the source is an older version, choose which
+                // tags to write from the decoded values (vs their 20.1 defaults) because the old
+                // source's tag ids/sections do not map onto the 20.1 tag maps.
+                bool valueBasedSparse = !fileWalker.VersionParsed || fileWalker.Version != MfmeVersion.V20_1;
+                byte[] output = LayoutWriter.WriteFml(
+                    plaintext,
+                    fileWalker.PrologueEndOffset,
+                    layout,
+                    MfmeVersion.V20_1,
+                    valueBasedSparse);
+
+                string targetPath = outputPath ?? inputPath + ".repacked.fml";
+                string fullTargetPath = Path.GetFullPath(targetPath);
+                File.WriteAllBytes(fullTargetPath, output);
+                Console.Out.WriteLine($"Wrote {fullTargetPath} ({output.Length} bytes)");
+            }
+            finally
+            {
+                RunLog.Quiet = previousQuiet;
+            }
+
+            return 0;
+        }
+
         private static string ReadMfmeVersion(string inputPath, uint offset)
         {
             if (string.Equals(Path.GetExtension(inputPath), ".fml", StringComparison.OrdinalIgnoreCase))
@@ -167,6 +220,8 @@ namespace MfmeFmlDecoder.Application
             out bool exportLayout,
             out string exportOutputPath,
             out bool printMfmeVersion,
+            out bool writeFmlOut,
+            out string fmlOutPath,
             out string error)
         {
             fileName = null;
@@ -175,6 +230,8 @@ namespace MfmeFmlDecoder.Application
             exportLayout = false;
             exportOutputPath = null;
             printMfmeVersion = false;
+            writeFmlOut = false;
+            fmlOutPath = null;
             error = null;
 
             var positionals = new List<string>();
@@ -218,6 +275,22 @@ namespace MfmeFmlDecoder.Application
                 {
                     printMfmeVersion = true;
                 }
+                else if (a == "--fmlout")
+                {
+                    writeFmlOut = true;
+                }
+                else if (a.StartsWith("--fmlout=", StringComparison.Ordinal))
+                {
+                    string value = a.Substring("--fmlout=".Length).Trim();
+                    if (value.Length == 0)
+                    {
+                        error = "FML output path must not be empty when using --fmlout=.";
+                        return false;
+                    }
+
+                    writeFmlOut = true;
+                    fmlOutPath = value;
+                }
                 else if (!a.StartsWith("-", StringComparison.Ordinal))
                 {
                     positionals.Add(a);
@@ -255,6 +328,12 @@ namespace MfmeFmlDecoder.Application
             if (printMfmeVersion && (writeLayoutJson || exportLayout))
             {
                 error = "--mfme-version cannot be combined with --json or --export.";
+                return false;
+            }
+
+            if (writeFmlOut && (writeLayoutJson || exportLayout || printMfmeVersion))
+            {
+                error = "--fmlout cannot be combined with --json, --export, or --mfme-version.";
                 return false;
             }
 
@@ -326,7 +405,7 @@ namespace MfmeFmlDecoder.Application
         private static void PrintUsage()
         {
             Console.WriteLine("Usage:");
-            Console.WriteLine("  MfmeFmlDecoder <filename.(dat|fml)> [offset] [--json] [--export]");
+            Console.WriteLine("  MfmeFmlDecoder <filename.(dat|fml)> [offset] [--json] [--export] [--fmlout]");
             Console.WriteLine();
             Console.WriteLine("Options:");
             Console.WriteLine("  --json, -j          Emit decoded layout as JSON on standard output only; errors go to stderr.");
@@ -335,6 +414,9 @@ namespace MfmeFmlDecoder.Application
             Console.WriteLine("                      and game.json (GAM settings) into the zip.");
             Console.WriteLine("                      Default output: <input-file>.zip in the same directory as the input file.");
             Console.WriteLine("  --mfme-version      Print the MFME version from the layout file (TLV tag 0x2F) on standard output.");
+            Console.WriteLine("  --fmlout[=path]     Re-encode a .fml input into a fresh AACS container and write it.");
+            Console.WriteLine("                      Cannot be combined with --json, --export, or --mfme-version.");
+            Console.WriteLine("                      Default output: <input-file>.repacked.fml in the same directory as the input file.");
             Console.WriteLine();
             Console.WriteLine("Examples:");
             Console.WriteLine("  MfmeFmlDecoder file.dat --json");
@@ -343,7 +425,10 @@ namespace MfmeFmlDecoder.Application
             Console.WriteLine("  MfmeFmlDecoder file.dat --export");
             Console.WriteLine("  MfmeFmlDecoder file.dat --export=C:\\out\\layout.zip");
             Console.WriteLine("  MfmeFmlDecoder file.fml --mfme-version");
+            Console.WriteLine("  MfmeFmlDecoder file.fml --fmlout");
+            Console.WriteLine("  MfmeFmlDecoder file.fml --fmlout=C:\\out\\repacked.fml");
         }
 
     }
 }
+

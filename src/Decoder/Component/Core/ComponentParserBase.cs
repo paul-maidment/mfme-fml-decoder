@@ -83,7 +83,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             {
                 GeometryAngleNormalization.Rule normalizationRule =
                     profile.Angle.NormalizationRule ?? new GeometryAngleNormalization.Rule();
-                (byte[] normalizedData, int offsetAdjustment, int? preferredExtendedOffset, string normalizationModeLog) =
+                (byte[] normalizedData, int offsetAdjustment, int? preferredExtendedOffset, string normalizationModeLog, byte? angleFlag) =
                     GeometryAngleNormalization.Normalize(data, normalizationRule, profile.Angle.PreListTag6);
 
                 RunLog.WriteLine($"\nProcessing {typeof(T).Name} Component at {componentOffset:X8} (ID: {componentId}, Length: {normalizedData.Length}, payload @ {payloadFileOffset:X8})\n");
@@ -92,6 +92,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                 RunLog.WriteLine("");
 
                 var oldComponent = new T();
+                oldComponent.GeometryAngleFlag = angleFlag;
                 var oldGeometryParser = new GeometryParser();
                 long oldOffset = oldGeometryParser.ParseInto(
                     oldComponent,
@@ -531,6 +532,16 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             AssignColoursFromParseResult(component, parseResult);
             AssignBitmapEntriesFromParseResult(component, parseResult, componentTagMap, clearExisting);
             ApplyNestedTagBlockOrientation(component, parseResult);
+
+            if (parseResult.RawValuesByTag is not null)
+            {
+                foreach (var kvp in parseResult.RawValuesByTag) component.RawTagValues[kvp.Key] = kvp.Value;
+            }
+
+            if (parseResult.NestedTagBlockResult?.RawValuesByTag is not null)
+            {
+                foreach (var kvp in parseResult.NestedTagBlockResult.RawValuesByTag) component.NestedRawTagValues[kvp.Key] = kvp.Value;
+            }
         }
 
         private static void RemoveParseResultKeys(
@@ -1168,7 +1179,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             int ValidAngleOffsetDelta = 0
         );
 
-        public static (byte[] normalizedData, int offsetAdjustment, int? preferredExtendedOffset, string normalizationModeLog) Normalize(
+        public static (byte[] normalizedData, int offsetAdjustment, int? preferredExtendedOffset, string normalizationModeLog, byte? angleFlag) Normalize(
             byte[] data,
             Rule rule,
             bool preListTag6 = false)
@@ -1179,7 +1190,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
             using var stream = new System.IO.MemoryStream();
             if (data.Length <= StartOffset)
             {
-                return (EnsureTrailingTerminator(data), 0, null, null);
+                return (EnsureTrailingTerminator(data), 0, null, null, null);
             }
 
             stream.Write(data, 0, StartOffset);
@@ -1198,8 +1209,16 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                 pos += 5;
             }
 
+            byte? angleFlag = null;
             if (pos + AngleTagTotalLength <= data.Length && data[pos] == 0x07)
             {
+                // Preserve the raw lead byte (0x00 vs 0x01) so the writer can echo MFME's choice.
+                // Only when the source uses the 2-byte zero-angle form (0x07 <0/1> <next tag>); a
+                // legacy fixed-point angle's bytes are not a flag and must fall back to the default.
+                if (data[pos + 1] <= 1 && pos + 2 < data.Length && data[pos + 2] != 0x00)
+                {
+                    angleFlag = data[pos + 1];
+                }
                 ReadOnlySpan<byte> wire = data.AsSpan(pos + 1, MfmeAngleWireCodec.WireLength);
                 bool isAngleValid = MfmeAngleWireCodec.IsValidWireAngle(wire);
                 string angleText = isAngleValid
@@ -1228,7 +1247,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                     int? preferredExtendedOffset = continuationOffset + rule.RewriteTriggerOffsetDelta;
                     string modeLog =
                         $"Normalization mode: rewrite-trigger (wire={angleText}, continuationOffset={continuationOffset}, copyStart={copyStart}, delta={rule.RewriteTriggerOffsetDelta})";
-                    return (EnsureTrailingTerminator(normalizedData), 0, preferredExtendedOffset, modeLog);
+                    return (EnsureTrailingTerminator(normalizedData), 0, preferredExtendedOffset, modeLog, angleFlag);
                 }
 
                 // Valid-angle path: six-byte MFME wire round-trips.
@@ -1254,13 +1273,13 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                     {
                         string modeLog =
                             $"Normalization mode: angle-valid (angle={angleText}, anchor={anchor}, delta={rule.ValidAngleOffsetDelta})";
-                        return (EnsureTrailingTerminator(data), 0, anchor, modeLog);
+                        return (EnsureTrailingTerminator(data), 0, anchor, modeLog, angleFlag);
                     }
                 }
             }
 
             stream.Write(data, pos, data.Length - pos);
-            return (EnsureTrailingTerminator(stream.ToArray()), 0, null, null);
+            return (EnsureTrailingTerminator(stream.ToArray()), 0, null, null, angleFlag);
         }
 
         private static string FormatWireHex(ReadOnlySpan<byte> wire)

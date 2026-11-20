@@ -14,16 +14,33 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Behaviours
     {
         public static void Apply(IList<BaseComponent> components, ComponentOrderingMode mode)
         {
-            if (mode != ComponentOrderingMode.BordersLastReversed || components is null || components.Count == 0)
+            if (components is null || components.Count == 0)
             {
                 return;
             }
 
             List<BaseComponent> backgrounds = components.Where(c => c is Background).ToList();
-            List<BaseComponent> borders = components.OfType<Border>().Reverse<BaseComponent>().ToList();
+            List<BaseComponent> borders = components.OfType<Border>().Cast<BaseComponent>().ToList();
+            if (borders.Count == 0)
+            {
+                return;
+            }
+
             List<BaseComponent> rest = components
                 .Where(c => c is not Background && c is not Border)
                 .ToList();
+
+            // MFME's canonical 20.1 order is: backgrounds, then borders in reverse file order,
+            // then the rest. Old versions always write borders after their contents, and a number
+            // of 20.1 files do too (borders trailing). Canonicalise whenever the borders trail the
+            // rest; leave already-canonical files untouched so 20.1 -> 20.1 stays byte-identical.
+            bool bordersTrailing = rest.Count > 0
+                && borders.Min(c => components.IndexOf(c)) > rest.Max(c => components.IndexOf(c));
+
+            if (mode != ComponentOrderingMode.BordersLastReversed && !bordersTrailing)
+            {
+                return;
+            }
 
             components.Clear();
             foreach (BaseComponent component in backgrounds)
@@ -31,9 +48,9 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Behaviours
                 components.Add(component);
             }
 
-            foreach (BaseComponent component in borders)
+            for (int i = borders.Count - 1; i >= 0; i--)
             {
-                components.Add(component);
+                components.Add(borders[i]);
             }
 
             foreach (BaseComponent component in rest)

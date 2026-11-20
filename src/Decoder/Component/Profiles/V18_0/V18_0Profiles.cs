@@ -32,7 +32,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V18_0
             V19_8.FrameProfileV19_8.Profile.WithVersion(MfmeVersion.V18_0),
             V19_8.IGTVfdProfileV19_8.Profile.WithVersion(MfmeVersion.V18_0),
             V19_8.LabelProfileV19_8.Profile.WithVersion(MfmeVersion.V18_0),
-            V19_8.LampProfileV19_8.Profile.WithVersion(MfmeVersion.V18_0),
+            V19_0.LampProfileV19_0.Profile.WithVersion(MfmeVersion.V18_0),
             V19_8.LedProfileV19_8.Profile.WithVersion(MfmeVersion.V18_0),
             V19_8.MatrixAlphaProfileV19_8.Profile.WithVersion(MfmeVersion.V18_0),
             V19_8.MaygayMatrixProfileV19_8.Profile.WithVersion(MfmeVersion.V18_0),

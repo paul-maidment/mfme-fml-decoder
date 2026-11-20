@@ -25,6 +25,13 @@ namespace MfmeFmlDecoder.src.Decoder.Component
                         var parseResult = ParseExtendedTags(component, profile, parseData, offset);
 
             ApplyExtendedTags(component, parseResult, profile.Tags);
+
+            // MFME's 20.1 Border always writes the 0x0A/0x0B flags (as 0) even when the source
+            // omitted them. Model them as false so the writer emits the leading 0A 00 0B 00; JSON
+            // ignores "Unknown*" keys, so parity is unaffected.
+            if (!component.Booleans.ContainsKey("Unknown 0x0A")) component.Booleans["Unknown 0x0A"] = false;
+            if (!component.Booleans.ContainsKey("Unknown 0x0B")) component.Booleans["Unknown 0x0B"] = false;
+
             return component;
         }
 
