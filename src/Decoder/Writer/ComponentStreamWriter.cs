@@ -13,7 +13,7 @@ namespace MfmeFmlDecoder.Decoder.Writer
     /// </summary>
     internal static class ComponentStreamWriter
     {
-        public static byte[] Write(IReadOnlyList<BaseComponent> components, MfmeVersion version, bool valueBasedSparse = false)
+        public static byte[] Write(IReadOnlyList<BaseComponent> components, MfmeVersion version, bool valueBasedSparse = false, bool emitAllModelled = false)
         {
             using var stream = new MemoryStream();
             if (components is null)
@@ -23,7 +23,7 @@ namespace MfmeFmlDecoder.Decoder.Writer
 
             foreach (BaseComponent component in components)
             {
-                byte[] payload = ComponentPayloadWriter.WritePayload(component, version, valueBasedSparse);
+                byte[] payload = ComponentPayloadWriter.WritePayload(component, version, valueBasedSparse, emitAllModelled);
                 Span<byte> header = stackalloc byte[8];
                 BinaryPrimitives.WriteUInt32LittleEndian(header, ComponentKind.ResolveId(component));
                 BinaryPrimitives.WriteUInt32LittleEndian(header.Slice(4), (uint)(payload.Length + 8));

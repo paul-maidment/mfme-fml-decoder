@@ -25,6 +25,11 @@ namespace MfmeFmlDecoder.Application
                 return verifierExitCode;
             }
 
+            if (TryRunRebuild(args, out int rebuildExitCode))
+            {
+                return rebuildExitCode;
+            }
+
             if (!TryParseArgs(
                     args,
                     out string fileName,
@@ -119,6 +124,62 @@ namespace MfmeFmlDecoder.Application
             {
                 RunLog.Quiet = false;
             }
+        }
+
+        private static bool TryRunRebuild(string[] args, out int exitCode)
+        {
+            string zip = null;
+            string outDir = null;
+            bool requested = false;
+            foreach (string a in args)
+            {
+                if (a.StartsWith("--rebuild=", StringComparison.Ordinal))
+                {
+                    zip = a.Substring("--rebuild=".Length).Trim();
+                    requested = true;
+                }
+                else if (a.StartsWith("--outdir=", StringComparison.Ordinal))
+                {
+                    outDir = a.Substring("--outdir=".Length).Trim();
+                }
+            }
+
+            if (!requested)
+            {
+                exitCode = 0;
+                return false;
+            }
+
+            exitCode = 1;
+            if (string.IsNullOrEmpty(zip))
+            {
+                RunLog.WriteErrorLine("Error: --rebuild requires an export zip path (--rebuild=<zip>).");
+                return true;
+            }
+
+            try
+            {
+                Reconstructor.Result result = Reconstructor.Rebuild(zip, outDir);
+                Console.Out.WriteLine($"Wrote {result.FmlPath}");
+                Console.Out.WriteLine($"Wrote {result.GamPath}");
+                foreach (string warning in result.PrologueUnsupported)
+                {
+                    RunLog.WriteDiagnosticLine("prologue: unsupported control " + warning);
+                }
+
+                foreach (string warning in result.GamUnsupported)
+                {
+                    RunLog.WriteDiagnosticLine("gam: unsupported control " + warning);
+                }
+
+                exitCode = 0;
+            }
+            catch (Exception ex)
+            {
+                RunLog.WriteErrorLine($"Error: {ex.Message}");
+            }
+
+            return true;
         }
 
         private static int RunFmlOut(string inputPath, string outputPath)
@@ -417,6 +478,9 @@ namespace MfmeFmlDecoder.Application
             Console.WriteLine("  --fmlout[=path]     Re-encode a .fml input into a fresh AACS container and write it.");
             Console.WriteLine("                      Cannot be combined with --json, --export, or --mfme-version.");
             Console.WriteLine("                      Default output: <input-file>.repacked.fml in the same directory as the input file.");
+            Console.WriteLine("  --rebuild=<zip>     Rebuild a 20.1 <name>.fml + <name>.gam pair from an --export zip.");
+            Console.WriteLine("                      The zip stem becomes the output base name.");
+            Console.WriteLine("  --outdir=<dir>      Directory for --rebuild output (default: the zip's directory).");
             Console.WriteLine();
             Console.WriteLine("Examples:");
             Console.WriteLine("  MfmeFmlDecoder file.dat --json");

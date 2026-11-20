@@ -83,12 +83,13 @@ namespace MfmeFmlDecoder.Decoder.Writer
             bool valueBasedSparse = false,
             string password = DefaultPassword,
             int chunkSize = DefaultChunkSize,
-            bool phase1 = true)
+            bool phase1 = true,
+            bool emitAllModelled = false)
         {
             if (prologue is null) throw new ArgumentNullException(nameof(prologue));
             if (layout is null) throw new ArgumentNullException(nameof(layout));
 
-            byte[] componentStream = ComponentStreamWriter.Write(layout.Components, version, valueBasedSparse);
+            byte[] componentStream = ComponentStreamWriter.Write(layout.Components, version, valueBasedSparse, emitAllModelled);
 
             byte[] plaintext = new byte[prologue.Length + componentStream.Length];
             Buffer.BlockCopy(prologue, 0, plaintext, 0, prologue.Length);

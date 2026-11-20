@@ -88,7 +88,7 @@ namespace MfmeFmlDecoder.Decoder.Writer
             0x09, 0x0C, 0x0D, 0x0E, 0x10, 0x14, 0x17, 0x18, 0x19, 0x01, 0x08, 0x13, 0x16,
         };
 
-        public static byte[] WritePayload(BaseComponent component, MfmeVersion version, bool valueBasedSparse = false)
+        public static byte[] WritePayload(BaseComponent component, MfmeVersion version, bool valueBasedSparse = false, bool emitAllModelled = false)
         {
             MFMEComponentType kind = ComponentKind.Resolve(component);
             ComponentProfile profile = ComponentProfileCatalog.Resolve(kind, version);
@@ -111,9 +111,9 @@ namespace MfmeFmlDecoder.Decoder.Writer
                 // second section into the first.
                 ComponentTagMap firstTags = profile.EffectiveBaseTags;
                 ComponentTagMap secondTags = profile.BaseSection.SecondSectionTags ?? firstTags;
-                WriteScope(payload, component, firstTags, specials, rawValues: component.RawTagValues, ascending: true, legacyAnsiText: legacyAnsiText, onlyRawPresent: true, valueBasedSparse: valueBasedSparse);
+                WriteScope(payload, component, firstTags, specials, rawValues: component.RawTagValues, ascending: true, legacyAnsiText: legacyAnsiText, onlyRawPresent: !emitAllModelled, valueBasedSparse: valueBasedSparse);
                 WireWriter.U8(payload, 0x00);
-                WriteScope(payload, component, secondTags, specials, rawValues: component.RawTagValues, ascending: true, legacyAnsiText: legacyAnsiText, onlyRawPresent: true, valueBasedSparse: valueBasedSparse);
+                WriteScope(payload, component, secondTags, specials, rawValues: component.RawTagValues, ascending: true, legacyAnsiText: legacyAnsiText, onlyRawPresent: !emitAllModelled, valueBasedSparse: valueBasedSparse);
                 WireWriter.U8(payload, 0x00);
                 return payload.ToArray();
             }
@@ -123,16 +123,16 @@ namespace MfmeFmlDecoder.Decoder.Writer
                 // Base section (high tags), then the 4C <orientation> 00 marker, then the
                 // class section (low tags: colours / images / shape / offsets) in ascending
                 // order to match MFME.
-                WriteScope(payload, component, classTags, specials, include: key => !InClassSection(kind, key, classMaxTag), rawValues: component.RawTagValues, legacyAnsiText: legacyAnsiText, onlyRawPresent: true, valueBasedSparse: valueBasedSparse);
+                WriteScope(payload, component, classTags, specials, include: key => !InClassSection(kind, key, classMaxTag), rawValues: component.RawTagValues, legacyAnsiText: legacyAnsiText, onlyRawPresent: !emitAllModelled, valueBasedSparse: valueBasedSparse);
                 WireWriter.U8(payload, 0x4C);
                 WireWriter.U8(payload, OrientationByte(component.Orientation));
                 WireWriter.U8(payload, 0x00);
-                WriteScope(payload, component, classTags, specials, include: key => InClassSection(kind, key, classMaxTag), rawValues: component.RawTagValues, ascending: true, legacyAnsiText: legacyAnsiText, onlyRawPresent: true, valueBasedSparse: valueBasedSparse);
+                WriteScope(payload, component, classTags, specials, include: key => InClassSection(kind, key, classMaxTag), rawValues: component.RawTagValues, ascending: true, legacyAnsiText: legacyAnsiText, onlyRawPresent: !emitAllModelled, valueBasedSparse: valueBasedSparse);
                 WireWriter.U8(payload, 0x00);
                 return payload.ToArray();
             }
 
-            WriteScope(payload, component, classTags, specials, rawValues: component.RawTagValues, legacyAnsiText: legacyAnsiText, onlyRawPresent: true, emittedNames: emittedNames, valueBasedSparse: valueBasedSparse, skipAngleTag: kind == MFMEComponentType.Reel,
+            WriteScope(payload, component, classTags, specials, rawValues: component.RawTagValues, legacyAnsiText: legacyAnsiText, onlyRawPresent: !emitAllModelled, emittedNames: emittedNames, valueBasedSparse: valueBasedSparse, skipAngleTag: kind == MFMEComponentType.Reel,
                 explicitOrder: kind == MFMEComponentType.BandReel ? BandReelTagOrder : null);
 
             if (nestedTags is not null)
@@ -142,8 +142,8 @@ namespace MfmeFmlDecoder.Decoder.Writer
                 // SevenSeg/SevenSegBlock cross-version: MFME emits the whole nested set regardless
                 // of default values, and omitting a default-valued flag (e.g. a DP flag) can render
                 // subtly differently, so emit every modelled tag. Same-version stays presence-based.
-                bool nestedEmitAll = valueBasedSparse
-                    && (kind == MFMEComponentType.SevenSeg || kind == MFMEComponentType.SevenSegBlock);
+                bool nestedEmitAll = emitAllModelled
+                    || (valueBasedSparse && (kind == MFMEComponentType.SevenSeg || kind == MFMEComponentType.SevenSegBlock));
                 WriteNestedBlock(payload, component, nestedTags, specials, legacyAnsiText, emittedNames, onlyRawPresent: !nestedEmitAll, valueBasedSparse: valueBasedSparse);
                 return payload.ToArray();
             }
