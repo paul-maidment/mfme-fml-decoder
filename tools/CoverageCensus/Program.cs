@@ -30,6 +30,7 @@ namespace CoverageCensus
             string dumpPayload = null;
             string dumpPayloadIndex = null;
             string dumpDecoded = null;
+            string dumpRaw = null;
             for (int i = 0; i < args.Length; i++)
             {
                 if (args[i] == "--root" && i + 1 < args.Length) root = args[++i];
@@ -40,6 +41,7 @@ namespace CoverageCensus
                 else if (args[i] == "--dumpcomp" && i + 2 < args.Length) { dumpComp = args[++i]; dumpCompIndex = args[++i]; }
                 else if (args[i] == "--dumppayload" && i + 2 < args.Length) { dumpPayload = args[++i]; dumpPayloadIndex = args[++i]; }
                 else if (args[i] == "--dumpdecoded" && i + 1 < args.Length) dumpDecoded = args[++i];
+                else if (args[i] == "--dumprraw" && i + 1 < args.Length) dumpRaw = args[++i];
             }
 
 
@@ -72,6 +74,12 @@ namespace CoverageCensus
             if (dumpDecoded != null)
             {
                 DumpDecoded(dumpDecoded);
+                return 0;
+            }
+
+            if (dumpRaw != null)
+            {
+                DumpRaw(dumpRaw);
                 return 0;
             }
 
@@ -332,6 +340,24 @@ namespace CoverageCensus
             }
 
             Console.Out.WriteLine($"first component candidate at 0x{pos:X6}: tag=0x{BitConverter.ToUInt32(plain, pos):X2} len=0x{BitConverter.ToUInt32(plain, pos + 4):X}");
+        }
+
+        private static void DumpRaw(string fmlPath)
+        {
+            byte[] plain = MfmeFmlDecoder.Decryption.FmlDecryptor.Decrypt(File.ReadAllBytes(fmlPath));
+            var parser = new MfmeFmlDecoder.src.Decoder.Component.Core.ComponentParser();
+            var walker = new MfmeFmlDecoder.Decoder.FileWalker(new MfmeFmlDecoder.Decoder.ComponentWalker(parser));
+            walker.WalkTlv(plain, 0);
+            var layout = parser.ToLayout(walker.Header);
+            int i = 0;
+            foreach (var c in layout.Components)
+            {
+                var parts = new System.Collections.Generic.List<string>();
+                foreach (var kv in c.RawTagValues) parts.Add($"R{kv.Key:X2}={Convert.ToHexString(kv.Value)}");
+                foreach (var kv in c.NestedRawTagValues) parts.Add($"N{kv.Key:X2}={Convert.ToHexString(kv.Value)}");
+                if (parts.Count > 0) Console.Out.WriteLine($"{i} {c.GetType().Name} {string.Join(" ", parts)}");
+                i++;
+            }
         }
 
         private static void DumpDecoded(string fmlPath)

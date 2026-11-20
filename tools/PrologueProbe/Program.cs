@@ -23,11 +23,30 @@ namespace PrologueProbe
         private static int Main(string[] args)
         {
             string fmlPath = null, gamPath = null, outDir = null;
+            string spliceA = null, spliceB = null, spliceOut = null;
             for (int i = 0; i < args.Length; i++)
             {
                 if (args[i] == "--fml" && i + 1 < args.Length) fmlPath = args[++i];
                 else if (args[i] == "--gam" && i + 1 < args.Length) gamPath = args[++i];
                 else if (args[i] == "--out" && i + 1 < args.Length) outDir = args[++i];
+                else if (args[i] == "--splice-prologue" && i + 1 < args.Length) spliceA = args[++i];
+                else if (args[i] == "--splice-components" && i + 1 < args.Length) spliceB = args[++i];
+                else if (args[i] == "--splice-out" && i + 1 < args.Length) spliceOut = args[++i];
+            }
+
+            if (spliceA != null && spliceB != null && spliceOut != null)
+            {
+                byte[] plainA = FmlDecryptor.Decrypt(File.ReadAllBytes(spliceA));
+                (_, int endA) = WalkPrologue(plainA);
+                byte[] plainB = FmlDecryptor.Decrypt(File.ReadAllBytes(spliceB));
+                (_, int endB) = WalkPrologue(plainB);
+                byte[] combined = new byte[endA + (plainB.Length - endB)];
+                Buffer.BlockCopy(plainA, 0, combined, 0, endA);
+                Buffer.BlockCopy(plainB, endB, combined, endA, plainB.Length - endB);
+                byte[] spliced = FmlDecryptor.Encode(combined, LayoutWriter.DefaultPassword, LayoutWriter.DefaultChunkSize, phase1: true);
+                File.WriteAllBytes(spliceOut, spliced);
+                Console.Out.WriteLine("spliced " + spliceOut);
+                return 0;
             }
 
             if (fmlPath is null || outDir is null)
