@@ -58,10 +58,11 @@ namespace MfmeFmlDecoder.Utilities
             PrologueSynthesizer.Result prologue = PrologueSynthesizer.Synthesize(
                 machineJson, map, layout.Header.SplashBitmap?.Bytes);
 
-            // The imported model carries no raw tag bytes, so presence is taken from the model:
-            // the writer emits each tag the component has a value for (the export captured
-            // exactly the tags that were present).
-            byte[] fml = LayoutWriter.WriteFml(prologue.Prologue, layout, MfmeVersion.V20_1, emitAllModelled: true);
+            // The imported model carries no raw tag bytes, so choose tags by value: emit a tag
+            // only when its value differs from the profile default. MFME writes sparsely and
+            // omits default-valued tags; emitting every modelled value instead inserts default
+            // tags the source did not have and changes the render.
+            byte[] fml = LayoutWriter.WriteFml(prologue.Prologue, layout, MfmeVersion.V20_1, valueBasedSparse: true);
 
             string layoutFileName = baseName + ".fml";
             GamSynthesizer.Result gam = GamSynthesizer.Synthesize(gameJson, map, layoutFileName, baseName);

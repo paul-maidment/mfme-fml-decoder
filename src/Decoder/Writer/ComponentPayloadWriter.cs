@@ -338,7 +338,7 @@ namespace MfmeFmlDecoder.Decoder.Writer
                     }
 
                     if (TagValueWriter.TryEncode(component, info, specials, out byte[] tableBytes, legacyAnsiText)
-                        && (!onlyRawPresent || present || (valueBasedSparse && !BytesEqual(tableBytes, info.DefaultValues))))
+                        && (!onlyRawPresent || present || (valueBasedSparse && !(info.DefaultValues is { Length: > 0 } && BytesEqual(tableBytes, info.DefaultValues)))))
                     {
                         WireWriter.U8(stream, (byte)entry.Key);
                         WireWriter.Bytes(stream, tableBytes);
@@ -348,7 +348,7 @@ namespace MfmeFmlDecoder.Decoder.Writer
                 }
 
                 if (TagValueWriter.TryEncode(component, info, specials, out byte[] bytes, legacyAnsiText)
-                    && (!onlyRawPresent || present || (valueBasedSparse && !BytesEqual(bytes, info.DefaultValues))))
+                    && (!onlyRawPresent || present || (valueBasedSparse && !(info.DefaultValues is { Length: > 0 } && BytesEqual(bytes, info.DefaultValues)))))
                 {
                     WireWriter.U8(stream, (byte)entry.Key);
                     WireWriter.Bytes(stream, bytes);
@@ -494,6 +494,8 @@ namespace MfmeFmlDecoder.Decoder.Writer
         }
     }
 }
+
+
 
 
 
