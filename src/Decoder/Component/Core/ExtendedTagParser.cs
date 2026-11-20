@@ -1829,6 +1829,16 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
         {
             value = null;
             if (tagInfo is null) return false;
+
+            // Variable-length table roles have no meaningful fixed default: a zero default
+            // would be parsed as a real one-entry table (0), which a component with no table
+            // tag then renders as a segment/sublamp mapping it never had.
+            if (tagInfo.Role == ValueRole.LAMP_SUBLAMP_TABLE ||
+                tagInfo.Role == ValueRole.PROGRAMMABLE_LAMP_TABLE)
+            {
+                return false;
+            }
+
             int length = tagInfo.Length;
             if (length <= 0) return false;
             byte[] source = tagInfo.DefaultValues;

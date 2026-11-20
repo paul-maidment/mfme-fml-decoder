@@ -27,6 +27,9 @@ namespace CoverageCensus
             string dumpImport = null;
             string dumpComp = null;
             string dumpCompIndex = null;
+            string dumpPayload = null;
+            string dumpPayloadIndex = null;
+            string dumpDecoded = null;
             for (int i = 0; i < args.Length; i++)
             {
                 if (args[i] == "--root" && i + 1 < args.Length) root = args[++i];
@@ -35,7 +38,12 @@ namespace CoverageCensus
                 else if (args[i] == "--dump" && i + 1 < args.Length) dump = args[++i];
                 else if (args[i] == "--dumpimport" && i + 1 < args.Length) dumpImport = args[++i];
                 else if (args[i] == "--dumpcomp" && i + 2 < args.Length) { dumpComp = args[++i]; dumpCompIndex = args[++i]; }
+                else if (args[i] == "--dumppayload" && i + 2 < args.Length) { dumpPayload = args[++i]; dumpPayloadIndex = args[++i]; }
+                else if (args[i] == "--dumpdecoded" && i + 1 < args.Length) dumpDecoded = args[++i];
             }
+
+
+            MfmeFmlDecoder.Utilities.RunLog.Quiet = true;
 
             if (dump != null)
             {
@@ -55,11 +63,27 @@ namespace CoverageCensus
                 return 0;
             }
 
+            if (dumpPayload != null && dumpPayloadIndex != null)
+            {
+                DumpPayload(dumpPayload, int.Parse(dumpPayloadIndex, CultureInfo.InvariantCulture));
+                return 0;
+            }
+
+            if (dumpDecoded != null)
+            {
+                DumpDecoded(dumpDecoded);
+                return 0;
+            }
+
+
             if (!Directory.Exists(root))
             {
                 Console.Error.WriteLine("Root not found: " + root);
                 return 1;
             }
+
+            MfmeFmlDecoder.Utilities.RunLog.Quiet = true;
+
 
             var zips = new List<string>(Directory.EnumerateFiles(root, "*.zip", SearchOption.AllDirectories));
             zips.Sort(StringComparer.OrdinalIgnoreCase);
@@ -310,17 +334,52 @@ namespace CoverageCensus
             Console.Out.WriteLine($"first component candidate at 0x{pos:X6}: tag=0x{BitConverter.ToUInt32(plain, pos):X2} len=0x{BitConverter.ToUInt32(plain, pos + 4):X}");
         }
 
+        private static void DumpDecoded(string fmlPath)
+        {
+            byte[] plain = MfmeFmlDecoder.Decryption.FmlDecryptor.Decrypt(File.ReadAllBytes(fmlPath));
+            var parser = new MfmeFmlDecoder.src.Decoder.Component.Core.ComponentParser();
+            var walker = new MfmeFmlDecoder.Decoder.FileWalker(new MfmeFmlDecoder.Decoder.ComponentWalker(parser));
+            walker.WalkTlv(plain, 0);
+            var layout = parser.ToLayout(walker.Header);
+            int i = 0;
+            foreach (var c in layout.Components)
+            {
+                var prop = c.GetType().GetProperty("SublampTable");
+                if (prop != null && prop.GetValue(c) is System.Collections.IEnumerable e)
+                {
+                    var vals = new System.Collections.Generic.List<string>();
+                    foreach (var o in e) vals.Add(o.ToString());
+                    if (vals.Count > 0 || c.GetType().Name == "Reel")
+                    {
+                        Console.Out.WriteLine($"{i} {c.GetType().Name} SublampTable=[{string.Join(",", vals)}] u32=[{string.Join(",", c.UInt32s.Keys)}]");
+                    }
+                }
+                i++;
+            }
+        }
+
+        private static void DumpPayload(string zipPath, int index)
+        {
+            MfmeFmlDecoder.src.Model.Layout layout = MfmeFmlDecoder.Utilities.LayoutImporter.ImportFromZip(zipPath);
+            MfmeFmlDecoder.src.Model.Component.BaseComponent c = layout.Components[index];
+            var specials = MfmeFmlDecoder.Decoder.Writer.ComponentSpecialValues.Create(c);
+            var pprop = c.GetType().GetProperty("SublampTable");
+            int propCount = -1;
+            if (pprop?.GetValue(c) is System.Collections.IEnumerable pe) { propCount = 0; foreach (var _ in pe) propCount++; }
+            Console.Out.WriteLine($"{c.GetType().Name} propSublamp={propCount} specialsSublamp={(specials.SublampTable?.Count.ToString() ?? "null")} uint32=[{string.Join(",", c.UInt32s.Keys)}]");
+            byte[] payload = MfmeFmlDecoder.Decoder.Writer.ComponentPayloadWriter.WritePayload(
+                c, MfmeFmlDecoder.Decoder.MfmeVersion.V20_1, false, emitAllModelled: true);
+            Console.Out.WriteLine($"{c.GetType().Name} payload {payload.Length} bytes");
+            Console.Out.WriteLine(Convert.ToHexString(payload));
+        }
+
         private static void DumpComponent(string fmlPath, int index)
         {
             byte[] plain = MfmeFmlDecoder.Decryption.FmlDecryptor.Decrypt(File.ReadAllBytes(fmlPath));
-            int pos = 0;
-            while (pos + 8 <= plain.Length)
-            {
-                uint tag = BitConverter.ToUInt32(plain, pos);
-                uint len = BitConverter.ToUInt32(plain, pos + 4);
-                if (tag == 0xFFFFFFFF) { pos += 8; break; }
-                pos += 8 + (int)len;
-            }
+            var parser = new MfmeFmlDecoder.src.Decoder.Component.Core.ComponentParser();
+            var walker = new MfmeFmlDecoder.Decoder.FileWalker(new MfmeFmlDecoder.Decoder.ComponentWalker(parser));
+            walker.WalkTlv(plain, 0);
+            int pos = walker.PrologueEndOffset;
 
             int idx = 0;
             while (pos + 8 <= plain.Length)
@@ -330,9 +389,9 @@ namespace CoverageCensus
                 if (size < 8 || pos + size > plain.Length) break;
                 if (idx == index)
                 {
-                    int n = (int)(int)(size - 8);
-                    Console.Out.WriteLine($"component {idx} kind=0x{kind:X2} size={size}");
-                    Console.Out.WriteLine(Convert.ToHexString(plain, pos + 8, n));
+                    int n = (int)(size - 8);
+                    Console.Out.WriteLine($"component {idx} kind=0x{kind:X2} size={size} payload={n}");
+                    Console.Out.WriteLine(Convert.ToHexString(plain, pos + 8, Math.Min(n, 3000)));
                     return;
                 }
 
