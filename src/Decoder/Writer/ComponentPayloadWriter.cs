@@ -18,8 +18,9 @@ namespace MfmeFmlDecoder.Decoder.Writer
     internal static class ComponentPayloadWriter
     {
         // MFME 20.1 writes a small, kind-specific base preamble immediately after the angle
-        // (whose length is the profile's ValidAngleOffsetDelta), and one kind uses a zero
-        // 0x07 flag. These are the only kinds whose preamble bytes are not modelled tags.
+        // (whose length is the profile's ValidAngleOffsetDelta). These are the only kinds whose
+        // preamble bytes are not modelled tags. The Flag is the default value for tag 0x07
+        // (element visibility): 0x01 = shown, 0x00 = hidden (MFME writes Checkbox hidden).
         private static readonly Dictionary<MFMEComponentType, (byte Flag, byte[] Preamble)> GeometryQuirks = new()
         {
             [MFMEComponentType.BFMLED] = (0x01, new byte[] { 0x0A, 0x00 }),
@@ -188,11 +189,10 @@ namespace MfmeFmlDecoder.Decoder.Writer
                 preamble = quirk.Preamble;
             }
 
-            // Echo MFME's observed angle lead byte (0x00 for shape/no-graphic lamps, 0x01 for
-            // graphic lamps). Critical for renders: a mis-set flag draws offscreen helper lamps.
-            if (component.GeometryAngleFlag.HasValue)
+            // Tag 0x07 is element visibility (MFME stores it at obj+0xFC; 0x01 = shown, 0x00 = hidden).
+            if (component.Visible is bool visible)
             {
-                flag = component.GeometryAngleFlag.Value;
+                flag = visible ? (byte)0x01 : (byte)0x00;
             }
 
             // Always emit a valid angle wire (0x07 flag byte + 0x08 int32 half-degree steps),

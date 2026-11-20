@@ -25,13 +25,13 @@ namespace MfmeFmlDecoder.src.Model.Component
         [JsonIgnore]
         public float Angle { get; set; }
         /// <summary>
-        /// Raw lead byte of the MFME angle wire (the byte after tag 0x07) as observed in the
-        /// source, when it is a 20.1 file. MFME uses 0x00 to mark shape/helper lamps (no graphic)
-        /// and 0x01 for graphic lamps; the writer echoes this so the render matches. Null for
-        /// legacy sources or when no wire was seen, in which case the writer uses its default.
+        /// Element visibility, carried by base tag <c>0x07</c> (MFME stores it at <c>obj+0xFC</c> and
+        /// gates repaint / hit-test on it; ctor default = visible). <c>false</c> means hidden.
+        /// Null for sources where the byte wasn't a simple 0/1 flag, in which case the writer uses
+        /// its per-kind default.
         /// </summary>
         [JsonIgnore]
-        internal byte? GeometryAngleFlag { get; set; }
+        internal bool? Visible { get; set; }
         [JsonIgnore]
         public string Orientation { get; set; }
 
@@ -148,14 +148,13 @@ namespace MfmeFmlDecoder.src.Model.Component
             }
 
             ordered["Geometry"] = BuildGeometryNode();
-            // The decoder already models this lead byte (GeometryAngleFlag); it exists solely so the
-            // writer can echo MFME's choice. Carry it only when it differs from the value the writer
-            // would otherwise emit (0x01, or the Checkbox quirk's 0x00), so it stays rare and the
-            // JSON omits it for the common case.
-            byte writerDefaultFlag = this is Checkbox ? (byte)0x00 : (byte)0x01;
-            if (GeometryAngleFlag is byte angleFlagValue && angleFlagValue != writerDefaultFlag)
+            // Tag 0x07 is element visibility (0x01 = shown, 0x00 = hidden). MFME writes Checkbox
+            // hidden (0x00) by default; everything else is visible. Carry only the non-default
+            // case so the JSON stays clean.
+            bool defaultVisible = this is not Checkbox;
+            if (Visible is bool visible && visible != defaultVisible)
             {
-                ordered["AngleFlag"] = angleFlagValue;
+                ordered["Visible"] = visible;
             }
             foreach (var kvp in json)
             {

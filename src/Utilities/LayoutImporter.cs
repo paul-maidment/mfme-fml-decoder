@@ -95,7 +95,7 @@ namespace MfmeFmlDecoder.Utilities
             props.Remove("Values");
             props.Remove("Fonts");
             props.Remove("SubLampNumberTable");
-            props.Remove("AngleFlag");
+            props.Remove("Visible");
             if (props.Count > 0)
             {
                 JsonTypeInfo typeInfo = ComponentJsonContext.Default.GetTypeInfo(component.GetType())
@@ -108,9 +108,9 @@ namespace MfmeFmlDecoder.Utilities
 
             MFMEComponentType kind = ComponentKind.Resolve(component);
             ApplyGeometry(node["Geometry"] as JsonObject, component);
-            if (node["AngleFlag"] is JsonValue angleFlag && angleFlag.TryGetValue(out int flagValue))
+            if (node["Visible"] is JsonValue visibleNode && visibleNode.TryGetValue(out bool visibleValue))
             {
-                component.GeometryAngleFlag = (byte)flagValue;
+                component.Visible = visibleValue;
             }
             ApplyFonts(node["Fonts"] as JsonObject, component);
             ApplySublampTable(node["SubLampNumberTable"] as JsonObject, component);
