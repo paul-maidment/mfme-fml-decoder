@@ -20,3 +20,7 @@ dist/
 
 # Local smoke-test data
 gamesV20.0.db
+
+# Local agent scratch files
+.afk.md
+.afk/
