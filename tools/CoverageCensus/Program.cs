@@ -24,17 +24,34 @@ namespace CoverageCensus
             string outPath = null;
             int limit = 0;
             string dump = null;
+            string dumpImport = null;
+            string dumpComp = null;
+            string dumpCompIndex = null;
             for (int i = 0; i < args.Length; i++)
             {
                 if (args[i] == "--root" && i + 1 < args.Length) root = args[++i];
                 else if (args[i] == "--out" && i + 1 < args.Length) outPath = args[++i];
                 else if (args[i] == "--limit" && i + 1 < args.Length) limit = int.Parse(args[++i], CultureInfo.InvariantCulture);
                 else if (args[i] == "--dump" && i + 1 < args.Length) dump = args[++i];
+                else if (args[i] == "--dumpimport" && i + 1 < args.Length) dumpImport = args[++i];
+                else if (args[i] == "--dumpcomp" && i + 2 < args.Length) { dumpComp = args[++i]; dumpCompIndex = args[++i]; }
             }
 
             if (dump != null)
             {
                 DumpFile(dump);
+                return 0;
+            }
+
+            if (dumpImport != null)
+            {
+                DumpImport(dumpImport);
+                return 0;
+            }
+
+            if (dumpComp != null)
+            {
+                DumpComponent(dumpComp, int.Parse(dumpCompIndex ?? "0", CultureInfo.InvariantCulture));
                 return 0;
             }
 
@@ -291,6 +308,59 @@ namespace CoverageCensus
             }
 
             Console.Out.WriteLine($"first component candidate at 0x{pos:X6}: tag=0x{BitConverter.ToUInt32(plain, pos):X2} len=0x{BitConverter.ToUInt32(plain, pos + 4):X}");
+        }
+
+        private static void DumpComponent(string fmlPath, int index)
+        {
+            byte[] plain = MfmeFmlDecoder.Decryption.FmlDecryptor.Decrypt(File.ReadAllBytes(fmlPath));
+            int pos = 0;
+            while (pos + 8 <= plain.Length)
+            {
+                uint tag = BitConverter.ToUInt32(plain, pos);
+                uint len = BitConverter.ToUInt32(plain, pos + 4);
+                if (tag == 0xFFFFFFFF) { pos += 8; break; }
+                pos += 8 + (int)len;
+            }
+
+            int idx = 0;
+            while (pos + 8 <= plain.Length)
+            {
+                uint kind = BitConverter.ToUInt32(plain, pos);
+                uint size = BitConverter.ToUInt32(plain, pos + 4);
+                if (size < 8 || pos + size > plain.Length) break;
+                if (idx == index)
+                {
+                    int n = (int)(int)(size - 8);
+                    Console.Out.WriteLine($"component {idx} kind=0x{kind:X2} size={size}");
+                    Console.Out.WriteLine(Convert.ToHexString(plain, pos + 8, n));
+                    return;
+                }
+
+                pos += (int)size;
+                idx++;
+            }
+
+            Console.Out.WriteLine("component not found");
+        }
+
+        private static void DumpImport(string zipPath)
+        {
+            MfmeFmlDecoder.src.Model.Layout layout = MfmeFmlDecoder.Utilities.LayoutImporter.ImportFromZip(zipPath);
+            foreach (MfmeFmlDecoder.src.Model.Component.BaseComponent c in layout.Components)
+            {
+                string sub = "";
+                var prop = c.GetType().GetProperty("SublampTable");
+                if (prop != null && prop.GetValue(c) is System.Collections.IEnumerable e)
+                {
+                    int n = 0;
+                    foreach (object _ in e) n++;
+                    sub = " SublampTable.count=" + n;
+                }
+
+                string extra = c.UInt32s.TryGetValue("NonNullSublampCount", out uint c1) ? " count(Reel)=" + c1 : "";
+                extra += c.UInt32s.TryGetValue("NumberOfDefinedLampNumbers", out uint c2) ? " count(Lamp)=" + c2 : "";
+                Console.Out.WriteLine($"{c.GetType().Name}{sub}{extra} keys={string.Join(",", c.UInt32s.Keys)} imgs={c.Images.Count}");
+            }
         }
 
         private static string TruncHex(byte[] v, int max)
@@ -591,3 +661,4 @@ namespace CoverageCensus
         }
     }
 }
+

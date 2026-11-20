@@ -111,6 +111,7 @@ namespace MfmeFmlDecoder.Utilities
             ApplySublampTable(node["SubLampNumberTable"] as JsonObject, component);
             ApplyValues(node["Values"] as JsonObject, kind, component);
             ApplyImages(node["Images"] as JsonObject, ordinal, images, component);
+            ApplyDerivedProperties(node, component);
 
             component.OrdinalComponentIdentifier = ordinal;
             return component;
@@ -168,7 +169,7 @@ namespace MfmeFmlDecoder.Utilities
                 return;
             }
 
-            var entries = new List<LampSublampTableEntry>();
+            var defined = new Dictionary<int, int>();
             foreach (KeyValuePair<string, JsonNode> kv in table)
             {
                 if (!kv.Key.StartsWith("Lamp", StringComparison.Ordinal) || kv.Value is null)
@@ -178,11 +179,26 @@ namespace MfmeFmlDecoder.Utilities
 
                 if (int.TryParse(kv.Key.Substring(4), NumberStyles.Integer, CultureInfo.InvariantCulture, out int index))
                 {
-                    entries.Add(new LampSublampTableEntry(index, ReadInt(kv.Value)));
+                    defined[index] = ReadInt(kv.Value);
                 }
             }
 
-            entries.Sort((a, b) => a.SublampIndex.CompareTo(b.SublampIndex));
+            // The model table is a slot-ordered list (1..N) with -2 for undefined slots; the
+            // JSON only lists defined ones, so rebuild the gaps. Lamps are a fixed 12 slots.
+            int maxIndex = component is Lamp ? 12 : 0;
+            foreach (int index in defined.Keys)
+            {
+                if (index > maxIndex)
+                {
+                    maxIndex = index;
+                }
+            }
+
+            var entries = new List<LampSublampTableEntry>(maxIndex);
+            for (int slot = 1; slot <= maxIndex; slot++)
+            {
+                entries.Add(new LampSublampTableEntry(slot, defined.TryGetValue(slot, out int value) ? value : -2));
+            }
 
             // The count key differs by kind (Lamp uses NumberOfDefinedLampNumbers, Reel/Button
             // use NonNullSublampCount, DiscReel stores none).
@@ -226,8 +242,87 @@ namespace MfmeFmlDecoder.Utilities
                     continue;
                 }
 
-                ValueRole role = roles.TryGetValue(kv.Key, out ValueRole mapped) ? mapped : InferRole(kv.Value);
+                ValueRole role = ResolveRole(kv.Key, roles, kv.Value);
                 RouteValue(component, kv.Key, kv.Value, role);
+            }
+        }
+
+        // Values the decoder derives into typed dictionaries from a raw tag (so their names are
+        // not in the tag map). Routing them correctly is what keeps the derived tag rebuildable.
+        private static readonly Dictionary<string, ValueRole> DerivedKeyRoles = new(StringComparer.Ordinal)
+        {
+            ["BoxX"] = ValueRole.INT32,
+            ["BoxY"] = ValueRole.INT32,
+            ["LeftWidth"] = ValueRole.INT32,
+            ["TopHeight"] = ValueRole.INT32,
+            ["RightWidth"] = ValueRole.INT32,
+            ["BottomHeight"] = ValueRole.INT32,
+            ["BoxWidth"] = ValueRole.UINT32,
+            ["BoxHeight"] = ValueRole.UINT32,
+            ["WidthDiff"] = ValueRole.INT32,
+            ["RedLampNumber"] = ValueRole.INT32,
+            ["GreenLampNumber"] = ValueRole.INT32,
+            ["BlueLampNumber"] = ValueRole.INT32,
+            ["WhiteLampNumber"] = ValueRole.INT32,
+        };
+
+        private static ValueRole ResolveRole(string name, Dictionary<string, ValueRole> roles, JsonNode value)
+        {
+            if (roles.TryGetValue(name, out ValueRole mapped))
+            {
+                return mapped;
+            }
+
+            if (DerivedKeyRoles.TryGetValue(name, out ValueRole derived))
+            {
+                return derived;
+            }
+
+            // FlipReel / PrismLamp per-index lamp numbers.
+            if (name.StartsWith("SubLamp", StringComparison.Ordinal) && name.EndsWith("Number", StringComparison.Ordinal))
+            {
+                return ValueRole.UINT32;
+            }
+
+            return InferRole(value);
+        }
+
+        /// <summary>
+        /// Sets model properties the writer reads for raw-backed tags (Border bounding box /
+        /// pane split, BandReel mask slots) from their JSON representation, which is flattened or
+        /// nested rather than a tag.
+        /// </summary>
+        private static void ApplyDerivedProperties(JsonObject node, BaseComponent component)
+        {
+            if (component is Border border)
+            {
+                if (border.Int32s.TryGetValue("BoxX", out int absX)) border.BoxX = absX - border.X;
+                if (border.Int32s.TryGetValue("BoxY", out int absY)) border.BoxY = absY - border.Y;
+                if (border.UInt32s.TryGetValue("BoxWidth", out uint bw)) border.BoxWidth = bw;
+                if (border.UInt32s.TryGetValue("BoxHeight", out uint bh)) border.BoxHeight = bh;
+                if (border.Int32s.TryGetValue("LeftWidth", out int lw)) border.LeftWidth = lw;
+                if (border.Int32s.TryGetValue("TopHeight", out int th)) border.TopHeight = th;
+                if (border.Int32s.TryGetValue("RightWidth", out int rw)) border.RightWidth = rw;
+                if (border.Int32s.TryGetValue("BottomHeight", out int bhh)) border.BottomHeight = bhh;
+            }
+
+            if (component is BandReel bandReel && node["Masks"] is JsonObject masks)
+            {
+                foreach (KeyValuePair<string, JsonNode> mask in masks)
+                {
+                    if (mask.Value is not JsonObject slots || !bandReel.MaskSlots.Masks.TryGetValue(mask.Key, out var target))
+                    {
+                        continue;
+                    }
+
+                    foreach (KeyValuePair<string, JsonNode> slot in slots)
+                    {
+                        if (target.TryGetValue(slot.Key, out SlotValue sv))
+                        {
+                            sv.SublampNumber = ReadInt(slot.Value);
+                        }
+                    }
+                }
             }
         }
 
