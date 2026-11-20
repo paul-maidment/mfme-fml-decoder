@@ -1128,10 +1128,6 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                         : "FLOAT tag has no attribute name.");
             }
 
-            if (attributeName.StartsWith("Unknown", StringComparison.OrdinalIgnoreCase))
-            {
-                return;
-            }
 
             if (floatsByAttributeName.TryGetValue(attributeName, out float existing))
             {
@@ -1158,10 +1154,6 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                         : "UINT32 tag has no attribute name.");
             }
 
-            if (attributeName.StartsWith("Unknown", StringComparison.OrdinalIgnoreCase))
-            {
-                return;
-            }
 
             if (uint32sByAttributeName.TryGetValue(attributeName, out uint existing))
             {
@@ -1188,10 +1180,6 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                         : "INT32 tag has no attribute name.");
             }
 
-            if (attributeName.StartsWith("Unknown", StringComparison.OrdinalIgnoreCase))
-            {
-                return;
-            }
 
             if (int32sByAttributeName.TryGetValue(attributeName, out int existing))
             {
@@ -1218,10 +1206,6 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                         : "UINT16 tag has no attribute name.");
             }
 
-            if (attributeName.StartsWith("Unknown", StringComparison.OrdinalIgnoreCase))
-            {
-                return;
-            }
 
             if (uint16sByAttributeName.TryGetValue(attributeName, out ushort existing))
             {
@@ -1248,10 +1232,6 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                         : "BOOLEAN tag has no attribute name.");
             }
 
-            if (attributeName.StartsWith("Unknown", StringComparison.OrdinalIgnoreCase))
-            {
-                return;
-            }
 
             if (booleansByAttributeName.TryGetValue(attributeName, out bool existing))
             {
@@ -1278,10 +1258,6 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                         : "BYTE tag has no attribute name.");
             }
 
-            if (attributeName.StartsWith("Unknown", StringComparison.OrdinalIgnoreCase))
-            {
-                return;
-            }
 
             if (bytesByAttributeName.TryGetValue(attributeName, out byte existing))
             {
@@ -1333,10 +1309,6 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                         : "ARGB_COLOR tag has no attribute name.");
             }
 
-            if (attributeName.StartsWith("Unknown", StringComparison.OrdinalIgnoreCase))
-            {
-                return;
-            }
 
             if (coloursByAttributeName.TryGetValue(attributeName, out string existing))
             {

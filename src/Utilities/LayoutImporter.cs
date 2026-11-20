@@ -95,6 +95,7 @@ namespace MfmeFmlDecoder.Utilities
             props.Remove("Values");
             props.Remove("Fonts");
             props.Remove("SubLampNumberTable");
+            props.Remove("AngleFlag");
             if (props.Count > 0)
             {
                 JsonTypeInfo typeInfo = ComponentJsonContext.Default.GetTypeInfo(component.GetType())
@@ -107,11 +108,17 @@ namespace MfmeFmlDecoder.Utilities
 
             MFMEComponentType kind = ComponentKind.Resolve(component);
             ApplyGeometry(node["Geometry"] as JsonObject, component);
+            if (node["AngleFlag"] is JsonValue angleFlag && angleFlag.TryGetValue(out int flagValue))
+            {
+                component.GeometryAngleFlag = (byte)flagValue;
+            }
             ApplyFonts(node["Fonts"] as JsonObject, component);
             ApplySublampTable(node["SubLampNumberTable"] as JsonObject, component);
             ApplyValues(node["Values"] as JsonObject, kind, component);
             ApplyImages(node["Images"] as JsonObject, ordinal, images, component);
             ApplyDerivedProperties(node, component);
+            ApplySegmentLamps(node["SegmentLamps"], component);
+            ApplyDefaultSubLampTable(component);
 
             component.OrdinalComponentIdentifier = ordinal;
             return component;
@@ -162,6 +169,20 @@ namespace MfmeFmlDecoder.Utilities
             }
         }
 
+        // MFME writes every component's sub-lamp slots, filling undefined ones with -2. The slot
+        // count is a fixed property of the component type (it does not vary per layout), so the
+        // table is sized here from the type rather than serialized. The JSON only lists the slots
+        // that carry a lamp number; the rest are implied defaults.
+        private static readonly Dictionary<MFMEComponentType, int> SublampSlotCounts = new()
+        {
+            [MFMEComponentType.Button] = 2,
+            [MFMEComponentType.Lamp] = 12,
+            [MFMEComponentType.Label] = 1,
+            [MFMEComponentType.Led] = 1,
+            [MFMEComponentType.FlipReel] = 3,
+            [MFMEComponentType.BandReel] = 60,
+        };
+
         private static void ApplySublampTable(JsonObject table, BaseComponent component)
         {
             if (table is null)
@@ -184,8 +205,21 @@ namespace MfmeFmlDecoder.Utilities
             }
 
             // The model table is a slot-ordered list (1..N) with -2 for undefined slots; the
-            // JSON only lists defined ones, so rebuild the gaps. Lamps are a fixed 12 slots.
-            int maxIndex = component is Lamp ? 12 : 0;
+            // JSON only lists defined ones. The declared count is the full slot count, so size by
+            // it too, otherwise a trailing -2 slot is lost. Lamps are a fixed 12 slots.
+            uint count = table["NumberOfDefinedLampNumbers"] is JsonNode countNode
+                ? unchecked((uint)ReadLong(countNode))
+                : 0u;
+            bool hasCount = table["NumberOfDefinedLampNumbers"] is not null;
+
+            int maxIndex = SublampSlotCounts.TryGetValue(ComponentKind.Resolve(component), out int fixedSlots)
+                ? fixedSlots
+                : 0;
+            if (hasCount && count > (uint)maxIndex)
+            {
+                maxIndex = (int)count;
+            }
+
             foreach (int index in defined.Keys)
             {
                 if (index > maxIndex)
@@ -199,13 +233,6 @@ namespace MfmeFmlDecoder.Utilities
             {
                 entries.Add(new LampSublampTableEntry(slot, defined.TryGetValue(slot, out int value) ? value : -2));
             }
-
-            // The count key differs by kind (Lamp uses NumberOfDefinedLampNumbers, Reel/Button
-            // use NonNullSublampCount, DiscReel stores none).
-            uint count = table["NumberOfDefinedLampNumbers"] is JsonNode countNode
-                ? unchecked((uint)ReadLong(countNode))
-                : 0u;
-            bool hasCount = table["NumberOfDefinedLampNumbers"] is not null;
 
             switch (component)
             {
@@ -421,6 +448,57 @@ namespace MfmeFmlDecoder.Utilities
                     roles[name] = entry.Value.Role;
                 }
             }
+        }
+
+        /// <summary>
+        /// MFME 20.1 always writes a SevenSeg sub-lamp table: a fixed 16-slot table where an
+        /// unwired slot is -2. layout.json drops it when every slot is undefined (SegmentLamps
+        /// has no positive entries), so re-supply the standard all-(-2) table. A display in
+        /// sub-lamp mode with no bound lamps is not the same as having no table at all.
+        /// </summary>
+        /// <summary>
+        /// SevenSeg serialises its sub-lamp table as a flat <c>SegmentLamps</c> array (the defined
+        /// lamp numbers in slot order). Rebuild the slot-indexed table from it.
+        /// </summary>
+        private static void ApplySegmentLamps(JsonNode node, BaseComponent component)
+        {
+            if (component is not SevenSeg sevenSeg || sevenSeg.SublampTable is { Count: > 0 })
+            {
+                return;
+            }
+
+            if (node is not JsonArray lamps || lamps.Count == 0)
+            {
+                return;
+            }
+
+            var table = new List<LampSublampTableEntry>(lamps.Count);
+            for (int i = 0; i < lamps.Count; i++)
+            {
+                table.Add(new LampSublampTableEntry(i + 1, ReadInt(lamps[i])));
+            }
+
+            sevenSeg.SublampTable = table;
+        }
+
+        private static void ApplyDefaultSubLampTable(BaseComponent component)
+        {
+            if (component is not SevenSeg sevenSeg || sevenSeg.SublampTable is { Count: > 0 })
+            {
+                return;
+            }
+
+            // MFME always writes a SevenSeg sub-lamp table of a fixed 16 slots (undefined slots
+            // are -2), so reconstruct the standard table when layout.json dropped an all-undefined
+            // one.
+            const int slots = 16;
+            var table = new List<LampSublampTableEntry>(slots);
+            for (int i = 1; i <= slots; i++)
+            {
+                table.Add(new LampSublampTableEntry(i, -2));
+            }
+
+            sevenSeg.SublampTable = table;
         }
 
         private static void ApplyImages(

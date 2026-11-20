@@ -14,6 +14,7 @@
       },
       "TransparencyType": "None",
       "Values": {
+        "Unknown3B": 49740944,
         "OffsetX": 0,
         "OffsetY": 0,
         "NoOverlayInFullscreenMode": false,
@@ -21,6 +22,9 @@
         "Tiled": false,
         "Transparency_UseAlphaChannel": false,
         "Transparency_UseColour": false,
+        "Unknown 0x09": false,
+        "Unknown 0x0A": false,
+        "Unknown 0x0B": false,
         "BorderColour": "#000000FF",
         "Colour": "#F0F0F0FF",
         "TransparentColour": "#000000FF"
@@ -45,6 +49,7 @@
         "SubLamp1Number": 23,
         "SubLamp2Number": 24,
         "Tilt": 42,
+        "Unknown3B": 146415568,
         "VerticalSpacing": 4,
         "CenterLine": false,
         "Style": true

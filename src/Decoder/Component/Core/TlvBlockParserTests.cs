@@ -187,11 +187,12 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
 
             Assert.True(result.UInt32sByAttributeName.TryGetValue("Lamp", out uint lamp));
             Assert.Equal(0u, lamp);
-            Assert.False(result.UInt32sByAttributeName.ContainsKey("Unknown 0x38"));
+            Assert.True(result.UInt32sByAttributeName.TryGetValue("Unknown 0x38", out uint unknown));
+            Assert.Equal(5u, unknown);
         }
 
         [Fact]
-        public void Parse_UInt32TagWithUnknownAttributeName_IsOmittedFromUInt32sByAttributeName()
+        public void Parse_UInt32TagWithUnknownAttributeName_IsIncludedInUInt32sByAttributeName()
         {
             byte[] data =
             {
@@ -211,7 +212,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
                 offset: 0,
                 ExtendedTagParser.Options.Default.WithoutMatchedTagLogging());
 
-            Assert.False(result.UInt32sByAttributeName.ContainsKey("Unknown 0x3B"));
+            Assert.True(result.UInt32sByAttributeName.TryGetValue("Unknown 0x3B", out uint unknown));
+            Assert.Equal(23u, unknown);
             Assert.True(result.ValuesByTag.TryGetValue(0x3B, out object rawValue));
             Assert.Equal(23u, rawValue);
         }
@@ -288,7 +290,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
 
             Assert.True(result.FloatsByAttributeName.TryGetValue("Thickness", out float thickness));
             Assert.Equal(2f, thickness);
-            Assert.False(result.FloatsByAttributeName.ContainsKey("Unknown 0x07"));
+            Assert.True(result.FloatsByAttributeName.TryGetValue("Unknown 0x07", out float unknown));
+            Assert.Equal(0f, unknown);
         }
 
         [Fact]
@@ -363,7 +366,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
 
             Assert.True(result.Int32sByAttributeName.TryGetValue("SelectedCoinNote", out int selectedCoinNote));
             Assert.Equal(0, selectedCoinNote);
-            Assert.False(result.Int32sByAttributeName.ContainsKey("Unknown 0x38"));
+            Assert.True(result.Int32sByAttributeName.TryGetValue("Unknown 0x38", out int unknown));
+            Assert.Equal(5, unknown);
         }
 
         [Fact]
@@ -410,7 +414,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
 
             Assert.True(result.UInt16sByAttributeName.TryGetValue("HorizontalVertical", out ushort horizontalVertical));
             Assert.Equal(0, horizontalVertical);
-            Assert.False(result.UInt16sByAttributeName.ContainsKey("Unknown 0x38"));
+            Assert.True(result.UInt16sByAttributeName.TryGetValue("Unknown 0x38", out ushort unknown));
+            Assert.Equal(5, (int)unknown);
         }
 
         [Fact]
@@ -457,7 +462,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
 
             Assert.True(result.BooleansByAttributeName.TryGetValue("Visible", out bool visible));
             Assert.True(visible);
-            Assert.False(result.BooleansByAttributeName.ContainsKey("Unknown 0x38"));
+            Assert.True(result.BooleansByAttributeName.TryGetValue("Unknown 0x38", out bool unknown));
+            Assert.False(unknown);
         }
 
         [Fact]
@@ -504,7 +510,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Core
 
             Assert.True(result.BytesByAttributeName.TryGetValue("OffLevel", out byte offLevel));
             Assert.Equal(0x40, offLevel);
-            Assert.False(result.BytesByAttributeName.ContainsKey("Unknown 0x18"));
+            Assert.True(result.BytesByAttributeName.TryGetValue("Unknown 0x18", out byte unknown));
+            Assert.Equal(0x00, unknown);
         }
 
         [Fact]

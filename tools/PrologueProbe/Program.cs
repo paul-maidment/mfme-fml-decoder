@@ -24,6 +24,7 @@ namespace PrologueProbe
         {
             string fmlPath = null, gamPath = null, outDir = null;
             string spliceA = null, spliceB = null, spliceOut = null;
+            string stripIn = null, stripOut = null, stripTags = null, dumpTags = null;
             for (int i = 0; i < args.Length; i++)
             {
                 if (args[i] == "--fml" && i + 1 < args.Length) fmlPath = args[++i];
@@ -32,6 +33,31 @@ namespace PrologueProbe
                 else if (args[i] == "--splice-prologue" && i + 1 < args.Length) spliceA = args[++i];
                 else if (args[i] == "--splice-components" && i + 1 < args.Length) spliceB = args[++i];
                 else if (args[i] == "--splice-out" && i + 1 < args.Length) spliceOut = args[++i];
+                else if (args[i] == "--strip-in" && i + 1 < args.Length) stripIn = args[++i];
+                else if (args[i] == "--strip-out" && i + 1 < args.Length) stripOut = args[++i];
+                else if (args[i] == "--strip-tags" && i + 1 < args.Length) stripTags = args[++i];
+                else if (args[i] == "--dumptags" && i + 1 < args.Length) dumpTags = args[++i];
+            }
+
+            if (dumpTags != null)
+            {
+                var tp = MfmeFmlDecoder.GameConfig.FileLevelTagBag.Parse(FmlDecryptor.Decrypt(File.ReadAllBytes(dumpTags)));
+                foreach (var kv in tp.OrderBy(k => k.Key)) Console.Out.WriteLine($"0x{kv.Key:X2} len={kv.Value.Length}");
+                return 0;
+            }
+
+            if (stripIn != null && stripOut != null && stripTags != null)
+            {
+                byte[] stripPlain = FmlDecryptor.Decrypt(File.ReadAllBytes(stripIn));
+                foreach (string t in stripTags.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                {
+                    uint tag = Convert.ToUInt32(t.Trim().TrimStart('0', 'x', 'X'), 16);
+                    stripPlain = MfmeFmlDecoder.GameConfig.FileLevelTagBag.RemoveTag(stripPlain, tag, out _);
+                }
+
+                File.WriteAllBytes(stripOut, FmlDecryptor.Encode(stripPlain, LayoutWriter.DefaultPassword, LayoutWriter.DefaultChunkSize, phase1: true));
+                Console.Out.WriteLine("stripped " + stripOut);
+                return 0;
             }
 
             if (spliceA != null && spliceB != null && spliceOut != null)
@@ -188,3 +214,5 @@ namespace PrologueProbe
         }
     }
 }
+
+

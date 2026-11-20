@@ -14,6 +14,7 @@
       },
       "TransparencyType": "None",
       "Values": {
+        "Unknown3B": 49610128,
         "OffsetX": 0,
         "OffsetY": 0,
         "NoOverlayInFullscreenMode": false,
@@ -21,6 +22,9 @@
         "Tiled": false,
         "Transparency_UseAlphaChannel": false,
         "Transparency_UseColour": false,
+        "Unknown 0x09": false,
+        "Unknown 0x0A": false,
+        "Unknown 0x0B": false,
         "BorderColour": "#000000FF",
         "Colour": "#F0F0F0FF",
         "TransparentColour": "#000000FF"
@@ -43,6 +47,10 @@
         "Style": "Square",
         "Digit": 23,
         "SelectedStyleIndex": 1,
+        "Unknown 0x1C": 1,
+        "Unknown 0x38": 1,
+        "Unknown 0x39": 0,
+        "Unknown 0x3B": 49001520,
         "SelectedSegmentIndex": 2,
         "Led": true,
         "NoOutline": true,

@@ -31,6 +31,8 @@ namespace CoverageCensus
             string dumpPayloadIndex = null;
             string dumpDecoded = null;
             string dumpRaw = null;
+            string cmpA = null, cmpB = null;
+            string angleScan = null;
             for (int i = 0; i < args.Length; i++)
             {
                 if (args[i] == "--root" && i + 1 < args.Length) root = args[++i];
@@ -42,6 +44,8 @@ namespace CoverageCensus
                 else if (args[i] == "--dumppayload" && i + 2 < args.Length) { dumpPayload = args[++i]; dumpPayloadIndex = args[++i]; }
                 else if (args[i] == "--dumpdecoded" && i + 1 < args.Length) dumpDecoded = args[++i];
                 else if (args[i] == "--dumprraw" && i + 1 < args.Length) dumpRaw = args[++i];
+                else if (args[i] == "--comparecomponents" && i + 2 < args.Length) { cmpA = args[++i]; cmpB = args[++i]; }
+                else if (args[i] == "--anglescan" && i + 1 < args.Length) angleScan = args[++i];
             }
 
 
@@ -80,6 +84,18 @@ namespace CoverageCensus
             if (dumpRaw != null)
             {
                 DumpRaw(dumpRaw);
+                return 0;
+            }
+
+            if (cmpA != null && cmpB != null)
+            {
+                CompareComponents(cmpA, cmpB);
+                return 0;
+            }
+
+            if (angleScan != null)
+            {
+                AngleScan(angleScan, limit);
                 return 0;
             }
 
@@ -358,6 +374,105 @@ namespace CoverageCensus
                 if (parts.Count > 0) Console.Out.WriteLine($"{i} {c.GetType().Name} {string.Join(" ", parts)}");
                 i++;
             }
+        }
+
+        private static void AngleScan(string root, int limit)
+        {
+            var tallies = new System.Collections.Generic.Dictionary<string, int>(StringComparer.Ordinal);
+            int n = 0, files = 0;
+            foreach (string fml in System.IO.Directory.EnumerateFiles(root, "*.fml", System.IO.SearchOption.AllDirectories))
+            {
+                if (limit > 0 && files >= limit) break;
+                files++;
+                byte[] plain;
+                try { plain = MfmeFmlDecoder.Decryption.FmlDecryptor.Decrypt(File.ReadAllBytes(fml)); }
+                catch { continue; }
+                var parser = new MfmeFmlDecoder.src.Decoder.Component.Core.ComponentParser();
+                var walker = new MfmeFmlDecoder.Decoder.FileWalker(new MfmeFmlDecoder.Decoder.ComponentWalker(parser));
+                try { walker.WalkTlv(plain, 0); } catch { continue; }
+                var layout = parser.ToLayout(walker.Header);
+                foreach (var c in layout.Components)
+                {
+                    if (c.GeometryAngleFlag is not byte flag)
+                    {
+                        string nk = "NULL-FLAG " + c.GetType().Name + " ver=" + walker.Version;
+                        tallies[nk] = tallies.GetValueOrDefault(nk) + 1;
+                        n++;
+                        continue;
+                    }
+                    string graphic = c.Booleans.TryGetValue("Graphic", out bool g) ? (g ? "G1" : "G0") : "G?";
+                    string offText = c.Strings.ContainsKey("OffText") ? "OffText" : "";
+                    string key = c.GetType().Name + " flag=" + flag + " " + graphic + (c.Images.Count > 0 ? " Img" : " NoImg") + " " + offText;
+                    tallies[key] = tallies.GetValueOrDefault(key) + 1;
+                    n++;
+                    if (flag != 1)
+                    {
+                        Console.Out.WriteLine("FLAG0 " + fml + " :: " + c.GetType().Name
+                            + " vals={" + string.Join(",", c.UInt32s.Keys) + "}"
+                            + " ints={" + string.Join(",", c.Int32s.Keys) + "}"
+                            + " bool={" + string.Join(",", c.Booleans.Keys) + "}"
+                            + " str={" + string.Join(",", c.Strings.Keys) + "}"
+                            + " img={" + string.Join(",", c.Images.Keys) + "}");
+                    }
+                }
+            }
+            Console.Out.WriteLine("files " + files + " componentsWithFlag " + n);
+            var list = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, int>>(tallies);
+            list.Sort((a, b) => b.Value.CompareTo(a.Value));
+            foreach (var kv in list)
+                Console.Out.WriteLine($"{kv.Value,8}  {kv.Key}");
+        }
+
+        private static void CompareComponents(string aPath, string bPath)
+        {
+            byte[] a = Components(MfmeFmlDecoder.Decryption.FmlDecryptor.Decrypt(File.ReadAllBytes(aPath)));
+            byte[] b = Components(MfmeFmlDecoder.Decryption.FmlDecryptor.Decrypt(File.ReadAllBytes(bPath)));
+            var ra = Records(a); var rb = Records(b);
+            int n = Math.Min(ra.Count, rb.Count);
+            int diffs = 0;
+            for (int i = 0; i < n; i++)
+            {
+                var (ka, oa, la) = ra[i]; var (kb, ob, lb) = rb[i];
+                if (ka != kb || la != lb || !a.AsSpan(oa, la).SequenceEqual(b.AsSpan(ob, lb)))
+                {
+                    diffs++;
+                    if (diffs <= 12)
+                    {
+                        int first = -1; int m = Math.Min(la, lb);
+                        for (int j = 0; j < m; j++) { if (a[oa + j] != b[ob + j]) { first = j; break; } }
+                        string ctxA = first >= 0 ? Convert.ToHexString(a, oa + Math.Max(0, first - 4), Math.Min(24, la - Math.Max(0, first - 4))) : "";
+                        string ctxB = first >= 0 ? Convert.ToHexString(b, ob + Math.Max(0, first - 4), Math.Min(24, lb - Math.Max(0, first - 4))) : "";
+                        Console.Out.WriteLine($"[{i}] kind=0x{ka:X2}/{kb:X2} len={la}/{lb} firstDiff={first} A={ctxA} B={ctxB}");
+                    }
+                }
+            }
+            Console.Out.WriteLine($"component records: {ra.Count}/{rb.Count}  differing: {diffs}");
+        }
+
+        private static byte[] Components(byte[] plain)
+        {
+            var parser = new MfmeFmlDecoder.src.Decoder.Component.Core.ComponentParser();
+            var walker = new MfmeFmlDecoder.Decoder.FileWalker(new MfmeFmlDecoder.Decoder.ComponentWalker(parser));
+            walker.WalkTlv(plain, 0);
+            int end = walker.PrologueEndOffset;
+            var outb = new byte[plain.Length - end];
+            Array.Copy(plain, end, outb, 0, outb.Length);
+            return outb;
+        }
+
+        private static System.Collections.Generic.List<(uint Kind, int Offset, int Length)> Records(byte[] data)
+        {
+            var list = new System.Collections.Generic.List<(uint, int, int)>();
+            int pos = 0;
+            while (pos + 8 <= data.Length)
+            {
+                uint kind = BitConverter.ToUInt32(data, pos);
+                uint size = BitConverter.ToUInt32(data, pos + 4);
+                if (size < 8 || pos + size > data.Length) break;
+                list.Add((kind, pos + 8, (int)size - 8));
+                pos += (int)size;
+            }
+            return list;
         }
 
         private static void DumpDecoded(string fmlPath)

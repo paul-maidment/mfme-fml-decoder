@@ -14,6 +14,7 @@
       },
       "TransparencyType": "None",
       "Values": {
+        "Unknown3B": 46502704,
         "OffsetX": 0,
         "OffsetY": 0,
         "NoOverlayInFullscreenMode": false,
@@ -21,6 +22,9 @@
         "Tiled": false,
         "Transparency_UseAlphaChannel": false,
         "Transparency_UseColour": false,
+        "Unknown 0x09": false,
+        "Unknown 0x0A": false,
+        "Unknown 0x0B": false,
         "BorderColour": "#000000FF",
         "Colour": "#F0F0F0FF",
         "TransparentColour": "#000000FF"
@@ -41,6 +45,8 @@
       "Values": {
         "Columns": 16,
         "DigitWidth": 4,
+        "Unknown 0x08": 0,
+        "Unknown3B": 128624736,
         "Reversed": true,
         "Colour": "#FF8000FF"
       },

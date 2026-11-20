@@ -14,6 +14,7 @@
       },
       "TransparencyType": "None",
       "Values": {
+        "Unknown3B": 49413520,
         "OffsetX": 0,
         "OffsetY": 0,
         "NoOverlayInFullscreenMode": false,
@@ -21,6 +22,9 @@
         "Tiled": false,
         "Transparency_UseAlphaChannel": false,
         "Transparency_UseColour": false,
+        "Unknown 0x09": false,
+        "Unknown 0x0A": false,
+        "Unknown 0x0B": false,
         "BorderColour": "#000000FF",
         "Colour": "#F0F0F0FF",
         "TransparentColour": "#000000FF"
@@ -39,6 +43,7 @@
         "Orientation": "Vertical"
       },
       "Values": {
+        "Unknown3B": 410551008,
         "Reversed": true,
         "Segment16": true,
         "Charset": 2,
@@ -51,7 +56,10 @@
         "VerticalSpacing": 8,
         "BackgroundColour": "#FF0000FF",
         "OffColour": "#FF8000FF",
-        "OnColour": "#FF80C0FF"
+        "OnColour": "#FF80C0FF",
+        "UNKNOWN 0x04": "#00001000",
+        "UNKNOWN 0x0D": "#00001100",
+        "UNKNOWN 0x0E": "#00000000"
       },
       "Images": {
         "overlay_image": {

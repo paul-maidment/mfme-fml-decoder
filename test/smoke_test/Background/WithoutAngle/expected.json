@@ -14,6 +14,7 @@
       },
       "TransparencyType": "Use Alpha Channel",
       "Values": {
+        "Unknown3B": 49675664,
         "OffsetX": 0,
         "OffsetY": 0,
         "NoOverlayInFullscreenMode": true,
@@ -21,6 +22,9 @@
         "Tiled": true,
         "Transparency_UseAlphaChannel": true,
         "Transparency_UseColour": false,
+        "Unknown 0x09": false,
+        "Unknown 0x0A": false,
+        "Unknown 0x0B": false,
         "BorderColour": "#FF0000FF",
         "Colour": "#FF80C0FF",
         "TransparentColour": "#FF8000FF"

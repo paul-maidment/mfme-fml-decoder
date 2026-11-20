@@ -620,7 +620,6 @@ namespace MfmeFmlDecoder.Decoder.Writer
                 return;
             }
 
-            int count = records.Count;
             Dictionary<string, long> outputTypes = ReverseValues(control, "outputTypeValues");
 
             var body = (tag: 0u, stride: 0, fields: (Dictionary<string, int>)null, ok: false);
@@ -660,59 +659,67 @@ namespace MfmeFmlDecoder.Decoder.Writer
                 }
             }
 
-            byte[] bodyBuf = body.ok ? Ensure(tags, body.tag, count * body.stride) : null;
-            byte[] labelBuf = label.ok ? Ensure(tags, label.tag, count * label.size) : null;
-            byte[] shortcutBuf = shortcut.ok ? Ensure(tags, shortcut.tag, count * 4) : null;
-
-            for (int i = 0; i < count; i++)
+            // Per-tag entry counts: the source may have different counts per tag (e.g. body 27,
+            // label/shortcut 28) and the decoder derives the record count from the longest tag.
+            // A record only gets a body/label/shortcut entry when it actually has those fields.
+            int bodyCount = 0, labelCount = 0, shortcutCount = 0;
+            foreach (JsonNode node in records)
             {
-                if (records[i] is not JsonObject rec)
-                {
-                    continue;
-                }
+                if (node is not JsonObject rec) continue;
+                int idx = rec["index"] is JsonValue iv && iv.TryGetValue(out int e) ? e : 0;
+                if (rec.ContainsKey("output") || rec.ContainsKey("outputType") || rec.ContainsKey("value1") || rec.ContainsKey("value2"))
+                    bodyCount = Math.Max(bodyCount, idx + 1);
+                if (rec.ContainsKey("label"))
+                    labelCount = Math.Max(labelCount, idx + 1);
+                if (rec.ContainsKey("shortcut"))
+                    shortcutCount = Math.Max(shortcutCount, idx + 1);
+            }
 
-                if (bodyBuf is not null && body.fields is not null)
+            byte[] bodyBuf = body.ok && bodyCount > 0 ? AssignExact(tags, body.tag, bodyCount * body.stride) : null;
+            byte[] labelBuf = label.ok && labelCount > 0 ? AssignExact(tags, label.tag, labelCount * label.size) : null;
+            byte[] shortcutBuf = shortcut.ok && shortcutCount > 0 ? AssignExact(tags, shortcut.tag, shortcutCount * 4) : null;
+
+            foreach (JsonNode node in records)
+            {
+                if (node is not JsonObject rec) continue;
+                int i = rec["index"] is JsonValue iv2 && iv2.TryGetValue(out int ei) ? ei : 0;
+
+                if (bodyBuf is not null && body.fields is not null
+                    && (rec.ContainsKey("output") || rec.ContainsKey("outputType") || rec.ContainsKey("value1") || rec.ContainsKey("value2")))
                 {
                     int recBase = i * body.stride;
-                    foreach (KeyValuePair<string, int> f in body.fields)
+                    if (recBase + body.stride <= bodyBuf.Length)
                     {
-                        if (recBase + f.Value + 4 > bodyBuf.Length)
+                        foreach (KeyValuePair<string, int> f in body.fields)
                         {
-                            continue;
-                        }
-
-                        long raw = 0;
-                        if (f.Key == "outputType")
-                        {
-                            if (rec[f.Key] is JsonValue otv && otv.TryGetValue(out string ot))
+                            if (recBase + f.Value + 4 > bodyBuf.Length) continue;
+                            long raw = 0;
+                            if (f.Key == "outputType")
                             {
-                                raw = outputTypes.TryGetValue(ot, out long c) ? c : 0;
+                                if (rec[f.Key] is JsonValue otv && otv.TryGetValue(out string ot))
+                                    raw = outputTypes.TryGetValue(ot, out long c) ? c : 0;
                             }
+                            else if (f.Key is "value1" or "value2")
+                            {
+                                raw = rec[f.Key] is null ? 0 : ReadLong(rec[f.Key]) + 1;
+                            }
+                            else
+                            {
+                                raw = ReadLong(rec[f.Key]);
+                            }
+                            WriteU32(bodyBuf, recBase + f.Value, unchecked((uint)raw));
                         }
-                        else if (f.Key is "value1" or "value2")
-                        {
-                            // MFME displays FML-1; 0 means blank.
-                            raw = rec[f.Key] is null ? 0 : ReadLong(rec[f.Key]) + 1;
-                        }
-                        else
-                        {
-                            raw = ReadLong(rec[f.Key]);
-                        }
-
-                        WriteU32(bodyBuf, recBase + f.Value, unchecked((uint)raw));
                     }
                 }
 
-                if (labelBuf is not null)
+                if (labelBuf is not null && rec.ContainsKey("label"))
                 {
                     int recBase = i * label.size;
                     string text = rec["label"] is JsonValue lv && lv.TryGetValue(out string ls) ? ls : string.Empty;
                     byte[] ascii = Encoding.ASCII.GetBytes(text ?? string.Empty);
                     int n = Math.Min(ascii.Length, Math.Max(0, label.size - 1));
-                    if (recBase + n <= labelBuf.Length)
-                    {
+                    if (recBase + label.size <= labelBuf.Length && recBase + n <= labelBuf.Length)
                         Array.Copy(ascii, 0, labelBuf, recBase, n);
-                    }
                 }
 
                 if (shortcutBuf is not null && rec["shortcut"] is not null)
@@ -722,12 +729,17 @@ namespace MfmeFmlDecoder.Decoder.Writer
                     {
                         shortcutBuf[recBase] = (byte)ReadLong(rec["shortcut"]);
                         if (rec["shortcutMods"] is not null)
-                        {
                             shortcutBuf[recBase + 1] = (byte)ReadLong(rec["shortcutMods"]);
-                        }
                     }
                 }
             }
+        }
+
+        private static byte[] AssignExact(Dictionary<uint, byte[]> tags, uint tag, int length)
+        {
+            var buffer = new byte[length];
+            tags[tag] = buffer;
+            return buffer;
         }
 
         private static void EncodeIndexedEnumTable(Dictionary<uint, byte[]> tags, string name, JsonElement control, JsonNode value)

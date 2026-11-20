@@ -14,6 +14,7 @@
       },
       "TransparencyType": "None",
       "Values": {
+        "Unknown3B": 49610128,
         "OffsetX": 0,
         "OffsetY": 0,
         "NoOverlayInFullscreenMode": false,
@@ -21,6 +22,9 @@
         "Tiled": false,
         "Transparency_UseAlphaChannel": false,
         "Transparency_UseColour": false,
+        "Unknown 0x09": false,
+        "Unknown 0x0A": false,
+        "Unknown 0x0B": false,
         "BorderColour": "#000000FF",
         "Colour": "#F0F0F0FF",
         "TransparentColour": "#000000FF"
@@ -40,6 +44,7 @@
       },
       "Values": {
         "Size": 7,
+        "Unknown 0x3B": 251318336,
         "BackgroundColour": "#000080FF",
         "OffColour": "#400000FF",
         "OnColour": "#FF80C0FF"

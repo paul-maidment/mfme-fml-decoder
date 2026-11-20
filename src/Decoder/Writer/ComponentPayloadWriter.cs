@@ -477,13 +477,7 @@ namespace MfmeFmlDecoder.Decoder.Writer
                 return false;
             }
 
-            if (info.Role == ValueRole.RAW)
-            {
-                return true;
-            }
-
-            return info.AttributeName is not null
-                && info.AttributeName.StartsWith("Unknown", StringComparison.OrdinalIgnoreCase);
+            return info.Role == ValueRole.RAW;
         }
 
         private static byte OrientationByte(string orientation)
@@ -494,6 +488,11 @@ namespace MfmeFmlDecoder.Decoder.Writer
         }
     }
 }
+
+
+
+
+
 
 
 

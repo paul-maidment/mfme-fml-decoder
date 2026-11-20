@@ -14,6 +14,7 @@
       },
       "TransparencyType": "None",
       "Values": {
+        "Unknown3B": 49740944,
         "OffsetX": 0,
         "OffsetY": 0,
         "NoOverlayInFullscreenMode": false,
@@ -21,6 +22,9 @@
         "Tiled": false,
         "Transparency_UseAlphaChannel": false,
         "Transparency_UseColour": false,
+        "Unknown 0x09": false,
+        "Unknown 0x0A": false,
+        "Unknown 0x0B": false,
         "BorderColour": "#000000FF",
         "Colour": "#F0F0F0FF",
         "TransparentColour": "#000000FF"
@@ -42,13 +46,15 @@
         "BorderWidth": 5,
         "HalfSteps": 433,
         "NumberOfDefinedLampNumbers": 3,
-        "Offset": 1,
         "Stops": 72,
         "SubLamp1Number": 23,
         "SubLamp2Number": 24,
         "SubLamp3Number": 25,
+        "Unknown3B": 49716928,
+        "Offset": 1,
         "Inverted": true,
         "LampsEnabled": true,
+        "Unknown 0x09": 0,
         "BorderColour": "#FF0080FF"
       },
       "Images": {

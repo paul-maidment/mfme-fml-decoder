@@ -148,11 +148,21 @@ namespace MfmeFmlDecoder.src.Model.Component
             }
 
             ordered["Geometry"] = BuildGeometryNode();
+            // The decoder already models this lead byte (GeometryAngleFlag); it exists solely so the
+            // writer can echo MFME's choice. Carry it only when it differs from the value the writer
+            // would otherwise emit (0x01, or the Checkbox quirk's 0x00), so it stays rare and the
+            // JSON omits it for the common case.
+            byte writerDefaultFlag = this is Checkbox ? (byte)0x00 : (byte)0x01;
+            if (GeometryAngleFlag is byte angleFlagValue && angleFlagValue != writerDefaultFlag)
+            {
+                ordered["AngleFlag"] = angleFlagValue;
+            }
             foreach (var kvp in json)
             {
                 // JsonNodes can only have one parent; clone to reorder safely.
                 ordered[kvp.Key] = kvp.Value is null ? null : JsonNode.Parse(kvp.Value.ToJsonString());
             }
+
             return ordered;
         }
 
@@ -219,11 +229,6 @@ namespace MfmeFmlDecoder.src.Model.Component
         {
             foreach (var kvp in source.OrderBy(entry => entry.Key, StringComparer.Ordinal))
             {
-                if (kvp.Key.StartsWith("Unknown", StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
                 if (target.ContainsKey(kvp.Key))
                 {
                     throw new InvalidOperationException($"Duplicate Values key '{kvp.Key}'.");
