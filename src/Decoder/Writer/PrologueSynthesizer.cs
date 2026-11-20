@@ -27,7 +27,7 @@ namespace MfmeFmlDecoder.Decoder.Writer
             public IReadOnlyList<string> Unsupported { get; init; }
         }
 
-        public static Result Synthesize(string machineJson, GameConfigMap map)
+        public static Result Synthesize(string machineJson, GameConfigMap map, byte[] splashBitmap = null)
         {
             if (machineJson is null) throw new ArgumentNullException(nameof(machineJson));
             if (map is null) throw new ArgumentNullException(nameof(map));
@@ -41,6 +41,11 @@ namespace MfmeFmlDecoder.Decoder.Writer
             var unsupported = new List<string>();
 
             SetBytes(tags, VersionTag, null, 4, V20_1, 0, V20_1.Length);
+            SeedConstants(tags);
+            if (splashBitmap is { Length: > 0 })
+            {
+                tags[0x98] = splashBitmap;
+            }
 
             foreach (KeyValuePair<string, JsonElement> entry in map.Controls)
             {
@@ -75,6 +80,29 @@ namespace MfmeFmlDecoder.Decoder.Writer
             }
 
             return new Result { Prologue = Emit(tags), Unsupported = unsupported };
+        }
+
+        // Structural tags MFME needs to load, independent of any setting. Values are the corpus
+        // constants (census mode across 2998 layouts). The map does not carry them, but a
+        // prologue without them is rejected by MFME's loader (slice-2 probe).
+        private static void SeedConstants(Dictionary<uint, byte[]> tags)
+        {
+            SetConstant(tags, 0x00, 0x00, 0x00, 0x00, 0x00);
+            SetConstant(tags, 0x02, 0x78, 0x56, 0x34, 0x12);
+            SetConstant(tags, 0x39, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF);
+            SetConstant(tags, 0x41, 0xFF, 0x00, 0x00, 0x00);
+            SetConstant(tags, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
+            SetConstant(tags, 0x51, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
+            SetConstant(tags, 0x6E, 0x01, 0x00, 0x00, 0x00);
+            SetConstant(tags, 0x6F, 0x00, 0x00, 0x00, 0x00);
+        }
+
+        private static void SetConstant(Dictionary<uint, byte[]> tags, uint tag, params byte[] value)
+        {
+            if (!tags.ContainsKey(tag))
+            {
+                tags[tag] = value;
+            }
         }
 
         private static void EncodeControl(
