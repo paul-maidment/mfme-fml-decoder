@@ -31,19 +31,27 @@ namespace MfmeFmlDecoder.Decoder.Writer
                 var table = prop.GetValue(component) as IReadOnlyList<LampSublampTableEntry>;
                 if (table is { Count: > 0 })
                 {
-                    // MFME's 20.1 Lamp uses a fixed 12-slot sub-lamp table (-2 for undefined
-                    // slots); legacy sources define fewer. Pad so a legacy re-save matches MFME's
-                    // own 20.1 conversion.
-                    if (component is Lamp && table.Count < 12)
+                    // MFME 20.1 uses fixed sub-lamp table sizes: Lamp 12, Reel 15 (both -2-padded
+                    // for undefined slots). Legacy-format sources are smaller (e.g. Reel 10), so pad
+                    // to the 20.1 size so a re-save matches MFME's own 20.1 conversion.
+                    int fixedSlots = component is Lamp ? 12 : component is Reel ? 15 : 0;
+                    if (fixedSlots > 0 && table.Count < fixedSlots)
                     {
                         var padded = new List<LampSublampTableEntry>(table);
-                        for (int i = table.Count; i < 12; i++)
+                        for (int i = table.Count; i < fixedSlots; i++)
                         {
                             padded.Add(new LampSublampTableEntry(i + 1, -2));
                         }
                         table = padded;
                     }
                     return table;
+                }
+                if (component is Reel)
+                {
+                    // A 20.1 Reel always carries the fixed 15-slot sub-lamp table.
+                    var t = new List<LampSublampTableEntry>(15);
+                    for (int i = 1; i <= 15; i++) t.Add(new LampSublampTableEntry(i, -2));
+                    return t;
                 }
             }
 
