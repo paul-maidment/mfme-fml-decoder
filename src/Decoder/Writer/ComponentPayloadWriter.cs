@@ -38,6 +38,15 @@ namespace MfmeFmlDecoder.Decoder.Writer
             [MFMEComponentType.Checkbox] = (0x00, new byte[] { 0x17, 0x01, 0x18, 0x00, 0x00, 0x00, 0x00 }),
         };
 
+        // Class-section tags that must never be written as scalar fields. Lamp declares 0x68 and
+        // 0x08 as "Unknown" UINT32 scalars in its class map, but 0x68 is really a nested TLV block
+        // and 0x08 collides with the base angle tag; emitting either as an extra class field
+        // corrupts MFME's parse (verified: force-emitting them diverges ~46% of the frame).
+        private static readonly Dictionary<MFMEComponentType, IReadOnlySet<uint>> NeverEmitClassTags = new()
+        {
+            [MFMEComponentType.Lamp] = new HashSet<uint> { 0x68, 0x08 },
+        };
+
         // Kinds whose on-disk record is a base section then a class section, separated by the
         // 4C <orientation> 00 marker. The value is the highest tag id in the class section;
         // tags above it stay in the base section. (Their low-tag class fields would otherwise
@@ -92,6 +101,7 @@ namespace MfmeFmlDecoder.Decoder.Writer
         public static byte[] WritePayload(BaseComponent component, MfmeVersion version, bool valueBasedSparse = false, bool emitAllModelled = false)
         {
             MFMEComponentType kind = ComponentKind.Resolve(component);
+            NeverEmitClassTags.TryGetValue(kind, out IReadOnlySet<uint> skipClassTags);
             ComponentProfile profile = ComponentProfileCatalog.Resolve(kind, version);
 
             ComponentSpecialValues specials = ComponentSpecialValues.Create(component);
@@ -124,17 +134,17 @@ namespace MfmeFmlDecoder.Decoder.Writer
                 // Base section (high tags), then the 4C <orientation> 00 marker, then the
                 // class section (low tags: colours / images / shape / offsets) in ascending
                 // order to match MFME.
-                WriteScope(payload, component, classTags, specials, include: key => !InClassSection(kind, key, classMaxTag), rawValues: component.RawTagValues, legacyAnsiText: legacyAnsiText, onlyRawPresent: !emitAllModelled, valueBasedSparse: valueBasedSparse);
+                WriteScope(payload, component, classTags, specials, include: key => !InClassSection(kind, key, classMaxTag), rawValues: component.RawTagValues, legacyAnsiText: legacyAnsiText, onlyRawPresent: !emitAllModelled, valueBasedSparse: valueBasedSparse, skipTags: skipClassTags);
                 WireWriter.U8(payload, 0x4C);
                 WireWriter.U8(payload, OrientationByte(component.Orientation));
                 WireWriter.U8(payload, 0x00);
-                WriteScope(payload, component, classTags, specials, include: key => InClassSection(kind, key, classMaxTag), rawValues: component.RawTagValues, ascending: true, legacyAnsiText: legacyAnsiText, onlyRawPresent: !emitAllModelled, valueBasedSparse: valueBasedSparse);
+                WriteScope(payload, component, classTags, specials, include: key => InClassSection(kind, key, classMaxTag), rawValues: component.RawTagValues, ascending: true, legacyAnsiText: legacyAnsiText, onlyRawPresent: !emitAllModelled, valueBasedSparse: valueBasedSparse, skipTags: skipClassTags);
                 WireWriter.U8(payload, 0x00);
                 return payload.ToArray();
             }
 
             WriteScope(payload, component, classTags, specials, rawValues: component.RawTagValues, legacyAnsiText: legacyAnsiText, onlyRawPresent: !emitAllModelled, emittedNames: emittedNames, valueBasedSparse: valueBasedSparse, skipAngleTag: kind == MFMEComponentType.Reel,
-                explicitOrder: kind == MFMEComponentType.BandReel ? BandReelTagOrder : null);
+                explicitOrder: kind == MFMEComponentType.BandReel ? BandReelTagOrder : null, skipTags: skipClassTags);
 
             if (nestedTags is not null)
             {
@@ -233,7 +243,8 @@ namespace MfmeFmlDecoder.Decoder.Writer
             bool onlyRawPresent = false,
             bool valueBasedSparse = false,
             bool skipAngleTag = false,
-            IReadOnlyList<int> explicitOrder = null)
+            IReadOnlyList<int> explicitOrder = null,
+            IReadOnlySet<uint> skipTags = null)
         {
             if (map is null)
             {
@@ -280,6 +291,12 @@ namespace MfmeFmlDecoder.Decoder.Writer
                 // angle (0x08); WriteGeometry already emits the angle. Skip it in the base scope
                 // only (the nested 0x08 is the real "Resolution" field).
                 if (skipAngleTag && entry.Key == 0x08)
+                {
+                    continue;
+                }
+
+                // Per-kind class tags that must never be emitted (see NeverEmitClassTags).
+                if (skipTags is not null && skipTags.Contains(entry.Key))
                 {
                     continue;
                 }
@@ -488,6 +505,7 @@ namespace MfmeFmlDecoder.Decoder.Writer
         }
     }
 }
+
 
 
 
