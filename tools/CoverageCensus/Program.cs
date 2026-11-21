@@ -393,7 +393,7 @@ namespace CoverageCensus
                 var layout = parser.ToLayout(walker.Header);
                 foreach (var c in layout.Components)
                 {
-                    if (c.GeometryAngleFlag is not byte flag)
+                    if (c.Visible is not bool flag)
                     {
                         string nk = "NULL-FLAG " + c.GetType().Name + " ver=" + walker.Version;
                         tallies[nk] = tallies.GetValueOrDefault(nk) + 1;
@@ -405,7 +405,7 @@ namespace CoverageCensus
                     string key = c.GetType().Name + " flag=" + flag + " " + graphic + (c.Images.Count > 0 ? " Img" : " NoImg") + " " + offText;
                     tallies[key] = tallies.GetValueOrDefault(key) + 1;
                     n++;
-                    if (flag != 1)
+                    if (!flag)
                     {
                         Console.Out.WriteLine("FLAG0 " + fml + " :: " + c.GetType().Name
                             + " vals={" + string.Join(",", c.UInt32s.Keys) + "}"

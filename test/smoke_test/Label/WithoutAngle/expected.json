@@ -60,7 +60,7 @@
         "Unknown 0x38": 1,
         "Unknown 0x3B": 49001520,
         "Lamp": 23,
-        "Unknown 0x02": true,
+        "Transparent": true,
         "BackgroundColour": "#FF0080FF"
       },
       "Images": {
