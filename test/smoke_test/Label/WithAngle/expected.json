@@ -56,7 +56,7 @@
       },
       "Values": {
         "Label": "Label",
-        "Unknown 0x1C": 1,
+        "SuppressCaption": 1,
         "Unknown 0x38": 1,
         "Unknown 0x3B": 49001520,
         "Lamp": 23,
