@@ -47,6 +47,16 @@ namespace MfmeFmlDecoder.Decoder.Writer
             [MFMEComponentType.Lamp] = new HashSet<uint> { 0x68, 0x08 },
         };
 
+        // Present-at-default class tags the four-member IR cannot carry: the writer must
+        // synthesise them (with this constant value) so MFME does not fall back to its own
+        // absent-tag behaviour. Label 0x38 ("Unknown 0x38", u32) is load-bearing for the caption
+        // render -- verified: dropping it from a legacy source diverges a lower-middle region
+        // 0.138% (Red Hot), matching the full rebuild diff.
+        private static readonly Dictionary<MFMEComponentType, IReadOnlyDictionary<uint, byte[]>> SynthesizeClassTags = new()
+        {
+            [MFMEComponentType.Label] = new Dictionary<uint, byte[]> { [0x38] = new byte[] { 0x00, 0x00, 0x00, 0x00 } },
+        };
+
         // Kinds whose on-disk record is a base section then a class section, separated by the
         // 4C <orientation> 00 marker. The value is the highest tag id in the class section;
         // tags above it stay in the base section. (Their low-tag class fields would otherwise
@@ -102,6 +112,10 @@ namespace MfmeFmlDecoder.Decoder.Writer
         {
             MFMEComponentType kind = ComponentKind.Resolve(component);
             NeverEmitClassTags.TryGetValue(kind, out IReadOnlySet<uint> skipClassTags);
+            IReadOnlyDictionary<uint, byte[]> synthClassTags = SynthesizeClassTags.TryGetValue(kind, out IReadOnlyDictionary<uint, byte[]> synth)
+                ? synth
+                : null;
+
             ComponentProfile profile = ComponentProfileCatalog.Resolve(kind, version);
 
             ComponentSpecialValues specials = ComponentSpecialValues.Create(component);
@@ -134,17 +148,17 @@ namespace MfmeFmlDecoder.Decoder.Writer
                 // Base section (high tags), then the 4C <orientation> 00 marker, then the
                 // class section (low tags: colours / images / shape / offsets) in ascending
                 // order to match MFME.
-                WriteScope(payload, component, classTags, specials, include: key => !InClassSection(kind, key, classMaxTag), rawValues: component.RawTagValues, legacyAnsiText: legacyAnsiText, onlyRawPresent: !emitAllModelled, valueBasedSparse: valueBasedSparse, skipTags: skipClassTags);
+                WriteScope(payload, component, classTags, specials, include: key => !InClassSection(kind, key, classMaxTag), rawValues: component.RawTagValues, legacyAnsiText: legacyAnsiText, onlyRawPresent: !emitAllModelled, valueBasedSparse: valueBasedSparse, skipTags: skipClassTags, synthesizeTags: synthClassTags);
                 WireWriter.U8(payload, 0x4C);
                 WireWriter.U8(payload, OrientationByte(component.Orientation));
                 WireWriter.U8(payload, 0x00);
-                WriteScope(payload, component, classTags, specials, include: key => InClassSection(kind, key, classMaxTag), rawValues: component.RawTagValues, ascending: true, legacyAnsiText: legacyAnsiText, onlyRawPresent: !emitAllModelled, valueBasedSparse: valueBasedSparse, skipTags: skipClassTags);
+                WriteScope(payload, component, classTags, specials, include: key => InClassSection(kind, key, classMaxTag), rawValues: component.RawTagValues, ascending: true, legacyAnsiText: legacyAnsiText, onlyRawPresent: !emitAllModelled, valueBasedSparse: valueBasedSparse, skipTags: skipClassTags, synthesizeTags: synthClassTags);
                 WireWriter.U8(payload, 0x00);
                 return payload.ToArray();
             }
 
             WriteScope(payload, component, classTags, specials, rawValues: component.RawTagValues, legacyAnsiText: legacyAnsiText, onlyRawPresent: !emitAllModelled, emittedNames: emittedNames, valueBasedSparse: valueBasedSparse, skipAngleTag: kind == MFMEComponentType.Reel,
-                explicitOrder: kind == MFMEComponentType.BandReel ? BandReelTagOrder : null, skipTags: skipClassTags);
+                explicitOrder: kind == MFMEComponentType.BandReel ? BandReelTagOrder : null, skipTags: skipClassTags, synthesizeTags: synthClassTags);
 
             if (nestedTags is not null)
             {
@@ -244,7 +258,8 @@ namespace MfmeFmlDecoder.Decoder.Writer
             bool valueBasedSparse = false,
             bool skipAngleTag = false,
             IReadOnlyList<int> explicitOrder = null,
-            IReadOnlySet<uint> skipTags = null)
+            IReadOnlySet<uint> skipTags = null,
+            IReadOnlyDictionary<uint, byte[]> synthesizeTags = null)
         {
             if (map is null)
             {
@@ -369,6 +384,15 @@ namespace MfmeFmlDecoder.Decoder.Writer
                 {
                     WireWriter.U8(stream, (byte)entry.Key);
                     WireWriter.Bytes(stream, bytes);
+                }
+                else if (synthesizeTags is not null
+                    && synthesizeTags.TryGetValue(entry.Key, out byte[] synthBytes)
+                    && synthBytes is { Length: > 0 })
+                {
+                    // Present-at-default tag the four-member IR cannot carry: emit the constant
+                    // value so MFME does not use its absent-tag fallback (see SynthesizeClassTags).
+                    WireWriter.U8(stream, (byte)entry.Key);
+                    WireWriter.Bytes(stream, synthBytes);
                 }
                 else if (explicitOrder is not null
                     && rawValues is not null
@@ -505,6 +529,7 @@ namespace MfmeFmlDecoder.Decoder.Writer
         }
     }
 }
+
 
 
 
