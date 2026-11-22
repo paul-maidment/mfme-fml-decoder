@@ -81,7 +81,7 @@ namespace MfmeFmlDecoder.UnitTests
                     var parser2 = new ComponentParser();
                     var walker2 = new FileWalker(new ComponentWalker(parser2));
                     walker2.WalkTlv(rebuiltPlain, 0);
-                    string gotLayout = parser2.ToLayout(walker2.Header).ToJson(indented: true);
+                    string gotLayout = InertTagDefaults.FilterJson(parser2.ToLayout(walker2.Header).ToJson(indented: true));
 
                     // machine.json / game.json: decode the rebuilt FML + GAM.
                     if (!GameConfigDecoder.TryDecode(rebuilt.FmlPath, rebuilt.GamPath, rebuiltPlain, null, out GameConfigDecodeResult got, out string skip2))
@@ -152,3 +152,4 @@ namespace MfmeFmlDecoder.UnitTests
         }
     }
 }
+

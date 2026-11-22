@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.IO.Compression;
+using MfmeFmlDecoder.Decoder;
 using MfmeFmlDecoder.src.Model;
 using MfmeFmlDecoder.src.Model.Component;
 
@@ -46,7 +47,7 @@ namespace MfmeFmlDecoder.Utilities
         private static void WriteLayoutJson(Layout layout, string tempDir)
         {
             string jsonPath = Path.Combine(tempDir, "layout.json");
-            File.WriteAllText(jsonPath, layout.ToJson(indented: true));
+            File.WriteAllText(jsonPath, InertTagDefaults.FilterJson(layout.ToJson(indented: true)));
         }
 
         private static void WriteLayoutImages(Layout layout, string tempDir)
@@ -123,3 +124,5 @@ namespace MfmeFmlDecoder.Utilities
         }
     }
 }
+
+

@@ -14,7 +14,6 @@
       },
       "TransparencyType": "None",
       "Values": {
-        "Unknown3B": 50068624,
         "OffsetX": 0,
         "OffsetY": 0,
         "NoOverlayInFullscreenMode": false,
@@ -22,9 +21,6 @@
         "Tiled": false,
         "Transparency_UseAlphaChannel": false,
         "Transparency_UseColour": false,
-        "Unknown 0x09": false,
-        "Unknown 0x0A": false,
-        "Unknown 0x0B": false,
         "BorderColour": "#000000FF",
         "Colour": "#F0F0F0FF",
         "TransparentColour": "#000000FF"
@@ -69,7 +65,6 @@
         "SelectedShapeId": 5,
         "Shortcut 1": 67,
         "Shortcut 2": 192,
-        "Unknown 0x3B": 54178816,
         "XOffset": 5,
         "YOffset": 8,
         "Graphic": true,

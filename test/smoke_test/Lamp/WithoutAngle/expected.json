@@ -14,7 +14,6 @@
       },
       "TransparencyType": "None",
       "Values": {
-        "Unknown3B": 50068624,
         "OffsetX": 0,
         "OffsetY": 0,
         "NoOverlayInFullscreenMode": false,
@@ -22,9 +21,6 @@
         "Tiled": false,
         "Transparency_UseAlphaChannel": false,
         "Transparency_UseColour": false,
-        "Unknown 0x09": false,
-        "Unknown 0x0A": false,
-        "Unknown 0x0B": false,
         "BorderColour": "#000000FF",
         "Colour": "#F0F0F0FF",
         "TransparentColour": "#000000FF"
@@ -162,7 +158,6 @@
         "Shortcut 2": 66,
         "Unknown 0x08": 50,
         "Unknown 0x0E": 0,
-        "Unknown 0x3B": 53948544,
         "Unknown 0x68": 0,
         "PieStart": 0,
         "ShapeAngle": 0,
@@ -182,7 +177,6 @@
         "Shortcut 2 Enabled": true,
         "Transparent": true,
         "Unknown 0x17": true,
-        "Unknown 0x3E": false,
         "OffImageColour": "#00FFFFFF",
         "OutlineColour": "#0000FFFF",
         "Sublamp10Colour": "#000040FF",

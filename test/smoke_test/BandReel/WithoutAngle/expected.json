@@ -14,7 +14,6 @@
       },
       "TransparencyType": "None",
       "Values": {
-        "Unknown3B": 49675664,
         "OffsetX": 0,
         "OffsetY": 0,
         "NoOverlayInFullscreenMode": false,
@@ -22,9 +21,6 @@
         "Tiled": false,
         "Transparency_UseAlphaChannel": false,
         "Transparency_UseColour": false,
-        "Unknown 0x09": false,
-        "Unknown 0x0A": false,
-        "Unknown 0x0B": false,
         "BorderColour": "#000000FF",
         "Colour": "#F0F0F0FF",
         "TransparentColour": "#000000FF"
@@ -50,7 +46,6 @@
         "OptoTab": 9,
         "Spacing": 12,
         "Stops": 23,
-        "Unknown 0x3B": 411310880,
         "View": 6,
         "Offset": 11,
         "Custom": true,
@@ -91,28 +86,46 @@
       },
       "Masks": {
         "mask1": {
-          "1a": 21, "1b": 28,
-          "2a": 22, "2b": 29,
-          "3a": 23, "3b": 30,
-          "4a": 24, "4b": 31,
-          "5a": 25, "5b": 32,
-          "6a": 26, "6b": 33
+          "1a": 21,
+          "1b": 28,
+          "2a": 22,
+          "2b": 29,
+          "3a": 23,
+          "3b": 30,
+          "4a": 24,
+          "4b": 31,
+          "5a": 25,
+          "5b": 32,
+          "6a": 26,
+          "6b": 33
         },
         "mask2": {
-          "1a": 35, "1b": 42,
-          "2a": 36, "2b": 43,
-          "3a": 37, "3b": 44,
-          "4a": 38, "4b": 45,
-          "5a": 39, "5b": 46,
-          "6a": 40, "6b": 47
+          "1a": 35,
+          "1b": 42,
+          "2a": 36,
+          "2b": 43,
+          "3a": 37,
+          "3b": 44,
+          "4a": 38,
+          "4b": 45,
+          "5a": 39,
+          "5b": 46,
+          "6a": 40,
+          "6b": 47
         },
         "mask3": {
-          "1a": 49, "1b": 56,
-          "2a": 50, "2b": 57,
-          "3a": 51, "3b": 58,
-          "4a": 52, "4b": 59,
-          "5a": 53, "5b": 60,
-          "6a": 54, "6b": 61
+          "1a": 49,
+          "1b": 56,
+          "2a": 50,
+          "2b": 57,
+          "3a": 51,
+          "3b": 58,
+          "4a": 52,
+          "4b": 59,
+          "5a": 53,
+          "5b": 60,
+          "6a": 54,
+          "6b": 61
         }
       }
     }

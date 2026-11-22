@@ -93,7 +93,7 @@ namespace MfmeFmlDecoder.Application
 
                     if (writeLayoutJson)
                     {
-                        string json = layout.ToJson(indented: true);
+                        string json = InertTagDefaults.FilterJson(layout.ToJson(indented: true));
                         Console.Out.Write(json);
                     }
 
@@ -207,6 +207,21 @@ namespace MfmeFmlDecoder.Application
                 // tags to write from the decoded values (vs their 20.1 defaults) because the old
                 // source's tag ids/sections do not map onto the 20.1 tag maps.
                 bool valueBasedSparse = !fileWalker.VersionParsed || fileWalker.Version != MfmeVersion.V20_1;
+                if (valueBasedSparse)
+                {
+                    // A legacy source's raw tag ids belong to that version's tag maps. Feeding them to
+                    // the 20.1 writer's raw-presence channel re-emits each id under its 20.1 meaning,
+                    // which is a different field (e.g. a Lamp/SevenSeg/Button 0x08 that is not the 20.1
+                    // field of that id), and the extra tags change the render. Drop the raw channel for
+                    // cross-version sources so tag selection is purely value-based, exactly like the
+                    // --rebuild path (which never has raw tags). Verified: --fmlout then renders 0.000%
+                    // vs the original on all 15 legacy Gate B layouts (was 0.09-0.72%).
+                    foreach (var comp in layout.Components)
+                    {
+                        comp.RawTagValues.Clear();
+                        comp.NestedRawTagValues.Clear();
+                    }
+                }
                 byte[] output = LayoutWriter.WriteFml(
                     plaintext,
                     fileWalker.PrologueEndOffset,
@@ -495,4 +510,7 @@ namespace MfmeFmlDecoder.Application
 
     }
 }
+
+
+
 

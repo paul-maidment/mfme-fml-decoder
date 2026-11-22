@@ -14,7 +14,6 @@
       },
       "TransparencyType": "None",
       "Values": {
-        "Unknown3B": 50265232,
         "OffsetX": 0,
         "OffsetY": 0,
         "NoOverlayInFullscreenMode": false,
@@ -22,9 +21,6 @@
         "Tiled": false,
         "Transparency_UseAlphaChannel": false,
         "Transparency_UseColour": false,
-        "Unknown 0x09": false,
-        "Unknown 0x0A": false,
-        "Unknown 0x0B": false,
         "BorderColour": "#000000FF",
         "Colour": "#F0F0F0FF",
         "TransparentColour": "#000000FF"
@@ -69,17 +65,13 @@
         "OuterLampSize": 52,
         "Resolution": 2,
         "Stops": 24,
-        "Unknown 0x06": 0,
-        "Unknown 0x3B": 410493488,
-        "Unknown1": 12,
         "LampPositionsGap": 1,
         "LampPositionsOffset": 0,
         "Offset": 5,
         "Inverted": true,
         "LampPositionsGapEnabled": true,
         "LampsEnabled": true,
-        "Reversed": true,
-        "Unknown 0x3E": true
+        "Reversed": true
       },
       "Images": {
         "disc_overlay_image": {

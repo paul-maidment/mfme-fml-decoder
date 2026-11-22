@@ -14,7 +14,6 @@
       },
       "TransparencyType": "None",
       "Values": {
-        "Unknown3B": 52330432,
         "OffsetX": 0,
         "OffsetY": 0,
         "NoOverlayInFullscreenMode": false,
@@ -22,9 +21,6 @@
         "Tiled": false,
         "Transparency_UseAlphaChannel": false,
         "Transparency_UseColour": false,
-        "Unknown 0x09": false,
-        "Unknown 0x0A": false,
-        "Unknown 0x0B": false,
         "BorderColour": "#000000FF",
         "Colour": "#F0F0F0FF",
         "TransparentColour": "#000000FF"
@@ -73,7 +69,6 @@
         "Resolution": 2,
         "Stops": 17,
         "Unknown 0x08": 0,
-        "Unknown 0x3B": 141031872,
         "WinlinesThickness": 1,
         "BandOffset": -1,
         "ReelNbrOffset": 9,
