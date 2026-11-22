@@ -483,22 +483,30 @@ namespace MfmeFmlDecoder.Utilities
 
         private static void ApplyDefaultSubLampTable(BaseComponent component)
         {
-            if (component is not SevenSeg sevenSeg || sevenSeg.SublampTable is { Count: > 0 })
+            // Contract: layout.json may omit SubLampNumberTable. Absence means the empty
+            // (all-undefined, -2) table is present, at the kind's fixed size -- MFME's ctor always
+            // allocates it. Materialise it so the writer emits what MFME would.
+            System.Reflection.PropertyInfo prop = component.GetType().GetProperty(
+                "SublampTable",
+                System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            if (prop is null || !prop.CanWrite
+                || !typeof(IReadOnlyList<LampSublampTableEntry>).IsAssignableFrom(prop.PropertyType))
             {
                 return;
             }
 
-            // MFME always writes a SevenSeg sub-lamp table of a fixed 16 slots (undefined slots
-            // are -2), so reconstruct the standard table when layout.json dropped an all-undefined
-            // one.
-            const int slots = 16;
-            var table = new List<LampSublampTableEntry>(slots);
-            for (int i = 1; i <= slots; i++)
+            if (prop.GetValue(component) is IReadOnlyList<LampSublampTableEntry> { Count: > 0 })
             {
-                table.Add(new LampSublampTableEntry(i, -2));
+                return;
             }
 
-            sevenSeg.SublampTable = table;
+            int slots = SublampTableDefaults.FixedSlots(ComponentKind.Resolve(component));
+            if (slots <= 0)
+            {
+                return;
+            }
+
+            prop.SetValue(component, SublampTableDefaults.Empty(slots));
         }
 
         private static void ApplyImages(

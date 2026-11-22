@@ -29,12 +29,12 @@ namespace MfmeFmlDecoder.Decoder.Writer
             if (prop is not null && typeof(IReadOnlyList<LampSublampTableEntry>).IsAssignableFrom(prop.PropertyType))
             {
                 var table = prop.GetValue(component) as IReadOnlyList<LampSublampTableEntry>;
+                int fixedSlots = SublampTableDefaults.FixedSlots(ComponentKind.Resolve(component));
                 if (table is { Count: > 0 })
                 {
-                    // MFME 20.1 uses fixed sub-lamp table sizes: Lamp 12, Reel 15 (both -2-padded
-                    // for undefined slots). Legacy-format sources are smaller (e.g. Reel 10), so pad
-                    // to the 20.1 size so a re-save matches MFME's own 20.1 conversion.
-                    int fixedSlots = component is Lamp ? 12 : component is Reel ? 15 : 0;
+                    // MFME 20.1 uses a fixed sub-lamp table size per kind, -2-padded for undefined
+                    // slots. Legacy-format sources are smaller (e.g. Reel 10), so pad to the 20.1
+                    // size so a re-save matches MFME's own 20.1 conversion.
                     if (fixedSlots > 0 && table.Count < fixedSlots)
                     {
                         var padded = new List<LampSublampTableEntry>(table);
@@ -46,12 +46,13 @@ namespace MfmeFmlDecoder.Decoder.Writer
                     }
                     return table;
                 }
-                if (component is Reel)
+                if (fixedSlots > 0)
                 {
-                    // A 20.1 Reel always carries the fixed 15-slot sub-lamp table.
-                    var t = new List<LampSublampTableEntry>(15);
-                    for (int i = 1; i <= 15; i++) t.Add(new LampSublampTableEntry(i, -2));
-                    return t;
+                    // MFME's component constructor always allocates the sub-lamp table at the kind's
+                    // fixed size filled with -2 ("undefined"), so a component with no table tag in
+                    // the source still has one and MFME writes it (saver emits 0x38/0x39 when the
+                    // count is non-zero; ctors set it via FUN_0048bb80).
+                    return SublampTableDefaults.Empty(fixedSlots);
                 }
             }
 
