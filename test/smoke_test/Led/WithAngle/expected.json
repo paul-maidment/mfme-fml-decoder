@@ -43,7 +43,7 @@
         "Style": "Square",
         "Digit": 23,
         "SelectedStyleIndex": 1,
-        "Unknown 0x38": 1,
+        "SublampCount": 1,
         "Unknown 0x39": 0,
         "SelectedSegmentIndex": 2,
         "Led": true,

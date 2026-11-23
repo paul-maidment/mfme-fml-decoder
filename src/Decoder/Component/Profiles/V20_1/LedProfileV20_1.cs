@@ -14,7 +14,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             tags: new ComponentTagMap
         {
             { 0x1C, new TagInfo(0x04, "Unknown 0x1C", new byte[] { }, ValueRole.UINT32) },
-            { 0x38, new TagInfo(0x04, "Unknown 0x38", new byte[] { }, ValueRole.UINT32) },
+            { 0x38, new TagInfo(0x04, "SublampCount", new byte[] { }, ValueRole.UINT32) },
             { 0x39, new TagInfo(0x04, "Unknown 0x39", new byte[] { }, ValueRole.UINT32) },
             { 0x3B, new TagInfo(0x04, "Unknown 0x3B", new byte[] { }, ValueRole.UINT32) },
             { 0x01, new TagInfo(0x04, "OnColour", new byte[] { }, ValueRole.ARGB_COLOR) },
@@ -31,3 +31,4 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             baseSection: BaseSectionProfile.SingleStream);
     }
 }
+

@@ -16,7 +16,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             { 0x40, new TagInfo(0x01, "Reversed", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
             { 0x3C, new TagInfo(0x01, "InvertedOpto", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
 
-            { 0x08, new TagInfo(0x04, "Unknown 0x08", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
+            { 0x08, new TagInfo(0x04, "GeometryAngle", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
             { 0x36, new TagInfo(0x00, "Overlay Image", new byte[] { }, ValueRole.BITMAP) },
             { 0x3B, new TagInfo(0x04, "Unknown 0x3B", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
             { 0x1C, new TagInfo(0x04, "NonNullSublampCount", new byte[] { 0x00 }, ValueRole.UINT32) },
@@ -66,3 +66,4 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             baseSection: BaseSectionProfile.SingleStream);
     }
 }
+

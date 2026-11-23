@@ -13,7 +13,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             MfmeVersion.V20_1,
             tags: new ComponentTagMap
         {
-            { 0x17, new TagInfo(0x01, "Unknown 0x17", new byte[] { 0x01 }, ValueRole.BOOLEAN) },
+            { 0x17, new TagInfo(0x01, "InputPresent", new byte[] { 0x01 }, ValueRole.BOOLEAN) },
             // Button Number is the button's machine input. Blank (tag absent) means "no input", so it must
             // not be defaulted to 0: a real input of 0 is a distinct value and must survive to the JSON.
             { 0x18, new TagInfo(0x04, "Button Number", Array.Empty<byte>(), ValueRole.UINT32) },
@@ -48,7 +48,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             { 0x3B, new TagInfo(0x04, "Unknown 0x3B", new byte[] { }, ValueRole.UINT32) },
             { 0x3F, new TagInfo(0x00, "Label (UTF-16)", new byte[] { }, ValueRole.TEXT) },
             { 0x30, new TagInfo(0x01, "Unknown 0x30", new byte[] { }, ValueRole.BOOLEAN) },
-            { 0x19, new TagInfo(0x01, "Unknown 0x19", new byte[] { }, ValueRole.BOOLEAN) },
+            { 0x19, new TagInfo(0x01, "CoinSelected", new byte[] { }, ValueRole.BOOLEAN) },
             { 0x0D, new TagInfo(0x04, "XOffset", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.INT32) },
             { 0x0E, new TagInfo(0x04, "YOffset", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.INT32) },
         },
@@ -57,3 +57,4 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             baseSection: BaseSectionProfile.V20Signature);
     }
 }
+

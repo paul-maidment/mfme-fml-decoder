@@ -16,7 +16,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             { 0x01, new TagInfo(0x04, "OnColour", Array.Empty<byte>(), ValueRole.ARGB_COLOR) },
             { 0x02, new TagInfo(0x04, "OffColour", Array.Empty<byte>(), ValueRole.ARGB_COLOR) },
             { 0x03, new TagInfo(0x04, "BackgroundColour", Array.Empty<byte>(), ValueRole.ARGB_COLOR) },
-            { 0x04, new TagInfo(0x04, "UNKNOWN 0x04", Array.Empty<byte>(), ValueRole.ARGB_COLOR) },
+            { 0x04, new TagInfo(0x04, "SliceCount", Array.Empty<byte>(), ValueRole.ARGB_COLOR) },
             { 0x06, new TagInfo(0x04, "Thickness", new byte[] { 0x00, 0x00, 0x00, 0x40 }, ValueRole.FLOAT) },
             { 0x07, new TagInfo(0x04, "Spacing", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.FLOAT) },
             { 0x08, new TagInfo(0x04, "HorizontalSpacing", new byte[] { 0x00, 0x00, 0xA0, 0x40 }, ValueRole.FLOAT) },
@@ -24,8 +24,8 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             { 0x0A, new TagInfo(0x04, "Slant", new byte[] { 0x00, 0x00, 0xA0, 0x40 }, ValueRole.FLOAT) },
             { 0x0B, new TagInfo(0x04, "Centre", new byte[] { 0x00, 0x00, 0x40, 0x42 }, ValueRole.FLOAT) },
             { 0x99, new TagInfo(0x04, "Chop", new byte[] { 0x00, 0x00, 0xB4, 0x42 }, ValueRole.FLOAT) },
-            { 0x0D, new TagInfo(0x04, "UNKNOWN 0x0D", Array.Empty<byte>(), ValueRole.ARGB_COLOR) },
-            { 0x0E, new TagInfo(0x04, "UNKNOWN 0x0E", Array.Empty<byte>(), ValueRole.ARGB_COLOR) },
+            { 0x0D, new TagInfo(0x04, "SliceSize", Array.Empty<byte>(), ValueRole.ARGB_COLOR) },
+            { 0x0E, new TagInfo(0x04, "SliceOffset", Array.Empty<byte>(), ValueRole.ARGB_COLOR) },
             { 0x0C, new TagInfo(0x01, "Charset", new byte[] { 0x00 }, ValueRole.BYTE) },
             { 0x0F, new TagInfo(0x01, "Segment16", new byte[] { 0x01 }, ValueRole.BOOLEAN) },
             { 0x40, new TagInfo(0x01, "Reversed", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
@@ -37,3 +37,5 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             baseSection: BaseSectionProfile.V20Signature);
     }
 }
+
+

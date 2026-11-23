@@ -42,7 +42,7 @@
         "Segment": "",
         "Style": "Round",
         "SelectedStyleIndex": 0,
-        "Unknown 0x38": 1,
+        "SublampCount": 1,
         "Unknown 0x39": 4294967295,
         "SelectedSegmentIndex": -1,
         "Led": true,

@@ -18,7 +18,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             { 0x38, new TagInfo(0x04, "SublampCount", new byte[] { 0x00 }, ValueRole.SUBLAMP_COUNT) },
             { 0x39, new TagInfo(0x04, "SublampTable", new byte[] { 0x00 }, ValueRole.LAMP_SUBLAMP_TABLE) },
             { 0x3B, new TagInfo(0x04, "Unknown 0x3B", Array.Empty<byte>(), ValueRole.UINT32) },
-            { 0x08, new TagInfo(0x04, "Unknown 0x08", new byte[] { 0x32, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
+            { 0x08, new TagInfo(0x04, "GeometryAngle", new byte[] { 0x32, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
         }.WithNestedTagBlock(new ComponentTagMap
         {
             { 0x26, new TagInfo(0x01, "Alpha", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
@@ -42,10 +42,11 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             { 0x1F, new TagInfo(0x04, "Centre", new byte[] { 0x32, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
             { 0x0B, new TagInfo(0x01, "Programmable", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
             { 0x20, new TagInfo(0x01, "SelectedStyleId", new byte[] { 0x00 }, ValueRole.BYTE) },
-            { 0x24, new TagInfo(0x01, "Unknown 0x24", new byte[] { 0x00 }, ValueRole.BYTE) },
+            { 0x24, new TagInfo(0x01, "Style2", new byte[] { 0x00 }, ValueRole.BYTE) },
         }),
             angle: AngleProfile.Rewrite(0),
             options: ExtendedTagParser.Options .WithBitmapTags(0x36),
             baseSection: BaseSectionProfile.SingleStream);
     }
 }
+

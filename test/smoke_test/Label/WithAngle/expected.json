@@ -52,8 +52,8 @@
       },
       "Values": {
         "Label": "Label",
+        "SublampCount": 1,
         "SuppressCaption": 1,
-        "Unknown 0x38": 1,
         "Lamp": 23,
         "Transparent": true,
         "BackgroundColour": "#FF0080FF"

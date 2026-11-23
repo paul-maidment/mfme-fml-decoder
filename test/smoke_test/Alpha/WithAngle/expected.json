@@ -41,7 +41,7 @@
       "Values": {
         "Columns": 16,
         "DigitWidth": 4,
-        "Unknown 0x08": 0,
+        "GeometryAngle": 0,
         "Reversed": true,
         "Colour": "#FF8000FF"
       },

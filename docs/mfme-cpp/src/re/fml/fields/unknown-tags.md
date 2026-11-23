@@ -404,3 +404,312 @@ against a sample layout. The `0x5C..0x67` RAW-24 entries agree with the field ma
    (`FUN_0048d69c`/`d6a4`, `FUN_004a27e0`) but no draw-time reader was located.
 5. The decoder's Lamp/SevenSeg base-`0x08` default of `0x32` disagrees with the
    loader default of 0; confirm against a layout that omits tag `0x08`.
+
+---
+
+## Residual class tags (second pass)
+
+Second pass over the separated-type class loaders (Reel, BandReel, Alpha, Lamp),
+resolving tag ids a first pass left as `"Unknown 0xNN"`. Same base/class split as
+§1/§2. The main result: several of these are not new fields at all. They are the
+class-section spelling of a **base** flag, writing the same byte the base loader
+reaches through base tags `0x3C`/`0x40`/`0x4C`.
+
+Citations use RVA (durable) plus the current `code_*.c` line where the two differ.
+The class loaders are all shaped `FUN_0048fe68(obj, stream)` (base pass) followed by
+`while(tag != 0) switch(tag) { ... }` (class pass).
+
+### 0. The three aliased base flags
+
+These low offsets are the shared TGRBase element flags. Every "separated" class
+duplicates them under its own low class tag ids.
+
+| base tag | offset | base name (per profile) | setter (RVA) | base save |
+|---|---|---|---|---|
+| `0x3C` | `obj+0xEF` | `Inverted` / `InvertedOpto` | `FUN_004854e8` `0x0854E8` | `code_080000.c:9903-9904` |
+| `0x40` | `obj+0x12E` | `Reversed` / `Reverse` | `FUN_00485724` `0x085724` | `code_080000.c:9917-9918` |
+| `0x4C` | `obj+0xFF` | `HorizontalVertical` / `IsHorizontal` | `FUN_00485774` `0x085774` | `code_080000.c:9934` |
+
+- Base ctor zeroes all three: `obj+0xEF` `code_080000.c:6812`, `obj+0x12E:6827`,
+  `obj+0xFF:6860`. Default is 0 for all.
+- `obj+0x12E` flips the reel position in `FUN_0048555c` `0x08555C`
+  (`code_080000.c:2953-2967`): `if (obj+0x12e != 0) iVar1 = res - iVar1;`. So non-zero
+  mirrors the strip. Blob-name "Reversed"/"Reverse". **High.**
+- `obj+0xFF` selects vertical vs horizontal layout math in `FUN_00487254` `0x087254`
+  (`code_080000.c:4257+`): branch picks `0x118 - y` vs `0x114 - x`. Blob-name
+  "HorizontalVertical"/"IsHorizontal". **High.**
+- `obj+0xEF` is a plain bool: setter `FUN_004854e8` stores only, no redraw. It is read
+  with `obj+0xED` (Coin/Note Selected, base `0x19`) in `code_0e0000.c:3746`:
+  `if ((param_3+0xef != 0) && (param_3+0xed == 0)) cVar1 = cVar1 == 0;`, i.e. it
+  inverts an input-selected test. Blob-name "Inverted"/"InvertedOpto". **Medium.**
+
+The pattern across classes: Reel spells them `0x02`/`0x12`/`0x13`, BandReel
+`0x0F`/`0x0A`/`0x0B`, Alpha `0x05`.
+
+### 1. Reel (TGRFancyReel, element `0x03`)
+
+Class loader `FUN_004a89fc` RVA `0x0A89FC` (`code_0a0000.c:5472`). Class save
+`FUN_004a85b4` RVA `0x0A85B4` (`code_0a0000.c:5293`). Memberwise `Assign`
+`FUN_004a8304` RVA `0x0A8304` (`code_0a0000.c:5200`). Ctor `FUN_004a5784` RVA
+`0x0A5784` (`code_0a0000.c:3553`).
+
+| tag | role/len | object field | meaning | controls | conf |
+|---|---|---|---|---|---|
+| `0x12` | byte/1 | `obj+0xFF` | base `0x4C` HorizontalVertical | reel orientation (v/h) | high |
+| `0x13` | byte/1 | `obj+0x12E` | base `0x40` Reversed | reel scroll direction | high |
+| `0x14` | u32/4 | discarded local | none (legacy skip) | nothing on load | high |
+| `0x18` | byte/1 | discarded local | inert skip, **not** ButtonNumber | nothing on load | high |
+| `0x1B` | u32/4 | `obj+0x2F4` | reel int, default 100 | no consumer located | med (field)/low (role) |
+| `0x1D` | byte/1 | discarded local | none (legacy skip) | nothing on load | high |
+| `0x22` | u32/4 | `obj+0x3A4` | optional int, default `-1` | no consumer located | low |
+| `0x23` | u32/4 | `obj+0x3A8` | optional int, default `-1` | no consumer located | low |
+
+- `0x12`, `0x13`, and `0x02` (not requested but part of the trio) are the loader's
+  spellings of the three base flags: `case 0x02 -> obj+0xEF` (`code_0a0000.c:5516-5518`),
+  `case 0x12 -> obj+0xFF` (`5582-5584`), `case 0x13 -> obj+0x12E` (`5585-5587`).
+  Reel-specific setters confirm them: `obj+0x12E` setter `FUN_004a70a4` `0x0A70A4`
+  (`code_0a0000.c:4320`) calls `FUN_004a6b80` (relayout); `obj+0xEF` setter
+  `FUN_004a70fc` `0x0A70FC` (`4370`) just redraws.
+- `0x14`/`0x18`/`0x1D` read into stack locals and are discarded:
+  `case 0x14 -> auStack_44,4` (`code_0a0000.c:5588-5590`), `case 0x18 -> uStack_45,1`
+  (`5600-5602`), `case 0x1D -> uStack_45,1` (`5622-5624`). The class save
+  (`code_0a0000.c:5293-5401`) writes none of them, so they are load-only skip tags.
+  **`0x18` here is a 1-byte skipped byte, not the 4-byte base `ButtonNumber`**
+  (`obj+0xE8`): the tag id collides across the two lists but the meaning does not.
+- `0x1B` (`obj+0x2F4`, `piVar1+0xBD`): ctor default `100` (`code_0a0000.c:3686`); save
+  writes it only when `!= 100` (`5355-5356`); `Assign` copies it (`5167`, `5225`). No
+  reader of `obj+0x2F4` exists in the Reel class or elsewhere in `code_0a0000.c`; the
+  `code_260000.c` hits on `+0x2f4` are a different class (`FUN_0066xxxx`, its own
+  `0x300`/`0x58`/`0x5c` fields), not the reel. The field is real and round-tripped,
+  role unresolved. **Medium** on offset/default, **low** on meaning.
+- `0x22` (`obj+0x3A4`, `piVar1+0xE9`) and `0x23` (`obj+0x3A8`, `piVar1+0xEA`): loader
+  `code_0a0000.c:5637-5639` / `5640-5642`; `Assign` copies both (`5186-5187`, `5251-5252`);
+  save writes each only when `!= -1` (`5372-5373`, `5375-5376`), so default `-1`. The
+  only other in-file reads of `obj+0x3A4`/`obj+0x3A8` are inside `FUN_004a1df0` RVA
+  `0x0A1DF0`, which is a **Lamp** method (it uses `obj+0x560`, a Lamp ctor field), so
+  those reads are the Lamp matrix-array, not the reel. **No consumer of the Reel's
+  `obj+0x3A4`/`obj+0x3A8` was located. Unresolved.**
+
+### 2. BandReel (TGRBandReel, element `0x08`)
+
+Class loader `FUN_00486e7c` RVA `0x086E7C` (`code_080000.c:4118`). Ctor
+`FUN_00484dd0` RVA `0x084DD0` (`code_080000.c:2706`). The class `SaveToStream`
+(`0x086D0C`) was not emitted by the decompiler, so no class-save tag list is available;
+the base flags it aliases are still saved by the base writer.
+
+| tag | role/len | object field | meaning | controls | conf |
+|---|---|---|---|---|---|
+| `0x0A` | byte/1 | `obj+0xFF` | base `0x4C` HorizontalVertical | reel orientation (v/h) | high |
+| `0x0B` | byte/1 | `obj+0x12E` | base `0x40` Reverse | reel scroll direction | high |
+| `0x0F` | byte/1 | `obj+0xEF` | base `0x3C` Inverted | input-invert flag | medium |
+| `0x11` | byte/1 | discarded local | none (legacy skip) | nothing on load | high |
+| `0x14` | u32/4 | `obj+0x23C` | unknown int | no consumer located | low |
+| `0x15` | byte/1 | `obj+0x240` | unknown byte | no consumer located | low |
+
+- Loader: `case 0x0A -> obj+0xFF` (`code_080000.c:4199-4201`), `case 0x0B -> obj+0x12E`
+  (`4202-4204`), `case 0x0F -> obj+0xEF` (`4214-4216`), `case 0x11 -> uStack_41,1`
+  discarded (`4220-4222`), `case 0x14 -> piVar1+0x8F` (`4229-4231`), `case 0x15 ->
+  piVar1+0x90` (`4232-4234`).
+- `obj+0xFF` is consumed by the BandReel h/v math `FUN_00487254` (`code_080000.c:4266`,
+  `4273`), confirming `0x0A` = orientation. `obj+0x12E`/`obj+0xEF` use the shared
+  setters/maths in §0.
+- `0x14` (`obj+0x23C`) and `0x15` (`obj+0x240`) have **no reader anywhere** in the
+  corpus (`rg` for `+ 0x23c)`/`+ 0x240)` matches only unrelated classes, e.g.
+  `code_050000.c:7011` which is a countdown timer in a different object). The field map
+  marks both "No save counterpart". **Unresolved; no locatable consumer.**
+
+### 3. Alpha (TGRAlpha, element `0x07`)
+
+Class loader RVA `0x07EFE4` (`code_070000.c:8288`).
+
+| tag | role/len | object field | meaning | controls | conf |
+|---|---|---|---|---|---|
+| `0x05` | byte/1 | `obj+0x12E` | base `0x40` Reversed | alpha strip order | high |
+
+- Loader `case 0x05 -> obj+0x12E` (`code_070000.c:8339-8341`). Same byte as base `0x40`
+  "Reversed"; `fields/0x07_TGRAlpha.md` already notes `obj+0x12E` is the "orientation /
+  strip-order flag byte (0 reverses order in Render)", and the profile maps base `0x40`
+  to `"Reversed"` (`AlphaProfileV20_1.cs:23`). **High.** (The field map's "0 reverses"
+  phrasing is the inverse sense of the reel-side "non-zero mirrors"; either way the
+  flag selects the strip order.)
+
+### 4. Lamp (TGRFancyLamp, element `0x04`)
+
+Class loader `FUN_004a467c` RVA `0x0A467C` (`code_0a0000.c:2920`). Ctor `FUN_004a1820`
+RVA `0x0A1820`.
+
+| tag | role/len | object field | meaning | controls | conf |
+|---|---|---|---|---|---|
+| `0x0E` (nested) | u32/4 | `obj+0x21C` | shape size/scale parameter | shape-7 pie/disc scale | medium |
+| `0x68` (nested) | raw/24 | `obj+0x384` | 24-byte geometry slot, **not** TLV | drawn geometry | medium |
+
+- `0x0E`: loader `case 0x0e -> piVar1+0x87` = `obj+0x21C` (`code_0a0000.c:2989-2991`);
+  save writes it when non-zero (`code_0a0000.c:2765-2766`). The shape setter
+  `FUN_004a27e0` `0x0A27E0` (`code_0a0000.c:1609-1640`) sets `obj+0x21C = 0x32` (50) and
+  `obj+0x208 = 10` when `SelectedShapeIndex == 7`, else `0` (`1629-1635`). The draw
+  `FUN_004a2abc` `0x0A2ABC` (`code_0a0000.c:1793`) uses it as a scale in the shapes 7/8
+  branch: `local_7c = (100.0 - (float)obj+0x21C) / 100.0` (`2141`). So it is a
+  shape-specific size/inset parameter (50 for shape 7, absent means 0 = full size).
+  **Medium** (offset and setter are certain; the exact visual is inferred from the one
+  draw site).
+- `0x68`: loader `case 0x68 -> piVar1 + tag*6 - 399, 0x18` (`code_0a0000.c:3191-3192`),
+  i.e. **24 raw bytes** into `obj + (0x68*6-399)*4 = obj+0x384`, the next slot of the
+  24-byte-stride geometry struct array based at `obj+0x264` that `0x5C..0x67` also fill
+  (`case 0x5C..0x68`, `3179-3192`). The array's slots are 4-int rectangles copied by
+  the draw (`code_0a0000.c:3942-3947`, `3977-3982`, `4013`). So the decoder's
+  `"Unknown 0x68 (TLV Block)"` mapping (`LampProfileV20_1.cs:109`) is **wrong**: it is a
+  24-byte geometry blob, not a TLV. The base-section `0x68` (`LampProfileV20_1.cs:40`)
+  is **dead**: `FUN_0048fe68` has no `0x68` case (its switch ends at `0x4C`,
+  `code_080000.c:10425-10613`), so that entry can never match in MFME's base pass.
+  **Medium.**
+
+### 5. Not resolved
+
+- **Reel `0x1B`** (`obj+0x2F4`): real int, default 100, round-tripped; no reader found.
+- **Reel `0x22`/`0x23`** (`obj+0x3A4`/`obj+0x3A8`): real optional ints, default `-1`,
+  round-tripped; no reel reader found (offset is reused by Lamp as a matrix array).
+- **Reel `0x14`/`0x18`/`0x1D`, BandReel `0x11`**: read-and-discarded skip tags; no field.
+- **BandReel `0x14`/`0x15`** (`obj+0x23C`/`obj+0x240`): no reader anywhere; nothing to
+  tie them to.
+- **Lamp `0x68`**: geometry blob only (no name); shape meaning of the array unknown.
+
+---
+
+## Deep pass: medium-confidence names
+
+Second pass over the five medium-confidence fields above, following each value past
+"the id lands at offset X" to the consumer that computes something with it. All
+evidence is from the shipped binary (`MFME_unpacked.exe`) and its Ghidra decompile
+(`decomp/code_*.c`); the base element VMT was read from the raw PE (imagebase
+`0x00400000`) and cross-checked with `rea function ... --provider ghidra` (snapshot).
+No application source was changed. Line numbers are from the top-level
+`decomp/code_*.c`; RVAs are the durable citation.
+
+Base element VMT = VA `0x00A77BA4` (`MFME_unpacked.exe` RVA `0x677BA4`), stored by the
+base ctor `FUN_0048b2d0` (RVA `0x08B2D0`) at `code_080000.c:6742`
+(`*local_8 = &PTR_FUN_00a77ba4`). Entry `+0x00` = `FUN_0048b8a0`, `+0x04` = `FUN_0048bbdc`,
+`+0x08` = `FUN_0048bd44`, **`+0x0C` = `FUN_0048bd9c`**, ... `+0xA8` = `FUN_0048ee2c`.
+
+### 1. Base `0x08` — refuted "not stored"; confirmed **rotation angle**
+
+- The loader tail hands the value to the geometry virtual `vtable+0x0C`
+  (`code_080000.c:10657-10659`):
+  `(*param_1)[0xC](obj, obj+0xA8 /*x*/, obj+0xAC /*y*/, local_40 /*tag 0x08*/, obj+0xC0 /*h*/, obj+0xC4 /*w*/);`
+- `vtable+0x0C` is `FUN_0048bd9c` (RVA `0x08BD9C`, `code_080000.c:7120`). Its `param_4`
+  is the tag value. On a change it calls
+  `FUN_004917ec(obj, param_4, width, &y, &x, height)` (`code_080000.c:7170`, `7175`).
+- `FUN_004917ec` (RVA `0x0917EC`, `code_090000.c:925`) is the transform:
+  - angle `== 0` frees the transform helper objects at `obj+4`/`obj+8`/`obj+0x3C` and
+    returns the raw `obj+0xB0`/`obj+0xB4`;
+  - angle `!= 0` computes `local_98 = (_DAT_00491c18 * -angle) / 360.0`. The global
+    `_DAT_00491c18` (VA `0x00491C18`) is an 80-bit long double holding **π**
+    (`00 c0 68 21 a2 da 0f c9 00 40` = `0x4000C90FDAA22168C000`). So it converts degrees
+    to radians. It then builds a rotation helper (`obj+0x3C` via `FUN_00673c94` with
+    VMT `PTR_FUN_00670164`; `FUN_00674224(..., -angle/2.0, ...)` rotates about the
+    centre), sums the `sin`/`cos` terms for the rotated extent, and finally stores
+    `*(int *)(obj+0xD4) = param_2` (`code_090000.c:1085`).
+- Because the value round-trips through `obj+0xD4`, the earlier note that base `0x08`
+  is "read to a stack local (not stored on the object)" is wrong: it is stored on the
+  object at `obj+0xD4` by the vtable call, and the base save writes tag `0x08` from
+  `obj+0xD4` (the BASE.md mismatch). The decoder already calls it `GeometryAngle`
+  (`AlphaProfileV20_1.cs:20`, `Bitmap`, `Lamp`, `MatrixAlpha`, `Reel`, `SevenSeg`).
+- **Verdict: CONFIRMED** (rotation angle in degrees). Recommended name
+  **`GeometryAngle`**; note it is persisted at `obj+0xD4`. Confidence **high**.
+
+### 2. Base `0x17` — confirmed **InputPresent**; consumer is the machine-input dispatch
+
+- The paired value is `obj+0xE8` (base `0x18`), not just "meaningful when 0x17 set":
+  the element property dump prints `obj+0xE8` only when `obj+0xEC != 0`
+  (`code_010000.c:10005-10016`: `if (obj+0xEC == 0) write ""; else write obj+0xE8`).
+- Real consumer: the input dispatcher `FUN_004e7b88` (RVA `0x0E7B88`,
+  `code_0e0000.c:3732`) guard at `3753-3755`:
+  `if (DAT_00b930de == 0 && ((obj+0xEC != 0 || obj+0xED != 0) && obj+0xF1 != 0))` then,
+  with `obj+0xED == 0`, `FUN_004e8330(..., *(uint *)(obj+0xE8), ...)` — it routes the
+  bound input number. Same pattern in `FUN_004e816c` (`code_0e0000.c:3944-3949`).
+  So `obj+0xEC` decides whether the machine routes a machine input to this element; it
+  is not a draw or hit-test flag.
+- The element's own setter is `vtable+0xA8 = FUN_0048ee2c` (writes `obj+0xEC = param_2`;
+  it is the memberwise Assign target, `code_080000.c:8550-8551`). Lamp override
+  `FUN_004a23f4` (`code_0a0000.c:1372`) toggles it and relayouts/redraws.
+  The `(obj+0xE4, obj+0xE8)` pair is set by `FUN_00488160` (`code_080000.c:4819`).
+- Caution: `FUN_0048d69c`/`FUN_0048d6a4` also write a byte at `+0xEC` (`code_080000.c:8086`,
+  `8098`), but their object is the host/machine (it owns the element list at `obj+0xf8`
+  and the flag `obj+0x13c`, `code_080000.c:7950-8005`), a different class. The decompiler
+  collapses both to `+0xec`; those two are not the element field.
+- **Verdict: CONFIRMED** — **`InputPresent`** ("this element is bound to a machine input").
+  Confidence **high** on the role; **medium** on the literal "present" wording (it could
+  equally read "input enabled").
+
+### 3. Base `0x37` / Border `0x08` — confirmed **spacing**; it is a geometric inset, default 1
+
+- Both tags land at `obj+0x108`: base loader case `0x37` (`BASE.md:74`), Border own
+  loader case `8` (`code_090000.c:4235-4236`). Border ctor `FUN_00495904` sets
+  `obj+0x108 = 1` (`code_090000.c:3816`), which is why Border's save skips a value of 1
+  (`code_090000.c:4155-4156`) while the base save writes any non-zero value.
+- Setter `FUN_00495d40` (RVA `0x095D40`, `code_090000.c:3948`) shows it is thickness,
+  not an index: for a delta Δ it calls `vtable+0x10(obj, Δ, Δ)` to offset the element,
+  rebuilds the BoundingBox rect (`obj+0x190`) and shifts the PaneSplit rect
+  (`obj+0x1A0`, via `obj+0x68/0x69`) by `2Δ`, stores the new value, then relayouts and
+  redraws. The `×2` is the inset applied on both sides.
+- Reader `FUN_004962e8` (RVA `0x0962E8`, `code_090000.c:4285`): when gathering elements
+  inside the border, `if (obj+0x108 == 0) FUN_00655bec(rect, -1, -1)` — the zero case is
+  the "no spacing" special case.
+- `FUN_0048d598` (`code_080000.c:8031`) treats a Border with `obj+0x108 > 0` as a
+  child-containing border (it is shuffled between list `owner+0x64` and `owner+0xf8`).
+- **Verdict: CONFIRMED** as a border spacing/inset value (not an index or style id).
+  Recommended name **`BorderSpacing`** (decoder already uses it); it is the frame
+  inset/offset in element pixels with default 1. Confidence **high** on the geometric
+  role, **medium** on the exact visual (inferred from the two cited sites).
+
+### 4. SevenSeg `0x24` — identity confirmed, but **refuted** as a draw-path control
+
+- The field is literally `@TGRSevenSeg@SetStyle2` (`functions.txt` RVA `0x0B86B4`),
+  storing `obj+0x193`.
+- Every reference to `obj+0x193` in the whole corpus is a write or a copy: ctor init 0
+  (`code_0b0000.c:5055`), `SetStyle2` store (`5518`), `Assign` copy (`5636`, `6114`),
+  `SaveToStream` tag `0x24` (`5697`), loader case `0x24` (`5820`). **No read exists
+  anywhere in the binary**, and there is no `GetStyle2`.
+- The renderer `_TGRSevenSeg_Render` reads the *main* style `obj+0x192`
+  (`code_0b0000.c:6577`, `6643`, and the `== 2` branches) and never reads `obj+0x193`.
+  `SetStyle` validates `< 3`; `SetStyle2` has no such consumer.
+- So `0x20` (`SelectedStyleId`) is the live style that drives Render; `0x24` (`Style2`)
+  is a stored, assigned, saved second selector that no located code path consumes.
+- **Verdict: keep the name `Style2`** (identity confirmed), but correct the effect: it
+  changes nothing in the draw path in this build. Treat as a stored second style select
+  with no located consumer. Confidence **high** that it is `SetStyle2`'s field and
+  **high** that nothing reads it.
+
+### 5. AlphaNew `0x04` / `0x0D` / `0x0E` — confirmed derived slice geometry, **not colours**
+
+- `@TGRAlphaNew@Resize` (RVA `0x07FDBC`, `code_070000.c:9038`) derives the two computed
+  fields from the count:
+  - `obj+0x1BC` (tag `0x0D`) = `obj+0xC4 /*width*/ / obj+0x164 /*count*/`;
+  - `obj+0x1DC` (tag `0x0E`) = `(width − (width/count)*count) / 2` = `(width mod count)/2`.
+- `@TGRAlphaNew@Setup` (RVA `0x07FB74`, `code_070000.c:8988-8990`) uses them to blit the
+  strip one frame at a time:
+  `for (i = 0; i < obj+0x164; i++) blit(dest, i*(obj+0x1BC) + obj+0x1DC, 0, src);`
+  i.e. frame `i` is pasted at `x = i * sliceSize + offset`.
+- They are ints used only in loop arithmetic and offsets. The colours are the separate
+  tags `0x01`/`0x02`/`0x03` → `obj+0x1B0`/`0x1B4`/`0x1B8`. The decoder's `ARGB_COLOR`
+  role for `0x04`/`0x0D`/`0x0E` is a mislabel.
+- Correction to the field map: `0x0D` is `element width / count` (`obj+0xC4`), so it is a
+  slice *cell size* (width), not "bitmap height / slice count". The map's "SliceHeight"
+  name is width-based; "SliceSize" is more accurate.
+- **Verdict: CONFIRMED.** `0x04` = slice/frame count (default 16);
+  `0x0D` = slice cell size = element width / count; `0x0E` = slice centring offset =
+  `(width mod count)/2`. Not colours. Confidence **high**.
+
+### Summary
+
+| field | prior name | verdict | recommended | confidence |
+|---|---|---|---|---|
+| base `0x08` | GeometryAngle (stack local) | confirmed; stored at `obj+0xD4` | `GeometryAngle` (degrees) | high |
+| base `0x17` | InputPresent | confirmed | `InputPresent` | high |
+| base `0x37` | BorderSpacing | confirmed geometric | `BorderSpacing` (default 1) | high |
+| SevenSeg `0x24` | Style2 | identity confirmed, effect refuted | `Style2` (draw-inert) | high |
+| AlphaNew `0x04`/`0x0D`/`0x0E` | SliceCount/SliceHeight/SliceRemainder | confirmed, width-based | `SliceCount` / `SliceSize` / `SliceOffset` | high |
+
+All five remain non-colour, non-index except `BorderSpacing` (geometric) and `Style2`
+(a stored selector with no consumer). The two corrections worth carrying into the
+profiles: base `0x08` is persisted at `obj+0xD4` (the save source), and AlphaNew
+`0x0D` is width-based (slice cell size), not height-based.

@@ -52,9 +52,9 @@
         "BackgroundColour": "#FF0000FF",
         "OffColour": "#FF8000FF",
         "OnColour": "#FF80C0FF",
-        "UNKNOWN 0x04": "#00001000",
-        "UNKNOWN 0x0D": "#00001100",
-        "UNKNOWN 0x0E": "#00000000"
+        "SliceCount": "#00001000",
+        "SliceOffset": "#00000000",
+        "SliceSize": "#00001100"
       },
       "Images": {
         "overlay_image": {

@@ -14,12 +14,16 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V19_8
         private static ComponentTagMap BuildTags()
         {
             ComponentTagMap inner = new(V20_1.ReelProfileV20_1.Profile.Tags.NestedTagBlockMap);
-            inner.Add(0x12, new TagInfo(0x01, "Unknown 0x12", new byte[] { 0x00 }, ValueRole.BYTE));
+            inner.Add(0x12, new TagInfo(0x01, "HorizontalVerticalClass", new byte[] { 0x00 }, ValueRole.BYTE));
             inner.Add(0x14, new TagInfo(0x01, "Unknown 0x14", new byte[] { 0x00 }, ValueRole.BYTE));
-            inner.Add(0x18, new TagInfo(0x01, "Unknown 0x18", new byte[] { 0x00 }, ValueRole.BYTE));
+            inner.Add(0x18, new TagInfo(0x01, "Skip0x18", new byte[] { 0x00 }, ValueRole.BYTE));
 
             ComponentTagMap outer = new(V20_1.ReelProfileV20_1.Profile.Tags);
             return outer.WithNestedTagBlock(inner);
         }
     }
 }
+
+
+
+

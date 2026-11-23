@@ -40,7 +40,7 @@
       },
       "Values": {
         "DotSpacing": 7,
-        "Unknown 0x08": 0,
+        "GeometryAngle": 0,
         "XSize": 3,
         "YSize": 4,
         "BackgroundColour": "#00FF00FF",

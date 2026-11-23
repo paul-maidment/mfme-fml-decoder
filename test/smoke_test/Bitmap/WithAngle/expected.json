@@ -40,8 +40,8 @@
       },
       "Values": {
         "StretchMode": "Nearest",
+        "GeometryAngle": 0,
         "StretchMode Index": 0,
-        "Unknown 0x08": 0,
         "Transparent": true
       },
       "Images": {

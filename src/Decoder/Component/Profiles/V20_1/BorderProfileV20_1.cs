@@ -15,7 +15,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
         {
             { 0x0A, new TagInfo(0x01, "Unknown 0x0A", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
             { 0x0B, new TagInfo(0x01, "Unknown 0x0B", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
-            { 0x37, new TagInfo(0x04, "Unknown 0x37", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
+            { 0x37, new TagInfo(0x04, "BorderSpacing", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
             { 0x36, new TagInfo(0x00, "Overlay Image", Array.Empty<byte>(), ValueRole.BITMAP) },
             { 0x3B, new TagInfo(0x04, "Unknown 0x3B", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
             { 0x3F, new TagInfo(0x00, "Label", Array.Empty<byte>(), ValueRole.TEXT) },
@@ -37,3 +37,4 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             baseSection: BaseSectionProfile.SingleStream);
     }
 }
+

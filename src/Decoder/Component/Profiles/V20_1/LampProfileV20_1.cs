@@ -20,7 +20,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             { 0x27, new TagInfo(0x00, "PrimaryFont", Array.Empty<byte>(), ValueRole.FONT) },
             { 0x3B, new TagInfo(0x04, "Unknown 0x3B", Array.Empty<byte>(), ValueRole.UINT32) },
             { 0x3C, new TagInfo(0x01, "Inverted", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
-            { 0x17, new TagInfo(0x01, "Unknown 0x17", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
+            { 0x17, new TagInfo(0x01, "InputPresent", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
             { 0x29, new TagInfo(0x01, "Lockout", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
             { 0x49, new TagInfo(0x04, "SelectedCoinNoteId", new byte[ ] { 0xFF, 0xFF, 0xFF, 0xFF }, ValueRole.INT32) },
             { 0x48, new TagInfo(0x04, "SelectedEffectId", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
@@ -37,9 +37,9 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             { 0x3E, new TagInfo(0x01, "Unknown 0x3E", new byte[ ] { 0x00 }, ValueRole.BOOLEAN) },
             { 0x46, new TagInfo(0x00, "Overlay Bitmap", Array.Empty<byte>(), ValueRole.BITMAP) },
             { 0x36, new TagInfo(0x00, "Overlay Bitmap", Array.Empty<byte>(), ValueRole.BITMAP) },
-            { 0x68, new TagInfo(0x04, "Unknown 0x68", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
+            { 0x68, new TagInfo(0x04, "GeometryStruct", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
             { 0x19, new TagInfo(0x01, "Coin / Note Selected", new byte[ ] { 0x00 }, ValueRole.BOOLEAN) },
-            { 0x08, new TagInfo(0x04, "Unknown 0x08", new byte[] { 0x32, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
+            { 0x08, new TagInfo(0x04, "GeometryAngle", new byte[] { 0x32, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
         }.WithNestedTagBlock(new ComponentTagMap
             {
                 { 0x04, new TagInfo(0x04, "Sublamp1Colour", new byte[ ] { 0x00, 0xFF, 0xFF, 0xFF }, ValueRole.ARGB_COLOR) },
@@ -103,7 +103,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
                 { 0x25, new TagInfo(0x04, "OutlineColour", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.ARGB_COLOR) },
                 { 0x0B, new TagInfo(0x04, "ShapeParamter", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) }, // TODO: Add a half number mode for this type.
                 { 0x0D, new TagInfo(0x04, "ShapeAngle", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.INT32) },
-                { 0x0E, new TagInfo(0x04, "Unknown 0x0E", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
+                { 0x0E, new TagInfo(0x04, "ShapeScale", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
                 { 0x6A, new TagInfo(0x04, "PieSize", new byte[ ] { 0x78, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
                 { 0x6B, new TagInfo(0x04, "PieStart", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.INT32) },
                 { 0x68, new TagInfo(0x00, "Unknown 0x68 (TLV Block)", new byte[ ] { }, ValueRole.TLVBLOCK) },
@@ -140,3 +140,6 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             baseSection: BaseSectionProfile.SingleStream);
     }
 }
+
+
+

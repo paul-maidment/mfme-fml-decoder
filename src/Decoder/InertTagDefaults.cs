@@ -26,6 +26,8 @@ namespace MfmeFmlDecoder.Decoder
             [MFMEComponentType.Led] = new uint[] { 0x1C },
             [MFMEComponentType.RGBLed] = new uint[] { 0x1C },
             [MFMEComponentType.DotAlpha] = new uint[] { 0x03 },
+            [MFMEComponentType.BandReel] = new uint[] { 0x11, 0x14, 0x15 },
+            [MFMEComponentType.Reel] = new uint[] { 0x14, 0x1B, 0x1D, 0x22, 0x23 },
             [MFMEComponentType.FlipReel] = new uint[] { 0x09 },
             [MFMEComponentType.EpochDotAlpha] = new uint[] { 0x03, 0x09 },
             [MFMEComponentType.AceVideo] = new uint[] { 0x01, 0xE9 },
@@ -34,6 +36,11 @@ namespace MfmeFmlDecoder.Decoder
 
         // 0x3B is a confirmed no-op on every kind.
         private const uint UniversalInertTag = 0x3B;
+
+        private static readonly MfmeVersion[] Versions =
+        {
+            MfmeVersion.V5, MfmeVersion.V6_1, MfmeVersion.V19_0, MfmeVersion.V19_8, MfmeVersion.V20_1,
+        };
 
         private static readonly Dictionary<MFMEComponentType, IReadOnlySet<string>> NamesCache = new();
 
@@ -59,15 +66,29 @@ namespace MfmeFmlDecoder.Decoder
             }
 
             var names = new HashSet<string>(StringComparer.Ordinal);
-            ComponentProfile profile = ComponentProfileCatalog.Resolve(kind, MfmeVersion.V20_1);
-            ComponentTagMap map = profile?.EffectiveClassTags;
-            if (map is not null)
+            foreach (MfmeVersion version in Versions)
             {
+                ComponentProfile profile = ComponentProfileCatalog.Resolve(kind, version);
+                ComponentTagMap map = profile?.EffectiveClassTags;
+                if (map is null)
+                {
+                    continue;
+                }
+
                 foreach (uint t in TagsFor(kind))
                 {
                     if (map.TryGetValue(t, out TagInfo info) && !string.IsNullOrEmpty(info?.AttributeName))
                     {
+                        // Outer/base spelling wins; fall back to the nested spelling only when the
+                        // outer map does not carry the tag (so a same-id nested field such as
+                        // Background 0x09 "TransparentColour" is never stripped).
                         names.Add(info.AttributeName);
+                    }
+                    else if (map.NestedTagBlockMap is { } nested
+                        && nested.TryGetValue(t, out TagInfo nInfo)
+                        && !string.IsNullOrEmpty(nInfo?.AttributeName))
+                    {
+                        names.Add(nInfo.AttributeName);
                     }
                 }
             }
@@ -114,4 +135,6 @@ namespace MfmeFmlDecoder.Decoder
         }
     }
 }
+
+
 
