@@ -100,12 +100,17 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
                 { 0x4D, new TagInfo(0x00, "Sublamp 12 Mask image", Array.Empty<byte>(), ValueRole.BITMAP) },
                 { 0x03, new TagInfo(0x00, "Brightmask Main", Array.Empty<byte>(), ValueRole.BITMAP) },
                 { 0x5A, new TagInfo(0x00, "Brightmask Mask", Array.Empty<byte>(), ValueRole.BITMAP) },
-                { 0x0C, new TagInfo(0x04, "Roundness", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
+                { 0x0C, new TagInfo(0x04, "Roundness", new byte[ ] { 0x0A, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
                 { 0x21, new TagInfo(0x04, "X Offset", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.INT32) },
                 { 0x22, new TagInfo(0x04, "Y Offset", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.INT32) },
                 { 0x25, new TagInfo(0x04, "OutlineColour", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.ARGB_COLOR) },
-                { 0x0B, new TagInfo(0x04, "ShapeParamter", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) }, // TODO: Add a half number mode for this type.
-                { 0x0D, new TagInfo(0x04, "ShapeAngle", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.INT32) },
+                // Shape parameters: these defaults are MFME's own ctor defaults, taken from the class
+                // saver (code_0a0000.c:2753ff), which writes the tag only when the value differs.
+                // They must match, or a stored value equal to the *wrong* declared default (e.g. a
+                // ShapeAngle of 0) is sparse-dropped and MFME falls back to its real default (90),
+                // which rotates the shape (Alien's hexagons stop forming a honeycomb).
+                { 0x0B, new TagInfo(0x04, "ShapeParamter", new byte[ ] { 0x06, 0x00, 0x00, 0x00 }, ValueRole.UINT32) }, // TODO: Add a half number mode for this type.
+                { 0x0D, new TagInfo(0x04, "ShapeAngle", new byte[ ] { 0x5A, 0x00, 0x00, 0x00 }, ValueRole.INT32) },
                 { 0x0E, new TagInfo(0x04, "ShapeScale", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
                 { 0x6A, new TagInfo(0x04, "PieSize", new byte[ ] { 0x78, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
                 { 0x6B, new TagInfo(0x04, "PieStart", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.INT32) },
