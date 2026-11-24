@@ -29,7 +29,9 @@ namespace MfmeFmlDecoder.src.Model.Component
         {
             JsonObject json = base.ToJsonObject();
             RemoveValueKey(json, NonNullSublampCountKey);
-            RemoveValueKey(json, "SelectedOffColourId");
+            // NOTE: SelectedOffColourId (tag 0x2A) must stay in Values. It drives which mask/colour
+            // MFME uses for the reel's OFF symbols; the friendly OffColour string collapses several
+            // ids (0x00 and 0xFF both showed "Mask 1"), so it cannot be used to rebuild the tag.
             return json;
         }
 

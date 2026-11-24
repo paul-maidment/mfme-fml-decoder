@@ -85,6 +85,7 @@
         "Reversed": true,
         "ToggleView": true,
         "OffLevel": 65,
+        "SelectedOffColourId": 3,
         "BackgroundFillColour": "#804000FF",
         "BorderColour": "#FF0080FF",
         "WinlinesColour": "#FFFFFFFF"
