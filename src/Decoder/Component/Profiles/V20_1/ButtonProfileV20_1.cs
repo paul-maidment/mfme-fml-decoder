@@ -24,9 +24,12 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             { 0x16, new TagInfo(0x04, "Shortcut 1", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
             { 0x2A, new TagInfo(0x01, "Shortcut 2 Enabled", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
             { 0x2B, new TagInfo(0x04, "Shortcut 2", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x02, new TagInfo(0x04, "Lamp1Colour", new byte[] { 0x00, 0xFF, 0xFF, 0xFF}, ValueRole.ARGB_COLOR) },
-            { 0x08, new TagInfo(0x04, "Lamp2Colour", new byte[] { 0x00, 0xFF, 0xFF, 0xFF}, ValueRole.ARGB_COLOR) },
-            { 0x03, new TagInfo(0x04, "OffColour", new byte[] { 0x00, 0xFF, 0xFF, 0xFF}, ValueRole.ARGB_COLOR) },
+            // Button colours are presence-sensitive: MFME substitutes its own colour when the tag is
+            // absent, which is NOT the same as yellow. Blank default means "no default" so a stored
+            // yellow (0x00FFFFFF) survives to the JSON and is re-emitted on rebuild.
+            { 0x02, new TagInfo(0x04, "Lamp1Colour", Array.Empty<byte>(), ValueRole.ARGB_COLOR) },
+            { 0x08, new TagInfo(0x04, "Lamp2Colour", Array.Empty<byte>(), ValueRole.ARGB_COLOR) },
+            { 0x03, new TagInfo(0x04, "OffColour", Array.Empty<byte>(), ValueRole.ARGB_COLOR) },
             { 0x04, new TagInfo(0x01, "Graphic", new byte[] { 0x00 }, ValueRole.BOOLEAN) },
             { 0x05, new TagInfo(0x00, "Lamp 1 image", new byte[] { }, ValueRole.BITMAP) },
             { 0x07, new TagInfo(0x00, "Lamp 2 Image", new byte[] { }, ValueRole.BITMAP) },

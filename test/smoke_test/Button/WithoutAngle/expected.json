@@ -75,10 +75,7 @@
         "Lockout": true,
         "Shortcut 1 Enabled": true,
         "Shortcut 2 Enabled": true,
-        "Split": true,
-        "Lamp1Colour": "#FFFF00FF",
-        "Lamp2Colour": "#FFFF00FF",
-        "OffColour": "#FFFF00FF"
+        "Split": true
       },
       "Images": {
         "lamp_1_image": {
