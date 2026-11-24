@@ -34,7 +34,10 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             { 0x16, new TagInfo(0x04, "Shortcut 1", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
             { 0x2A, new TagInfo(0x01, "Shortcut 2 Enabled", new byte[ ] { 0x00 }, ValueRole.BOOLEAN) },
             { 0x2B, new TagInfo(0x04, "Shortcut 2", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x3E, new TagInfo(0x01, "Unknown 0x3E", new byte[ ] { 0x00 }, ValueRole.BOOLEAN) },
+            // Shape is MFME's shape-driven flag (obj+0x9E): set (1) for the selected-shape values
+            // 1,3,5,7,0x11, else 0. MFME writes the tag only when set, so it must be carried --
+            // dropping it renders the lamp as a different shape.
+            { 0x3E, new TagInfo(0x01, "Shape", new byte[ ] { 0x00 }, ValueRole.BOOLEAN) },
             { 0x46, new TagInfo(0x00, "Overlay Bitmap", Array.Empty<byte>(), ValueRole.BITMAP) },
             { 0x36, new TagInfo(0x00, "Overlay Bitmap", Array.Empty<byte>(), ValueRole.BITMAP) },
             { 0x68, new TagInfo(0x04, "GeometryStruct", new byte[ ] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },

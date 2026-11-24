@@ -21,7 +21,9 @@ namespace MfmeFmlDecoder.Decoder
             [MFMEComponentType.Border] = new uint[] { 0x04, 0x0A, 0x0B },
             [MFMEComponentType.MatrixAlpha] = new uint[] { 0x03, 0x0A },
             [MFMEComponentType.Bitmap] = new uint[] { 0x05 },
-            [MFMEComponentType.Lamp] = new uint[] { 0x0E, 0x3E },
+            // Lamp 0x3E (shape flag) and 0x0E (shape size, e.g. 0x32 for shape 7) are written by
+            // MFME only for certain shapes and are NOT inert: dropping them changes the rendered
+            // shape. They must be carried.
             [MFMEComponentType.SevenSeg] = new uint[] { 0x24 },
             [MFMEComponentType.Led] = new uint[] { 0x1C },
             [MFMEComponentType.RGBLed] = new uint[] { 0x1C },
