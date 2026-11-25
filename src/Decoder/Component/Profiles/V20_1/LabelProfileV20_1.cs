@@ -20,7 +20,10 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             { 0x01, new TagInfo(0x04, "BackgroundColour", new byte[] { 0xF0, 0xF0, 0xF0, 0xFF }, ValueRole.ARGB_COLOR) },
             { 0x02, new TagInfo(0x01, "Transparent", new byte[] { 0x01 }, ValueRole.BOOLEAN) },
             { 0x27, new TagInfo(0x00, "PrimaryFont", Array.Empty<byte>(), ValueRole.FONT) },
-            { 0x38, new TagInfo(0x04, "SublampCount", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
+            // 0x38 is the COUNT of 0x39 entries (MFME's shared saver writes them together, and only
+            // when the count is non-zero: code_080000.c "if (param_1[0xd] != 0)"). No default, so it
+            // is emitted only when the model actually has lamps — emitting a bare 0 made MFME crash.
+            { 0x38, new TagInfo(0x04, "SublampCount", Array.Empty<byte>(), ValueRole.UINT32) },
             { 0x1C, new TagInfo(0x04, "SuppressCaption", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
         },
             angle: AngleProfile.RewriteWithBytes(new byte[] { 0x00, 0x01 }, 0),

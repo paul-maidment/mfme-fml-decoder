@@ -46,6 +46,11 @@ namespace MfmeFmlDecoder.src.Decoder.Component
             }
 
             component.Lamp = lamp;
+
+            // MFME writes 0x38 (the count of 0x39 entries) alongside the lamp array, only when it is
+            // non-zero. Our model carries a single lamp number, so the count is 1. Without this the
+            // rebuild emitted no/garbage count and MFME crashed loading the layout.
+            component.UInt32s["SublampCount"] = 1;
         }
     }
 }
