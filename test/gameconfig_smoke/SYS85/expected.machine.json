@@ -1,7 +1,7 @@
 {
   "System": "SYS85",
   "Settings": {
-    "Caption": "           Bar Sevens DX By Ploggy - ?4/10p/92% - 07/10/18 - Huge Thanks To All The Contributors. :)",
+    "Caption": "           Bar Sevens DX By Ploggy - \u00A34/10p/92% - 07/10/18 - Huge Thanks To All The Contributors. :)",
     "IRQ": "Normal",
     "Meter Effects": {
       "rows": [
@@ -64,7 +64,7 @@
         },
         {
           "triac": 4,
-          "on": "£1 Slide",
+          "on": "\u00A31 Slide",
           "off": ""
         }
       ]

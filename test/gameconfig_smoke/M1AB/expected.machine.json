@@ -52,7 +52,7 @@
         }
       ]
     },
-    "Name In Manager": "Albert Square ?6 DX",
+    "Name In Manager": "Albert Square \u00A36 DX",
     "PAC Drive Assignments": {
       "records": []
     },
@@ -71,7 +71,7 @@
         },
         {
           "triac": 3,
-          "on": "£1 Slide",
+          "on": "\u00A31 Slide",
           "off": ""
         },
         {

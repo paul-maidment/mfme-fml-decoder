@@ -165,7 +165,10 @@ namespace MfmeFmlDecoder.Decoder
                 end = values.Length;
             }
 
-            return Encoding.ASCII.GetString(values, 0, end);
+            // Latin-1, not ASCII: prologue strings are ANSI (e.g. "£10" is 0xA3 0x31 0x30).
+            // ASCII decoding turned 0xA3 into '?' and the writer then wrote the '?', which
+            // corrupted captions such as "Ten X Ten DX £10 25p".
+            return Encoding.Latin1.GetString(values, 0, end);
         }
 
         /// <summary>
@@ -184,7 +187,7 @@ namespace MfmeFmlDecoder.Decoder
                 int end = Array.IndexOf(values, (byte)0, i);
                 if (end < 0) end = values.Length;
                 if (end > i)
-                    parts.Add(Encoding.ASCII.GetString(values, i, end - i));
+                    parts.Add(Encoding.Latin1.GetString(values, i, end - i));
                 if (end >= values.Length) break;
                 i = end + 1;
                 // Trailing padding is all zeros — stop once we hit an empty segment

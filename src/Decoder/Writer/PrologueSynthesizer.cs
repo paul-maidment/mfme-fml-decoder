@@ -232,7 +232,9 @@ namespace MfmeFmlDecoder.Decoder.Writer
             int prefix = encoding switch { "ascii-4" => 4, "ascii-8" => 8, _ => 0 };
             byte[] buffer = Ensure(tags, tag.Value, size);
 
-            byte[] ascii = Encoding.ASCII.GetBytes(text ?? string.Empty);
+            // Latin-1 (ANSI), not ASCII: decoding used to turn bytes such as 0xA3 ('£') into '?'
+            // and we must write back the same bytes MFME stored.
+            byte[] ascii = Encoding.Latin1.GetBytes(text ?? string.Empty);
             int max = prefix > 0 ? Math.Min(prefix, buffer.Length) : Math.Max(0, buffer.Length - 1);
             int n = Math.Min(ascii.Length, max);
             Array.Copy(ascii, 0, buffer, 0, n);
@@ -245,7 +247,9 @@ namespace MfmeFmlDecoder.Decoder.Writer
                 return;
             }
 
-            byte[] ascii = Encoding.ASCII.GetBytes(text ?? string.Empty);
+            // Latin-1 (ANSI), not ASCII: decoding used to turn bytes such as 0xA3 ('£') into '?'
+            // and we must write back the same bytes MFME stored.
+            byte[] ascii = Encoding.Latin1.GetBytes(text ?? string.Empty);
             int cursor = 0;
             foreach (JsonElement part in parts.EnumerateArray())
             {
@@ -720,7 +724,9 @@ namespace MfmeFmlDecoder.Decoder.Writer
                 {
                     int recBase = i * label.size;
                     string text = rec["label"] is JsonValue lv && lv.TryGetValue(out string ls) ? ls : string.Empty;
-                    byte[] ascii = Encoding.ASCII.GetBytes(text ?? string.Empty);
+                    // Latin-1 (ANSI), not ASCII: decoding used to turn bytes such as 0xA3 ('£') into '?'
+            // and we must write back the same bytes MFME stored.
+            byte[] ascii = Encoding.Latin1.GetBytes(text ?? string.Empty);
                     int n = Math.Min(ascii.Length, Math.Max(0, label.size - 1));
                     if (recBase + label.size <= labelBuf.Length && recBase + n <= labelBuf.Length)
                         Array.Copy(ascii, 0, labelBuf, recBase, n);

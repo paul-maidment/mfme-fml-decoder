@@ -116,7 +116,10 @@ namespace MfmeFmlDecoder.GameConfig
             if (value is null || value.Length == 0) return string.Empty;
             int end = Array.IndexOf(value, (byte)0);
             if (end < 0) end = value.Length;
-            return Encoding.ASCII.GetString(value, 0, end);
+            // Latin-1 (ANSI), not ASCII: FML text is stored as ANSI, so e.g. 0xA3 is '£'.
+            // ASCII decoding replaced it with '?' and the writer then wrote the '?', corrupting
+            // captions such as "Ten X Ten DX £10 25p".
+            return Encoding.Latin1.GetString(value, 0, end);
         }
     }
 }

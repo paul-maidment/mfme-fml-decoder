@@ -5,7 +5,7 @@
     "Alpha Cable": "Normal",
     "Aux1 Invert": false,
     "Aux2 Invert": false,
-    "Caption": "Apache ?6 84%",
+    "Caption": "Apache \u00A36 84%",
     "Character": "Barcrest",
     "Door Invert": false,
     "Encryption": "Normal",
@@ -76,7 +76,7 @@
         },
         {
           "triac": 2,
-          "on": "£1 Slide",
+          "on": "\u00A31 Slide",
           "off": ""
         },
         {
