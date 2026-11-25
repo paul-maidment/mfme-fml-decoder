@@ -82,6 +82,14 @@ namespace MfmeFmlDecoder.Utilities
 
                 foreach (var kvp in component.Images)
                 {
+                    // Skip parser-invented placeholders (see BaseComponent.BuildImagesNode):
+                    // they are blank buffers, not source bitmaps, and writing them produces a
+                    // corrupt image tag that MFME crashes on.
+                    if (kvp.Value.Synthesized)
+                    {
+                        continue;
+                    }
+
                     string fileName = kvp.Key + ".bmp";
                     File.WriteAllBytes(Path.Combine(imageDir, fileName), kvp.Value.Bytes);
                 }

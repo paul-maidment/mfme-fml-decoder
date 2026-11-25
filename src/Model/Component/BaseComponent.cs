@@ -196,6 +196,14 @@ namespace MfmeFmlDecoder.src.Model.Component
 
             foreach (var kvp in Images.OrderBy(entry => entry.Key, StringComparer.Ordinal))
             {
+                // Placeholders the parser invents (e.g. Button's blank lamp_1_image) are decoder-side
+                // conveniences, not source data. Exporting them made the rebuild write a zero-filled
+                // bitmap where the original had no tag at all, and MFME crashed on load.
+                if (kvp.Value.Synthesized)
+                {
+                    continue;
+                }
+
                 images[kvp.Key] = new JsonObject
                 {
                     [nameof(BitmapEntry.Width)] = kvp.Value.Width,

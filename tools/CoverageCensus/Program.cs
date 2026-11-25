@@ -30,6 +30,8 @@ namespace CoverageCensus
             string dumpPayload = null;
             string dumpPayloadIndex = null;
             string dumpDecoded = null;
+            string dumpAt = null;
+            long dumpAtOffset = 0;
             string dumpRaw = null;
             string cmpA = null, cmpB = null;
             string angleScan = null;
@@ -43,6 +45,7 @@ namespace CoverageCensus
                 else if (args[i] == "--dumpcomp" && i + 2 < args.Length) { dumpComp = args[++i]; dumpCompIndex = args[++i]; }
                 else if (args[i] == "--dumppayload" && i + 2 < args.Length) { dumpPayload = args[++i]; dumpPayloadIndex = args[++i]; }
                 else if (args[i] == "--dumpdecoded" && i + 1 < args.Length) dumpDecoded = args[++i];
+                else if (args[i] == "--dumpat" && i + 2 < args.Length) { dumpAt = args[++i]; dumpAtOffset = Convert.ToInt64(args[++i], 16); }
                 else if (args[i] == "--dumprraw" && i + 1 < args.Length) dumpRaw = args[++i];
                 else if (args[i] == "--comparecomponents" && i + 2 < args.Length) { cmpA = args[++i]; cmpB = args[++i]; }
                 else if (args[i] == "--anglescan" && i + 1 < args.Length) angleScan = args[++i];
@@ -72,6 +75,12 @@ namespace CoverageCensus
             if (dumpPayload != null && dumpPayloadIndex != null)
             {
                 DumpPayload(dumpPayload, int.Parse(dumpPayloadIndex, CultureInfo.InvariantCulture));
+                return 0;
+            }
+
+            if (dumpAt != null)
+            {
+                DumpAt(dumpAt, dumpAtOffset, 256);
                 return 0;
             }
 
@@ -473,6 +482,17 @@ namespace CoverageCensus
                 pos += (int)size;
             }
             return list;
+        }
+
+        private static void DumpAt(string fmlPath, long offset, int length)
+        {
+            byte[] plain = MfmeFmlDecoder.Decryption.FmlDecryptor.Decrypt(File.ReadAllBytes(fmlPath));
+            if (offset < 0 || offset >= plain.Length) { Console.Out.WriteLine("offset out of range"); return; }
+            int n = (int)Math.Min(length, plain.Length - offset);
+            Console.Out.WriteLine(Convert.ToHexString(plain, (int)offset, n));
+            var ascii = new System.Text.StringBuilder();
+            for (int i = 0; i < n; i++) { byte b = plain[offset + i]; ascii.Append(b >= 32 && b < 127 ? (char)b : '.'); }
+            Console.Out.WriteLine(ascii.ToString());
         }
 
         private static void DumpDecoded(string fmlPath)
