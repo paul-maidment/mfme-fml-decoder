@@ -40,7 +40,11 @@ namespace MfmeFmlDecoder.Decoder.Writer
             var tags = new Dictionary<uint, byte[]>();
             var unsupported = new List<string>();
 
-            SetBytes(tags, VersionTag, null, 4, V20_1, 0, V20_1.Length);
+            // The version tag must be written at its own length: MFME 20.1 emits 0x2F len=4 "20.1".
+            // FileTagLengths has 9 for 0x2F because legacy files store "MFME " as UTF-16 (9 bytes),
+            // so padding "20.1" out to 9 with NULs made our prologue differ from MFME's own writer.
+            // (Tested: this alone does not fix the Barcrest load crash, but it is what 20.1 writes.)
+            tags[VersionTag] = V20_1;
             SeedConstants(tags);
             if (splashBitmap is { Length: > 0 })
             {
@@ -822,7 +826,19 @@ namespace MfmeFmlDecoder.Decoder.Writer
                         raw = ReadLong(cellValue);
                     }
 
-                    WriteU32(Ensure(tags, tag.Value, byteOffset + 4), byteOffset, unchecked((uint)raw));
+                    if (string.Equals(encoding, "bytes", StringComparison.OrdinalIgnoreCase))
+                    {
+                        // A "bytes" cell is ONE byte at byteOffset inside a fixed-length tag. Sizing it
+                        // byteOffset+4 and writing a u32 made the tag a byte too long (MPU3 tag 0x10
+                        // came out as 5 bytes "00 13 00 00 00" instead of 4 "00 13 00 00") and MFME
+                        // access-violated (004F691B, read of 0x000000D8) loading those layouts.
+                        byte[] cellBytes = Ensure(tags, tag.Value, byteOffset + 1);
+                        cellBytes[byteOffset] = unchecked((byte)raw);
+                    }
+                    else
+                    {
+                        WriteU32(Ensure(tags, tag.Value, byteOffset + 4), byteOffset, unchecked((uint)raw));
+                    }
                 }
             }
         }
