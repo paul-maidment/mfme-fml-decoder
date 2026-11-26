@@ -1,7 +1,7 @@
 {
   "System": "SYSTEM80",
   "Settings": {
-    "Caption": "7s Up (JPM) By Alex74 Big Thanks To Steve Lancett For Providing Roms & AlanRoad Runner for dumping",
+    "Caption": "7s Up (JPM) By Alex74 Big Thanks To Steve Lancett For Providing Roms \u0026 AlanRoad Runner for dumping",
     "Meter Effects": {
       "rows": [
         {
@@ -3134,72 +3134,63 @@
           "output": 1,
           "outputType": "Lamp",
           "value1": 30,
-          "value2": null,
-          "label": ""
+          "value2": null
         },
         {
           "index": 1,
           "output": 3,
           "outputType": "Lamp",
           "value1": 17,
-          "value2": null,
-          "label": ""
+          "value2": null
         },
         {
           "index": 2,
           "output": 5,
           "outputType": "Lamp",
           "value1": 16,
-          "value2": null,
-          "label": ""
+          "value2": null
         },
         {
           "index": 3,
           "output": 6,
           "outputType": "Lamp",
           "value1": 18,
-          "value2": null,
-          "label": ""
+          "value2": null
         },
         {
           "index": 4,
           "output": 10,
           "outputType": "Lamp",
           "value1": 26,
-          "value2": null,
-          "label": ""
+          "value2": null
         },
         {
           "index": 5,
           "output": 11,
           "outputType": "Lamp",
           "value1": 25,
-          "value2": null,
-          "label": ""
+          "value2": null
         },
         {
           "index": 6,
           "output": 12,
           "outputType": "Lamp",
           "value1": 24,
-          "value2": null,
-          "label": ""
+          "value2": null
         },
         {
           "index": 7,
           "output": 14,
           "outputType": "Lamp",
           "value1": 33,
-          "value2": null,
-          "label": ""
+          "value2": null
         },
         {
           "index": 8,
           "output": 16,
-          "outputType": "Triac -> Hopper 1",
+          "outputType": "Triac -\u003E Hopper 1",
           "value1": 3,
-          "value2": 1,
-          "label": ""
+          "value2": 1
         }
       ]
     },

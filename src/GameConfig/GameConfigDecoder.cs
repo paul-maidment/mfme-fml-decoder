@@ -1192,6 +1192,30 @@ namespace MfmeFmlDecoder.GameConfig
                 records.Add(rec);
             }
 
+            // MFME omits the label column entirely when no record has label text. Treat an all-empty
+            // label column as "no label data": emitting a zero-filled label tag on the rebuild made
+            // MFME crash (e.g. Supatron, tag 0x94).
+            bool anyLabelText = false;
+            foreach (JsonNode rn in records)
+            {
+                if (rn is JsonObject ro && ro["label"] is JsonValue lv && lv.TryGetValue(out string ls) && !string.IsNullOrEmpty(ls))
+                {
+                    anyLabelText = true;
+                    break;
+                }
+            }
+
+            if (!anyLabelText)
+            {
+                foreach (JsonNode rn in records)
+                {
+                    if (rn is JsonObject ro)
+                    {
+                        ro.Remove("label");
+                    }
+                }
+            }
+
             return new JsonObject { ["kind"] = "record-list", ["records"] = records };
         }
 

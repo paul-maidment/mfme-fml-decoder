@@ -683,8 +683,20 @@ namespace MfmeFmlDecoder.Decoder.Writer
                     shortcutCount = Math.Max(shortcutCount, idx + 1);
             }
 
+            // MFME omits the label column entirely when no record has label text. Writing a
+            // zero-filled column instead made MFME crash loading Supatron (an all-zero tag 0x94).
+            bool anyLabelText = false;
+            foreach (JsonNode node in records)
+            {
+                if (node is JsonObject r && r["label"] is JsonValue lv && lv.TryGetValue(out string ls) && !string.IsNullOrEmpty(ls))
+                {
+                    anyLabelText = true;
+                    break;
+                }
+            }
+
             byte[] bodyBuf = body.ok && bodyCount > 0 ? AssignExact(tags, body.tag, bodyCount * body.stride) : null;
-            byte[] labelBuf = label.ok && labelCount > 0 ? AssignExact(tags, label.tag, labelCount * label.size) : null;
+            byte[] labelBuf = label.ok && labelCount > 0 && anyLabelText ? AssignExact(tags, label.tag, labelCount * label.size) : null;
             byte[] shortcutBuf = shortcut.ok && shortcutCount > 0 ? AssignExact(tags, shortcut.tag, shortcutCount * 4) : null;
 
             foreach (JsonNode node in records)
