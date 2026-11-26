@@ -32,6 +32,8 @@ namespace CoverageCensus
             string dumpDecoded = null;
             string dumpAt = null;
             long dumpAtOffset = 0;
+            string findAt = null;
+            string findAtText = null;
             string dumpRaw = null;
             string cmpA = null, cmpB = null;
             string angleScan = null;
@@ -46,6 +48,7 @@ namespace CoverageCensus
                 else if (args[i] == "--dumppayload" && i + 2 < args.Length) { dumpPayload = args[++i]; dumpPayloadIndex = args[++i]; }
                 else if (args[i] == "--dumpdecoded" && i + 1 < args.Length) dumpDecoded = args[++i];
                 else if (args[i] == "--dumpat" && i + 2 < args.Length) { dumpAt = args[++i]; dumpAtOffset = Convert.ToInt64(args[++i], 16); }
+                else if (args[i] == "--findat" && i + 2 < args.Length) { findAt = args[++i]; findAtText = args[++i]; }
                 else if (args[i] == "--dumprraw" && i + 1 < args.Length) dumpRaw = args[++i];
                 else if (args[i] == "--comparecomponents" && i + 2 < args.Length) { cmpA = args[++i]; cmpB = args[++i]; }
                 else if (args[i] == "--anglescan" && i + 1 < args.Length) angleScan = args[++i];
@@ -75,6 +78,12 @@ namespace CoverageCensus
             if (dumpPayload != null && dumpPayloadIndex != null)
             {
                 DumpPayload(dumpPayload, int.Parse(dumpPayloadIndex, CultureInfo.InvariantCulture));
+                return 0;
+            }
+
+            if (findAt != null)
+            {
+                FindAt(findAt, findAtText);
                 return 0;
             }
 
@@ -482,6 +491,24 @@ namespace CoverageCensus
                 pos += (int)size;
             }
             return list;
+        }
+
+        private static void FindAt(string fmlPath, string text)
+        {
+            byte[] plain = MfmeFmlDecoder.Decryption.FmlDecryptor.Decrypt(File.ReadAllBytes(fmlPath));
+            byte[] needle = System.Text.Encoding.Latin1.GetBytes(text);
+            int hits = 0;
+            for (int i = 0; i + needle.Length <= plain.Length; i++)
+            {
+                bool ok = true;
+                for (int k = 0; k < needle.Length; k++) { if (plain[i + k] != needle[k]) { ok = false; break; } }
+                if (!ok) continue;
+                int start = Math.Max(0, i - 24);
+                int len = Math.Min(needle.Length + 48, plain.Length - start);
+                Console.Out.WriteLine($"found at 0x{i:X} (fml offset) context: " + Convert.ToHexString(plain, start, len));
+                if (++hits >= 5) break;
+            }
+            if (hits == 0) Console.Out.WriteLine("not found");
         }
 
         private static void DumpAt(string fmlPath, long offset, int length)

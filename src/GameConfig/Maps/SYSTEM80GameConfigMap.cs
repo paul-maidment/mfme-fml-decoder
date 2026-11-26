@@ -478,7 +478,7 @@ namespace MfmeFmlDecoder.GameConfig.Maps
                       }
                     },
                     ""0x94"": {
-                      ""sizeBytes"": 20,
+                      ""sizeBytes"": 21,
                       ""encoding"": ""ascii-null-padded"",
                       ""field"": ""label""
                     },
