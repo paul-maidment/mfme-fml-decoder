@@ -31,7 +31,7 @@ namespace MfmeFmlDecoder.Decoder
             [MFMEComponentType.BandReel] = new uint[] { 0x11, 0x14, 0x15 },
             [MFMEComponentType.Reel] = new uint[] { 0x14, 0x1B, 0x1D, 0x22, 0x23 },
             [MFMEComponentType.FlipReel] = new uint[] { 0x09 },
-            [MFMEComponentType.EpochDotAlpha] = new uint[] { 0x03, 0x09 },
+            // EpochDotAlpha 0x03/0x09 are live display geometry: the original carries 0x03=7, 0x09=0.
             [MFMEComponentType.AceVideo] = new uint[] { 0x01, 0xE9 },
             [MFMEComponentType.DiscReel] = new uint[] { 0x06, 0x1C, 0x3E },
         };
