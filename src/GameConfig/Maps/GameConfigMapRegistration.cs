@@ -8,6 +8,7 @@ namespace MfmeFmlDecoder.GameConfig
     {
         public static void RegisterAll()
         {
+            GameConfigMapRegistry.Register(ACE1GameConfigMap.SystemName, ACE1GameConfigMap.Create);
             GameConfigMapRegistry.Register(ACEVIDEOGameConfigMap.SystemName, ACEVIDEOGameConfigMap.Create);
             GameConfigMapRegistry.Register(ADDER5GameConfigMap.SystemName, ADDER5GameConfigMap.Create);
             GameConfigMapRegistry.Register(ASTRASYSA1GameConfigMap.SystemName, ASTRASYSA1GameConfigMap.Create);
