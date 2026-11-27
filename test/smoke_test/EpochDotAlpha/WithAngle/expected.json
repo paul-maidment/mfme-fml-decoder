@@ -41,8 +41,6 @@
       "Values": {
         "DigitSpacing": 6,
         "DotSpacing": 5,
-        "Unknown 0x03": 0,
-        "Unknown 0x09": 0,
         "XSize": 3,
         "YSize": 4,
         "BackgroundColour": "#FF80C0FF",

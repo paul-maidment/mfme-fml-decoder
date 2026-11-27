@@ -31,7 +31,9 @@ namespace MfmeFmlDecoder.Decoder
             [MFMEComponentType.BandReel] = new uint[] { 0x11, 0x14, 0x15 },
             [MFMEComponentType.Reel] = new uint[] { 0x14, 0x1B, 0x1D, 0x22, 0x23 },
             [MFMEComponentType.FlipReel] = new uint[] { 0x09 },
-            // EpochDotAlpha 0x03/0x09 are live display geometry: the original carries 0x03=7, 0x09=0.
+            // EpochDotAlpha 0x03/0x09 stay inert: A/B verified - dropping them only (0x04/0x06/0x07/0x08
+            // still carried) renders 0.000%. The Beaver Las Vegas fix came from the defaults, not these.
+            [MFMEComponentType.EpochDotAlpha] = new uint[] { 0x03, 0x09 },
             [MFMEComponentType.AceVideo] = new uint[] { 0x01, 0xE9 },
             [MFMEComponentType.DiscReel] = new uint[] { 0x06, 0x1C, 0x3E },
         };
