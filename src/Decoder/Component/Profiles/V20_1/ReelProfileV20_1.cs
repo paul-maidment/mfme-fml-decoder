@@ -38,7 +38,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             { 0x20, new TagInfo(0x04, "WinlinesOffset", new byte[] { 0x00, 0x00, 0x00, 0x00 }, ValueRole.INT32) },
             { 0x0C, new TagInfo(0x04, "WinlinesThickness", new byte[] { 0x01, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
             { 0x0A, new TagInfo(0x04, "BorderThickness", new byte[] { 0x01, 0x00, 0x00, 0x00 }, ValueRole.UINT32) },
-            { 0x1E, new TagInfo(0x04, "ReelNbrOffset", new byte[] { 0x01, 0x00, 0x00, 0x00 }, ValueRole.INT32) },
+            { 0x1E, new TagInfo(0x04, "ReelNbrOffset", Array.Empty<byte>(), ValueRole.INT32) },
             { 0x17, new TagInfo(0x04, "Filter", Array.Empty<byte>(), ValueRole.UINT32) },
             { 0x15, new TagInfo(0x04, "Bounce", Array.Empty<byte>(), ValueRole.UINT32) },
             { 0x2A, new TagInfo(0x01, "SelectedOffColourId", new byte[] { 0x00 }, ValueRole.BYTE) },
