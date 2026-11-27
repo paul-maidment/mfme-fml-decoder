@@ -21,12 +21,19 @@ namespace FmlTagEdit
                 return args.Length == 0 ? 1 : 0;
             }
 
+            // Allow an argument response file: pass @<path> and each line is one argument.
+            if (args.Length == 1 && args[0].StartsWith("@", StringComparison.Ordinal))
+            {
+                args = File.ReadAllLines(args[0].Substring(1));
+            }
+
             string inputPath = null;
             string outputPath = null;
             uint? removeTag = null;
             bool listTags = false;
             bool unban = false;
             var patches = new List<(int Offset, byte[] Bytes)>();
+            var splices = new List<(int Offset, int Length, byte[] Bytes)>();
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -90,6 +97,42 @@ namespace FmlTagEdit
 
                     patches.Add((poff, pbytes));
                 }
+                else if (a is "--splicefile")
+                {
+                    // --splicefile <plaintextOffset>:<length>:<file containing hex>
+                    string spec = args[++i];
+                    string[] parts = spec.Split(':') is var _ ? spec.Split(':') : null;
+                    if (parts.Length < 3)
+                    {
+                        Console.Error.WriteLine("--splicefile wants <offset>:<length>:<hexfile>");
+                        return 1;
+                    }
+                    if (!TryParseOffset(parts[0], out int soff2) || !TryParseOffset(parts[1], out int slen2))
+                    {
+                        Console.Error.WriteLine($"Invalid splice offsets: {parts[0]}:{parts[1]}");
+                        return 1;
+                    }
+                    string hexPath = string.Join(":", parts, 2, parts.Length - 2);
+                    string hexText = string.Concat(File.ReadAllLines(hexPath)).Trim();
+                    splices.Add((soff2, slen2, Convert.FromHexString(hexText)));
+                }
+                else if (a is "--splice")
+                {
+                    // --splice <plaintextOffset>:<length>:<hex>  (length may change)
+                    string spec = args[++i];
+                    string[] parts = spec.Split('i') is var _ ? spec.Split(':') : null;
+                    if (parts.Length != 3 || parts[2].Length % 2 != 0)
+                    {
+                        Console.Error.WriteLine("--splice wants <offset>:<length>:<hex>");
+                        return 1;
+                    }
+                    if (!TryParseOffset(parts[0], out int soff) || !TryParseOffset(parts[1], out int slen))
+                    {
+                        Console.Error.WriteLine($"Invalid splice offsets: {spec}");
+                        return 1;
+                    }
+                    splices.Add((soff, slen, Convert.FromHexString(parts[2])));
+                }
                 else if (a is "--output" or "-o")
                 {
                     if (i + 1 >= args.Length)
@@ -130,7 +173,7 @@ namespace FmlTagEdit
                 return 1;
             }
 
-            if (!listTags && removeTag == null && patches.Count == 0 && !unban)
+            if (!listTags && removeTag == null && patches.Count == 0 && splices.Count == 0 && !unban)
             {
                 Console.Error.WriteLine("Specify --list, --unban, --remove-tag <id> and/or --patch <offset>:<hex>.");
                 PrintUsage();
@@ -221,6 +264,30 @@ namespace FmlTagEdit
 
                 Console.WriteLine($"Removed {removed} occurrence(s) of tag 0x{removeTag.Value:X}");
                 Console.WriteLine($"Plaintext {plain.Length:N0} → {edited.Length:N0} bytes");
+            }
+
+            if (splices.Count > 0)
+            {
+                var ordered = splices.OrderBy(s => s.Offset).ToList();
+                var ms = new System.IO.MemoryStream(edited.Length + 4096);
+                int cursor = 0;
+                foreach ((int Offset, int Length, byte[] Bytes) s in ordered)
+                {
+                    if (s.Offset < cursor || s.Length < 0 || s.Offset + s.Length > edited.Length)
+                    {
+                        Console.Error.WriteLine($"Splice at 0x{s.Offset:X} len {s.Length} is outside the plaintext or overlaps.");
+                        return 1;
+                    }
+
+                    ms.Write(edited, cursor, s.Offset - cursor);
+                    Console.WriteLine($"Splice 0x{s.Offset:X} ({s.Length} -> {s.Bytes.Length} B)");
+                    ms.Write(s.Bytes, 0, s.Bytes.Length);
+                    cursor = s.Offset + s.Length;
+                }
+
+                ms.Write(edited, cursor, edited.Length - cursor);
+                edited = ms.ToArray();
+                Console.WriteLine($"Plaintext after splice: {edited.Length:N0} bytes");
             }
 
             byte[] repacked = FmlDecryptor.RepackAsSingleChunk(fml, edited);
