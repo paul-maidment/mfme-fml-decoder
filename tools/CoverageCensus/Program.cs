@@ -578,7 +578,7 @@ namespace CoverageCensus
                 if (idx == index)
                 {
                     int n = (int)(size - 8);
-                    Console.Out.WriteLine($"component {idx} kind=0x{kind:X2} size={size} payload={n}");
+                    Console.Out.WriteLine($"component {idx} kind=0x{kind:X2} size={size} payload={n} payloadOffset=0x{pos + 8:X}");
                     Console.Out.WriteLine(Convert.ToHexString(plain, pos + 8, n));
                     return;
                 }
