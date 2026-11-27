@@ -19,7 +19,7 @@ namespace MfmeFmlDecoder.src.Decoder.Component.Profiles.V20_1
             { 0x01, new TagInfo(0x04, "XSize", new byte[] { 0x02 }, ValueRole.UINT32) },
             { 0x02, new TagInfo(0x04, "YSize", new byte[] { 0x02 }, ValueRole.UINT32) },
             { 0x03, new TagInfo(0x04, "DigitSpacing", Array.Empty<byte>(), ValueRole.UINT32) },
-            { 0x07, new TagInfo(0x04, "LedSize", new byte[] { 0x07 }, ValueRole.UINT32) },
+            { 0x07, new TagInfo(0x04, "LedSize", Array.Empty<byte>(), ValueRole.UINT32) },
             { 0x33, new TagInfo(0x01, "Unknown 0x33", new byte[] { }, ValueRole.BOOLEAN) },
             { 0x36, new TagInfo(0x04, "Overlay Image", new byte[] { }, ValueRole.BITMAP) },
             { 0x3B, new TagInfo(0x04, "Unknown 0x3B", new byte[] { 0x00 }, ValueRole.UINT32) },
